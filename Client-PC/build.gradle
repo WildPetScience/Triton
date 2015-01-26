@@ -1,7 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'application'
 
 sourceCompatibility = 1.7
-version = '1.0'
+version = '0.1'
+
+mainClassName = 'uk.ac.cam.cl.wildpetscience.triton.client.Client'
 
 dependencies {
     compile project(':Lib')
