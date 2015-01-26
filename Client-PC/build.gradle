@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.7
+version = '0.1'
+
+mainClassName = 'uk.ac.cam.cl.wildpetscience.triton.client.Client'
+
+dependencies {
+    compile project(':Lib')
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
