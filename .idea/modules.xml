@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Client-PC/Client-PC.iml" filepath="$PROJECT_DIR$/Client-PC/Client-PC.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Client-Pi/Client-Pi.iml" filepath="$PROJECT_DIR$/Client-Pi/Client-Pi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Lib/Lib.iml" filepath="$PROJECT_DIR$/Lib/Lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Triton.iml" filepath="$PROJECT_DIR$/Triton.iml" />
+    </modules>
+  </component>
+</project>
