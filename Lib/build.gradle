@@ -4,5 +4,9 @@ sourceCompatibility = 1.6
 version = '1.0'
 
 dependencies {
+    // 3rd-party libraries
+    compile 'nu.pattern:opencv:2.4.9-7'
+
+    // Unit tests
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
