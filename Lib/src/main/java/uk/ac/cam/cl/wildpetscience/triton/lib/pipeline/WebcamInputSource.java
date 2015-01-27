@@ -13,7 +13,7 @@ public class WebcamInputSource implements ImageInputSource {
     private final VideoCapture capture;
 
     public WebcamInputSource() throws InputFailedException {
-        capture = new VideoCapture(1);
+        capture = new VideoCapture(0);
         if (!capture.isOpened()) {
             throw new InputFailedException();
         }
