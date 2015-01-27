@@ -1,4 +1,4 @@
-package uk.ac.cam.cl.wildpetscience.triton.lib.test.javacv;
+package uk.ac.cam.cl.wildpetscience.triton.lib.javacv;
 
 import nu.pattern.OpenCV;
 import org.junit.Test;
