@@ -2,6 +2,7 @@ package uk.ac.cam.cl.wildpetscience.triton.demo;
 
 import nu.pattern.OpenCV;
 import org.opencv.core.Mat;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.BufferedInputSource;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.WebcamInputSource;
@@ -35,7 +36,7 @@ public class ImageCaptureDemo {
             }
         });
 
-        final Driver driver = new Driver(new WebcamInputSource(), panel);
+        final Driver driver = new Driver(new BufferedInputSource(new WebcamInputSource(0)), panel);
 
         frame.addWindowListener(new WindowListener() {
             @Override public void windowOpened(WindowEvent windowEvent) { }
