@@ -19,13 +19,8 @@ import java.net.URLConnection;
 public class SparkTest {
     @Test
     public void testLoadSpark() throws IOException, InterruptedException {
-        Spark.setPort(9877);
-        Spark.get(new Route("/get") {
-            @Override
-            public Object handle(Request request, Response response) {
-                return "Spark server";
-            }
-        });
+        Spark.port(9877);
+        Spark.get("/get", (req, res) -> "Spark server");
         // Wait for spark to be up
         Thread.sleep(400);
         URLConnection conn =
