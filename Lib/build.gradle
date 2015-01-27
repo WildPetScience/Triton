@@ -8,6 +8,7 @@ dependencies {
     compile 'nu.pattern:opencv:2.4.9-7'
     compile 'com.sparkjava:spark-core:1.0'
 
-    // Unit tests
+    // Unit tests - junit and mockito for class mocking
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile "org.mockito:mockito-core:1.+"
 }
