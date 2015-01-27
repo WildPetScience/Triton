@@ -1,9 +1,6 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.spark;
 
 import org.junit.Test;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 import spark.Spark;
 
 import java.io.BufferedReader;
