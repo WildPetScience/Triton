@@ -5,6 +5,7 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * An ImageInputSource that fetches input ahead of time and buffers input.
@@ -27,7 +28,10 @@ public class BufferedInputSource implements ImageInputSource {
                 worker.start();
             }
             try {
-                return queue.take();
+                Image img = null;
+                while (!cancelled &&
+                        (img = queue.poll(1, TimeUnit.SECONDS)) == null);
+                return img;
             } catch (InterruptedException e) {
                 return null;
             }
@@ -49,6 +53,10 @@ public class BufferedInputSource implements ImageInputSource {
                 Image img = null;
                 try {
                     img = source.getNext();
+                    if (img == null) {
+                        cancelled = true;
+                        return;
+                    }
                     queue.put(img);
                 } catch (InputFailedException e) {
                     e.printStackTrace();
