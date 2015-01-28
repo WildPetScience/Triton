@@ -33,7 +33,9 @@ public class BufferedInputSourceTest {
             public Image answer(InvocationOnMock invocation) throws Throwable {
                 if (count++ < 300) {
                     Image img = new Image(null);
-                    created.add(img);
+                    synchronized (created) {
+                        created.add(img);
+                    }
                     return img;
                 }
                 return null;
@@ -42,7 +44,10 @@ public class BufferedInputSourceTest {
 
         for (int i = 0; i < 300; i++) {
             Image i1 = buffer.getNext();
-            Image i2 = created.remove(0);
+            Image i2;
+            synchronized (created) {
+                i2 = created.remove(0);
+            }
             if (i1 != i2) {
                 throw new RuntimeException("Unequal images found");
             }
