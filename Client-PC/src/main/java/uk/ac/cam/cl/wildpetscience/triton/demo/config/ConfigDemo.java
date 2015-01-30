@@ -1,4 +1,4 @@
-package uk.ac.cam.cl.wildpetscience.triton.configdemo;
+package uk.ac.cam.cl.wildpetscience.triton.demo.config;
 
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigServer;
 

@@ -1,4 +1,4 @@
-package uk.ac.cam.cl.wildpetscience.triton.webcamdemo;
+package uk.ac.cam.cl.wildpetscience.triton.demo.webcam;
 
 import nu.pattern.OpenCV;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.BufferedInputSource;
