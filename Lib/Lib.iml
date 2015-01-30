@@ -31,5 +31,8 @@
     <orderEntry type="library" exported="" name="Gradle: com.sparkjava:spark-core:2.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.slf4j:slf4j-api:1.7.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.slf4j:slf4j-simple:1.7.7" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.sparkjava:spark-template-mustache:1.0.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.github.spullara.mustache.java:compiler:0.8.15" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.google.guava:guava:16.0.1" level="project" />
   </component>
 </module>
