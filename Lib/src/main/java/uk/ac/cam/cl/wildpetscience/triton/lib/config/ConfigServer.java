@@ -50,4 +50,7 @@ public class ConfigServer {
         }
     }
 
+    // Private constructor to prevent instantiation
+    private ConfigServer() {}
+
 }
