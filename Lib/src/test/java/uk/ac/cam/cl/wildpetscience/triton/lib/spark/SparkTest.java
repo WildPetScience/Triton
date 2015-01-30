@@ -1,5 +1,6 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.spark;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 import spark.Spark;
 
@@ -14,6 +15,12 @@ import java.net.URLConnection;
  * Tests that Spark is present and working.
  */
 public class SparkTest {
+
+    @AfterClass
+    public static void tearDown() {
+        Spark.stop();
+    }
+
     @Test
     public void testLoadSpark() throws IOException, InterruptedException {
         Spark.port(9877);
