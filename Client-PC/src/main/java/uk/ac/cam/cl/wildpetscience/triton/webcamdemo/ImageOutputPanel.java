@@ -1,4 +1,4 @@
-package uk.ac.cam.cl.wildpetscience.triton.demo;
+package uk.ac.cam.cl.wildpetscience.triton.webcamdemo;
 
 import org.opencv.core.Mat;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;

@@ -1,19 +1,14 @@
-package uk.ac.cam.cl.wildpetscience.triton.demo;
+package uk.ac.cam.cl.wildpetscience.triton.webcamdemo;
 
 import nu.pattern.OpenCV;
-import org.opencv.core.Mat;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.BufferedInputSource;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.WebcamInputSource;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
 import java.io.IOException;
 
 public class ImageCaptureDemo {
