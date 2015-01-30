@@ -7,6 +7,7 @@ dependencies {
     // 3rd-party libraries
     compile 'nu.pattern:opencv:2.4.9-7'
     compile 'com.sparkjava:spark-core:2.1'
+    compile 'com.sparkjava:spark-template-mustache:1.0.0'
 
     // Unit tests - junit and mockito for class mocking
     testCompile group: 'junit', name: 'junit', version: '4.11'

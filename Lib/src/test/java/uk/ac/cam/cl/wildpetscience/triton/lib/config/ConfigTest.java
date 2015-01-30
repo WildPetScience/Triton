@@ -4,7 +4,9 @@ import org.junit.AfterClass;
 import org.junit.Test;
 import spark.Route;
 import spark.Spark;
+import spark.TemplateViewRoute;
 
+import javax.print.DocFlavor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +23,7 @@ public class ConfigTest {
 
     @AfterClass
     public static void tearDown() {
-        Spark.stop();
+        ConfigServer.stop();
     }
 
     @Test
@@ -52,6 +54,20 @@ public class ConfigTest {
         }
 
         reader.close();
+    }
+
+    @Test
+    public void testIndexPage() throws IOException, InterruptedException {
+        ConfigServer.start(8001);
+        Thread.sleep(400);
+
+        URLConnection conn = new URL("http://127.0.0.1:8001/config").openConnection();
+        InputStream content = (InputStream) conn.getContent();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+        String r;
+        while((r = reader.readLine()) != null) {
+            System.out.println(r);
+        }
     }
 
 }
