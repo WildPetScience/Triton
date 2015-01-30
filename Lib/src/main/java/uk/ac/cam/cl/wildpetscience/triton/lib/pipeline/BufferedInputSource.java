@@ -22,15 +22,15 @@ public class BufferedInputSource implements ImageInputSource {
 
     @Override
     public Image getNext() throws InputFailedException {
-        if (!cancelled) {
+        if (!cancelled || !queue.isEmpty()) {
             if (!running) {
                 running = true;
                 worker.start();
             }
             try {
                 Image img = null;
-                while (!cancelled &&
-                        (img = queue.poll(1, TimeUnit.SECONDS)) == null);
+                while ((!cancelled || !queue.isEmpty()) &&
+                        (img = queue.poll(100, TimeUnit.MILLISECONDS)) == null);
                 return img;
             } catch (InterruptedException e) {
                 return null;
