@@ -15,10 +15,9 @@ public class ConfigServer {
     /**
      * Launches the configuration server if it is not running, configured with a mapping of URLs to routes.
      * Restarts with new routes if the server is already running.
-     * @param port
-     * @param routes
+     * @param port The port to listen on.
+     * @param routes A map of URL strings to Spark route objects.
      */
-
     public static void start(int port, Map<String, Route> routes) {
         Spark.stop();
         Spark.port(port);
@@ -29,7 +28,7 @@ public class ConfigServer {
 
     /**
      * Starts the server with a sane default configuration.
-     * @param port
+     * @param port The port to listen on.
      */
     public static void start(int port) {
         Map<String, Route> map = new HashMap<>();
