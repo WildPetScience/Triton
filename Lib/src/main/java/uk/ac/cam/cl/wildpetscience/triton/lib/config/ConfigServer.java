@@ -1,6 +1,7 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
 import spark.*;
+import spark.template.mustache.MustacheTemplateEngine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,21 +12,18 @@ import java.util.Map.Entry;
  */
 public class ConfigServer {
 
-    private static boolean serverRunning = false;
-
     /**
      * Launches the configuration server if it is not running, configured with a mapping of URLs to routes.
-     * Has no effect if the server is already running.
+     * Restarts with new routes if the server is already running.
      * @param port
      * @param routes
      */
+
     public static void start(int port, Map<String, Route> routes) {
-        if(!serverRunning) {
-            Spark.port(port);
-            for(Entry<String, Route> r : routes.entrySet()) {
-                Spark.get(r.getKey(), r.getValue());
-            }
-            serverRunning = true;
+        Spark.stop();
+        Spark.port(port);
+        for(Entry<String, Route> r : routes.entrySet()) {
+            Spark.get(r.getKey(), r.getValue());
         }
     }
 
@@ -35,8 +33,8 @@ public class ConfigServer {
      */
     public static void start(int port) {
         Map<String, Route> map = new HashMap<>();
-        map.put("/", new RootConfigRoute());
-        start(port, map);
+        map.put("/config", new RootConfigRoute());
+        ConfigServer.start(port, map);
     }
 
     /**
@@ -44,10 +42,7 @@ public class ConfigServer {
      * Has no effect if the server is not running.
      */
     public static void stop() {
-        if(serverRunning) {
-            Spark.stop();
-            serverRunning = false;
-        }
+        Spark.stop();
     }
 
     // Private constructor to prevent instantiation
