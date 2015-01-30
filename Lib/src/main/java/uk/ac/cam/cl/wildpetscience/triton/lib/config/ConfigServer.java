@@ -33,7 +33,7 @@ public class ConfigServer {
     public static void start(int port) {
         Map<String, Route> map = new HashMap<>();
         map.put("/", new RootConfigRoute());
-        map.put("/:resource", new StaticResourceRoute());
+        map.put("/:resource/*", new StaticResourceRoute());
         ConfigServer.start(port, map);
     }
 
