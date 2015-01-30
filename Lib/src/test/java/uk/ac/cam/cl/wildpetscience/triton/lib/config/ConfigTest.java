@@ -61,7 +61,7 @@ public class ConfigTest {
         ConfigServer.start(8001);
         Thread.sleep(400);
 
-        URLConnection conn = new URL("http://127.0.0.1:8001/config").openConnection();
+        URLConnection conn = new URL("http://127.0.0.1:8001/").openConnection();
         InputStream content = (InputStream) conn.getContent();
         BufferedReader reader = new BufferedReader(new InputStreamReader(content));
         String r;
