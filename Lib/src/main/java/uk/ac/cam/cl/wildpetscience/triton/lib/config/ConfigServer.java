@@ -1,7 +1,6 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
 import spark.*;
-import spark.template.mustache.MustacheTemplateEngine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,13 +15,40 @@ public class ConfigServer {
      * Launches the configuration server if it is not running, configured with a mapping of URLs to routes.
      * Restarts with new routes if the server is already running.
      * @param port The port to listen on.
-     * @param routes A map of URL strings to Spark route objects.
+     * @param routes A map of URL strings to HTTPRoute objects.
      */
-    public static void start(int port, Map<String, Route> routes) {
+    public static void start(int port, Map<String, HTTPRoute> routes) {
         Spark.stop();
         Spark.port(port);
-        for(Entry<String, Route> r : routes.entrySet()) {
-            Spark.get(r.getKey(), r.getValue());
+        for(Entry<String, HTTPRoute> r : routes.entrySet()) {
+            String path = r.getKey();
+            Route route = r.getValue().route;
+            HTTPMethod method = r.getValue().method;
+            switch(method) {
+                case GET:
+                    Spark.get(path, route);
+                    break;
+                case POST:
+                    Spark.post(path, route);
+                    break;
+                case PUT:
+                    Spark.put(path, route);
+                    break;
+                case PATCH:
+                    Spark.patch(path, route);
+                    break;
+                case DELETE:
+                    Spark.delete(path, route);
+                    break;
+                case OPTIONS:
+                    Spark.options(path, route);
+                    break;
+                case HEAD:
+                    Spark.head(path, route);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -31,9 +57,9 @@ public class ConfigServer {
      * @param port The port to listen on.
      */
     public static void start(int port) {
-        Map<String, Route> map = new HashMap<>();
-        map.put("/", new RootConfigRoute());
-        map.put("/:resource/*", new StaticResourceRoute());
+        Map<String, HTTPRoute> map = new HashMap<>();
+        map.put("/", new HTTPRoute(new RootConfigRoute(), HTTPMethod.GET));
+        map.put("/:resource/*", new HTTPRoute(new StaticResourceRoute(), HTTPMethod.GET));
         ConfigServer.start(port, map);
     }
 

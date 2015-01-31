@@ -31,9 +31,9 @@ public class ConfigTest {
 
     @Test
     public void testConfigRouting() throws IOException, InterruptedException {
-        Map<String, Route> routes = new HashMap<>();
-        routes.put("/test1", (req, res) -> "CONFIG TEST RESPONSE 1");
-        routes.put("/test2", (req, res) -> "CONFIG TEST RESPONSE 2");
+        Map<String, HTTPRoute> routes = new HashMap<>();
+        routes.put("/test1", new HTTPRoute((req, res) -> "CONFIG TEST RESPONSE 1"));
+        routes.put("/test2", new HTTPRoute((req, res) -> "CONFIG TEST RESPONSE 2"));
         ConfigServer.start(8000, routes);
         Thread.sleep(400);
 
