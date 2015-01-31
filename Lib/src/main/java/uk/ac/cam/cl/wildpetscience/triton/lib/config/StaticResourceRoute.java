@@ -33,8 +33,9 @@ public class StaticResourceRoute implements Route {
             OutputStream out = response.raw().getOutputStream();
 
             byte[] buffer = new byte[BUFFER_SIZE];
-            while(in.read(buffer) != -1) {
-                out.write(buffer);
+            int bytesRead;
+            while((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
             }
 
             in.close();
