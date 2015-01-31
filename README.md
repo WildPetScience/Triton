@@ -44,3 +44,13 @@ Finally we must run the code - in the top right of IntelliJ, find the drop-down
 box next to the green run button. Select "Triton: Client-PC [run]", then click
 the green play button. Gradle will download dependencies and run the
 application.
+
+## Best practices
+
+### Creating a new build config
+When creating a new build configuration it's important to set Gradle as the build
+system, rather than the built in one in IntelliJ. When editing the Run/Debug
+config, find the 'Before launch' box at the bottom and remove the entry called 'Make'.
+Then add a new dependency for "Run another configuration", and select the 'assemble'
+config for the project this run config will be for. This will ensure that the project
+is built using Gradle.
