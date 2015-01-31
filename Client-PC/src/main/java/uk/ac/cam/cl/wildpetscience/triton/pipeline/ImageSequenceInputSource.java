@@ -42,7 +42,7 @@ public class ImageSequenceInputSource implements ImageInputSource {
         this.delay = delay;
     }
 
-    private int pos = 0;
+    private int pos = 1;
 
     private boolean stopped = false;
 
@@ -50,7 +50,8 @@ public class ImageSequenceInputSource implements ImageInputSource {
     public Image getNext() throws InputFailedException {
         if (stopped) return null;
 
-        Mat mat = Highgui.imread(filenameGenerator.apply(pos++).getAbsolutePath());
+        String path = filenameGenerator.apply(pos++).getAbsolutePath();
+        Mat mat = Highgui.imread(path);
         if (mat.dataAddr() == 0) { // Decode error, according to javadoc
             return null; // End of stream
         }
