@@ -1,4 +1,4 @@
-package uk.ac.cam.cl.wildpetscience.triton.lib.config;
+package uk.ac.cam.cl.wildpetscience.triton.lib.config.routes;
 
 
 import spark.Request;

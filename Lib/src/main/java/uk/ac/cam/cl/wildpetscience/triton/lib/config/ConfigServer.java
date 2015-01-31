@@ -1,6 +1,8 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
 import spark.*;
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.RootConfigRoute;
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.StaticResourceRoute;
 
 import java.util.HashMap;
 import java.util.Map;
