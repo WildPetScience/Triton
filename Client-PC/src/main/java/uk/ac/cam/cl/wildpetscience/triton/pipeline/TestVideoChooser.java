@@ -32,7 +32,7 @@ public class TestVideoChooser extends JFrame {
                 if (evt.getClickCount() == 2) {
                     int index = list.locationToIndex(evt.getPoint());
                     TestVideoEnumerator.TestVideo video =
-                            jList.getSelectedValuesList().get(index);
+                            jList.getSelectedValue();
                     startVideo(video);
                 }
             }
