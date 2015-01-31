@@ -2,9 +2,7 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.WebClient;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 import spark.Route;
 
 import java.io.BufferedReader;
@@ -20,6 +18,11 @@ import java.util.Map;
  * Tests the usage of the ConfigServer.
  */
 public class ConfigTest {
+
+    @Before
+    public void setUp() {
+        ConfigServer.stop();
+    }
 
     @AfterClass
     public static void tearDown() {
