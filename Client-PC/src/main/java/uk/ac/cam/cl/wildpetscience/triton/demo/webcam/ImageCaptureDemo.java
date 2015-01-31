@@ -1,52 +1,29 @@
 package uk.ac.cam.cl.wildpetscience.triton.demo.webcam;
 
 import nu.pattern.OpenCV;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.BufferedInputSource;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import uk.ac.cam.cl.wildpetscience.triton.demo.VisualPipelineDemo;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.WebcamInputSource;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.IOException;
-
+/**
+ * A demo that shows the output of the webcam.
+ */
 public class ImageCaptureDemo {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws InputFailedException, ParseException {
+        Options opts = new Options();
+        opts.addOption("w", "webcam", true, "Webcam number to use (default 0)");
+        CommandLine cmd = new GnuParser().parse(opts, args);
+
+        int webcam = Integer.valueOf(cmd.getOptionValue('w', "0"));
+
         OpenCV.loadShared();
-        final JFrame frame = new JFrame("Image capture demo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(640, 480);
-
-        frame.setResizable(true);
-        frame.setLocationRelativeTo(null);
-
-        ImageOutputPanel panel = new ImageOutputPanel();
-        frame.getContentPane().add(panel);
-
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                frame.setVisible(true);
-            }
-        });
-
-        final Driver driver = new Driver(new BufferedInputSource(new WebcamInputSource(0)), panel);
-
-        frame.addWindowListener(new WindowListener() {
-            @Override public void windowOpened(WindowEvent windowEvent) { }
-
-            @Override
-            public void windowClosing(WindowEvent windowEvent) {
-                driver.cancel();
-            }
-
-            @Override public void windowClosed(WindowEvent windowEvent) {  }
-            @Override public void windowIconified(WindowEvent windowEvent) {  }
-            @Override public void windowDeiconified(WindowEvent windowEvent) {  }
-            @Override public void windowActivated(WindowEvent windowEvent) {  }
-            @Override public void windowDeactivated(WindowEvent windowEvent) {  }
-        });
-        driver.start();
+        VisualPipelineDemo demo = new VisualPipelineDemo(
+                new WebcamInputSource(webcam),
+                "Live webcam demo");
+        demo.start();
     }
 }
