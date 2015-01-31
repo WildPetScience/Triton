@@ -2,7 +2,7 @@ package uk.ac.cam.cl.wildpetscience.triton.demo;
 
 import org.opencv.core.Mat;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageOutputSink;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * A JPanel that displays outputted images
  */
-public class ImageOutputPanel extends JPanel implements ImageOutputSink {
+public class ImageOutputPanel extends JPanel implements OutputSink<Image> {
     static BufferedImage createAwtImage(Mat mat) {
         int type = 0;
         if (mat.channels() == 1) {

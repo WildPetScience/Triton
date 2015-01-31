@@ -24,7 +24,7 @@ public class VisualPipelineDemo {
         ImageOutputPanel panel = new ImageOutputPanel();
         frame.getContentPane().add(panel);
 
-        driver = new Driver(input, panel);
+        driver = Driver.makeSimpleDriver(input, panel);
 
         frame.addWindowListener(new WindowListener() {
             @Override public void windowOpened(WindowEvent windowEvent) { }

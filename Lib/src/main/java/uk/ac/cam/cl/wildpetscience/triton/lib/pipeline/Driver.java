@@ -5,17 +5,57 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 import java.io.IOException;
 
 /**
- * Pumps data from an ImageInputSource to an ImageOutputSink.
+ * Pumps data from an ImageInputSource to an OutputSink.
  */
-public class Driver extends Thread {
+public class Driver<D> extends Thread {
     private final ImageInputSource in;
-    private final ImageOutputSink out;
+    private final OutputSink<D> out;
+
+    private final Filter<Image, D> filter;
 
     private boolean cancelled = false;
 
-    public Driver (ImageInputSource in, ImageOutputSink out) {
+    public Driver(ImageInputSource in, Filter<Image, D> flt, OutputSink<D> out) {
         this.in = in;
         this.out = out;
+        filter = flt;
+    }
+
+    public <A> Driver(ImageInputSource in,
+                  Filter<Image, A> f1,
+                  Filter<A, D> f2,
+                  OutputSink<D> out) {
+        this(in, new ConnectingFilter<>(f1, f2), out);
+    }
+
+    public <A, B> Driver(ImageInputSource in,
+                         Filter<Image, A> f1,
+                         Filter<A, B> f2,
+                         Filter<B, D> f3,
+                         OutputSink<D> out) {
+        this(in,
+                new ConnectingFilter<>(
+                        new ConnectingFilter<>(f1, f2),
+                        f3)
+                , out);
+    }
+
+    public <A, B, C> Driver(ImageInputSource in,
+                      Filter<Image, A> f1,
+                      Filter<A, B> f2,
+                      Filter<B, C> f3,
+                      Filter<C, D> f4,
+                      OutputSink<D> out) {
+        this(in,
+                new ConnectingFilter<>(
+                        new ConnectingFilter<>(f1, f2),
+                        new ConnectingFilter<>(f3, f4))
+                        , out);
+    }
+
+    public static Driver<Image> makeSimpleDriver(ImageInputSource in,
+                                                 OutputSink<Image> out) {
+        return new Driver(in, new IdentityFilter<>(), out);
     }
 
     @Override
@@ -31,7 +71,8 @@ public class Driver extends Thread {
                     out.close();
                     cancel();
                 } else {
-                    out.onImageAvailable(img);
+                    D result = filter.filter(img);
+                    out.onImageAvailable(result);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
