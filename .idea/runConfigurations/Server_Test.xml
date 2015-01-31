@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Camera test" type="Application" factoryName="Application">
+  <configuration default="false" name="Server Test" type="Application" factoryName="Application">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-    <option name="MAIN_CLASS_NAME" value="uk.ac.cam.cl.wildpetscience.triton.demo.webcam.ImageCaptureDemo" />
+    <option name="MAIN_CLASS_NAME" value="uk.ac.cam.cl.wildpetscience.triton.demo.config.ConfigDemo" />
     <option name="VM_PARAMETERS" value="" />
     <option name="PROGRAM_PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
@@ -12,17 +12,8 @@
     <option name="PASS_PARENT_ENVS" value="true" />
     <module name="Client-PC" />
     <envs />
-    <RunnerSettings RunnerId="Debug">
-      <option name="DEBUG_PORT" value="" />
-      <option name="TRANSPORT" value="0" />
-      <option name="LOCAL" value="true" />
-    </RunnerSettings>
     <RunnerSettings RunnerId="Run" />
-    <ConfigurationWrapper RunnerId="Debug" />
     <ConfigurationWrapper RunnerId="Run" />
-    <method>
-      <option name="Make" enabled="false" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Triton:Client-PC [assemble]" run_configuration_type="GradleRunConfiguration" />
-    </method>
+    <method />
   </configuration>
 </component>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTarget -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/config.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <title>Wild Pet Science Setup</title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Setup</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div id="page-header">
+        <h1>
+            Wild Pet Science Setup
+        </h1>
+        <p>
+            This page will allow you to perform basic configuration of your Wild Pet Science system.
+        </p>
+    </div>
+</div>
+
+<hr />
+
+<div class="container">
+    <div id="start-stop">
+        <h2>
+            Start / Stop
+        </h2>
+        <p>
+            Here you can start and stop your system.
+        </p>
+        <button type="button" id="toggle-button" class="btn btn-primary btn-lg btn-success" onclick="toggleRunning()">Start</button>
+    </div>
+</div>
+
+<hr />
+
+<div class="container">
+    <div id="zone-marks">
+        <h2>
+            Mark Zones
+        </h2>
+        <p>Use this tool to mark areas of interest on your pet's cage.</p>
+        <canvas id="zone-canvas" width="800" height="600">
+        </canvas>
+    </div>
+</div>
+
+<hr />
+
+<div class="container">
+    <div id="code-gen">
+        <h2>
+            Data Access Code
+        </h2>
+        <p>
+            Use this code to access your data on the Wild Pet Science website.
+        </p>
+        <pre>correct-horse-battery-staple</pre>
+    </div>
+</div>
+
+<hr />
+
+<div class="container">
+    <div id="status-logs">
+        <h2>
+            System Logs
+        </h2>
+        <pre>31/01/15 - Uploaded 1.8kB of data.
+29/01/15 - Begin recording.</pre>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/config.js"></script>
+</body>
+</html>
