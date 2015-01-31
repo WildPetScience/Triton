@@ -27,7 +27,12 @@ public class Driver extends Thread {
             }
             try {
                 Image img = in.getNext();
-                out.onImageAvailable(img);
+                if (img == null) {
+                    out.close();
+                    cancel();
+                } else {
+                    out.onImageAvailable(img);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
