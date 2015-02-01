@@ -7,7 +7,7 @@ import java.io.Closeable;
 /**
  * A destination for images
  */
-public interface ImageOutputSink extends Closeable {
+public interface OutputSink<T> extends Closeable {
     /**
      * Another image is available for processing. This method will most likely
      * be called on a worker thread, but will be called on the same thread each
@@ -15,5 +15,5 @@ public interface ImageOutputSink extends Closeable {
      * done.
      * @param image
      */
-    public void onImageAvailable(Image image);
+    public void onImageAvailable(T image);
 }

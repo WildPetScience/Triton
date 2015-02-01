@@ -1,19 +1,27 @@
 package uk.ac.cam.cl.wildpetscience.triton.demo;
 
-import nu.pattern.OpenCV;
+import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.function.Function;
 
 public class VisualPipelineDemo {
     private final JFrame frame;
     private final Driver driver;
 
     public VisualPipelineDemo(ImageInputSource input, String title) {
+        this(panel -> Driver.makeSimpleDriver(input, panel), title);
+    }
+
+    public VisualPipelineDemo(Function<OutputSink<Image>,
+                                      Driver<Image>> creator,
+                              String title) {
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(640, 480);
@@ -24,7 +32,7 @@ public class VisualPipelineDemo {
         ImageOutputPanel panel = new ImageOutputPanel();
         frame.getContentPane().add(panel);
 
-        driver = new Driver(input, panel);
+        driver = creator.apply(panel);
 
         frame.addWindowListener(new WindowListener() {
             @Override public void windowOpened(WindowEvent windowEvent) { }
