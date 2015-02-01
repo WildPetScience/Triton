@@ -1,4 +1,4 @@
-package uk.ac.cam.cl.wildpetscience.triton.lib.config.manage;
+package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
