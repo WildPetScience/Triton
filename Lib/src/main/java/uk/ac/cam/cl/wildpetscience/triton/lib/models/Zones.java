@@ -8,8 +8,13 @@ import java.util.Set;
 public class Zones {
     private Set<Zone> zones;
 
-    public Zones(Set<Zone> zones) {
+    private double cageWidth;
+    private double cageHeight;
+
+    public Zones(Set<Zone> zones, double cageWidth, double cageHeight) {
         this.zones = zones;
+        this.cageHeight = cageHeight;
+        this.cageWidth = cageWidth;
     }
 
     public Set<Zone> getZones() {
@@ -18,5 +23,21 @@ public class Zones {
 
     public void setZones(Set<Zone> zones) {
         this.zones = zones;
+    }
+
+    public double getCageWidth() {
+        return cageWidth;
+    }
+
+    public void setCageWidth(double cageWidth) {
+        this.cageWidth = cageWidth;
+    }
+
+    public double getCageHeight() {
+        return cageHeight;
+    }
+
+    public void setCageHeight(double cageHeight) {
+        this.cageHeight = cageHeight;
     }
 }
