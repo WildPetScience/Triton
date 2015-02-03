@@ -9,11 +9,11 @@ import java.io.Closeable;
  */
 public interface OutputSink<T> extends Closeable {
     /**
-     * Another image is available for processing. This method will most likely
+     * More data is available for processing. This method will most likely
      * be called on a worker thread, but will be called on the same thread each
-     * time. Note that it is the job of this method to release the Image once
-     * done.
-     * @param image
+     * time. Note that it is the job of this method to release any passed data
+     * when done.
+     * @param data
      */
-    public void onImageAvailable(T image);
+    public void onDataAvailable(T data);
 }
