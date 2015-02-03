@@ -18,7 +18,7 @@ public class CornerDisplayFilter implements Filter<ImageWithCorners, Image> {
     public Image filter(ImageWithCorners input) {
         Mat dat = input.getData();
         Scalar col = new Scalar(0, 255, 0);
-        for (uk.ac.cam.cl.wildpetscience.triton.lib.models.Point point : input.getCorners().get()) {
+        for (Point point : input.getCorners().get()) {
             Core.circle(dat,
                     new Point(point.x * dat.width(), point.y * dat.height()),
                     10, col, 3);
