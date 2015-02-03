@@ -18,6 +18,13 @@ public class Corners {
         this.lowerRight = lowerRight;
     }
 
+    public Corners() {
+        upperLeft = new Point(0, 0);
+        upperRight = new Point(1, 0);
+        lowerLeft = new Point(0, 1);
+        lowerRight = new Point(1, 1);
+    }
+
     public Point getLowerLeft() {
         return lowerLeft;
     }
@@ -48,5 +55,9 @@ public class Corners {
 
     public void setUpperRight(Point upperRight) {
         this.upperRight = upperRight;
+    }
+
+    public Point[] get() {
+        return new Point[] { upperLeft, upperRight, lowerRight, lowerLeft };
     }
 }

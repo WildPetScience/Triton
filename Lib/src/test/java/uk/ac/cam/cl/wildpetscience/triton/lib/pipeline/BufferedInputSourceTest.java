@@ -32,7 +32,7 @@ public class BufferedInputSourceTest {
             @Override
             public Image answer(InvocationOnMock invocation) throws Throwable {
                 if (count++ < 300) {
-                    Image img = new Image(null);
+                    Image img = new Image();
                     synchronized (created) {
                         created.add(img);
                     }

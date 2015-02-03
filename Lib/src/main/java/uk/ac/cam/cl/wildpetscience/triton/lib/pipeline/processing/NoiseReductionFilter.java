@@ -11,7 +11,8 @@ import java.io.IOException;
 public class NoiseReductionFilter implements Filter<Image, Image> {
     @Override
     public Image filter(Image input) {
-        return null;
+        // TODO: Provide implementation
+        return input;
     }
 
     @Override

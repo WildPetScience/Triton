@@ -11,8 +11,20 @@ public class Image {
      */
     private Mat data;
 
+    public Image() {
+        data = new Mat();
+    }
+
     public Image(Mat data) {
         this.data = data;
+    }
+
+    /**
+     * Copy constructor - copies the Mat inside the Image
+     * @param img
+     */
+    public Image(Image img) {
+        this(img.getData().clone());
     }
 
     public Mat getData() {

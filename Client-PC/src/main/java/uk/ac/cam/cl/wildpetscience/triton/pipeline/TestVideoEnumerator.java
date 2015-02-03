@@ -19,8 +19,8 @@ public class TestVideoEnumerator {
     private final int webcam;
 
     public TestVideoEnumerator(File path, int webcam) {
-        enumerateChangeDetection(path);
         this.webcam = webcam;
+        enumerateChangeDetection(path);
     }
 
     private void enumerateChangeDetection(File root) {

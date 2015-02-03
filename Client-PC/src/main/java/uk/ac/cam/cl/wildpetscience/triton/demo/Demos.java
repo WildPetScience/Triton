@@ -8,7 +8,9 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.CornerDetectionFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.NoiseReductionFilter;
+import uk.ac.cam.cl.wildpetscience.triton.pipeline.CornerDisplayFilter;
 import uk.ac.cam.cl.wildpetscience.triton.pipeline.TestVideoEnumerator;
 
 import javax.swing.*;
@@ -80,6 +82,23 @@ public class Demos extends JFrame {
             }
         });
         grid.add(noiseReduction);
+
+        grid.add(new JLabel("Corner detection demo:"));
+        JButton cornerDetection = new JButton("Start");
+        cornerDetection.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VisualPipelineDemo demo = new VisualPipelineDemo(
+                        output -> new Driver<>(
+                                getInputSource(),
+                                new CornerDetectionFilter(),
+                                new CornerDisplayFilter(),
+                                output
+                        ), "Noise reduction");
+                demo.start();
+            }
+        });
+        grid.add(cornerDetection);
 
         pack();
     }
