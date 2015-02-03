@@ -17,21 +17,21 @@ public class ConfigManager {
      * Start the system - begin to take pictures, process movement and upload data.
      */
     public static void startRecording() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
      * Stop the system - stop taking pictures and upload any remaining data.
      */
     public static void stopRecording() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
      * @return a list of interesting zones registered with the system.
      */
     public static List<Zone> getZones() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -39,28 +39,28 @@ public class ConfigManager {
      * @param zones
      */
     public static void setZones(List<Zone> zones) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
      * @return The unique, random access code for viewing data online.
      */
     public static String getAccessCode() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
      * @return A List of logged system events.
      */
     public static List<LogEntry> getSystemLogs() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
      * @param entry A new system event to log.
      */
     public static void addLogEntry(LogEntry entry) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
 }
