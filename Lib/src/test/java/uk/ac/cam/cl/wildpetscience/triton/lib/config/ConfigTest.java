@@ -34,11 +34,11 @@ public class ConfigTest {
         Map<String, HTTPRoute> routes = new HashMap<>();
         routes.put("/test1", new HTTPRoute((req, res) -> "CONFIG TEST RESPONSE 1"));
         routes.put("/test2", new HTTPRoute((req, res) -> "CONFIG TEST RESPONSE 2"));
-        ConfigServer.start(8000, routes);
+        ConfigServer.start(8123, routes);
         Thread.sleep(400);
 
         URLConnection conn =
-                new URL("http://127.0.0.1:8000/test1").openConnection();
+                new URL("http://127.0.0.1:8123/test1").openConnection();
         InputStream content = (InputStream) conn.getContent();
         BufferedReader reader = new BufferedReader(new InputStreamReader(content));
         if (!reader.readLine().equals("CONFIG TEST RESPONSE 1")) {
@@ -47,7 +47,7 @@ public class ConfigTest {
                     "Spark server returned incorrect response");
         }
 
-        conn = new URL("http://127.0.0.1:8000/test2").openConnection();
+        conn = new URL("http://127.0.0.1:8123/test2").openConnection();
         content = (InputStream) conn.getContent();
         reader = new BufferedReader(new InputStreamReader(content));
         if (!reader.readLine().equals("CONFIG TEST RESPONSE 2")) {
@@ -61,11 +61,11 @@ public class ConfigTest {
 
     @Test
     public void testIndexPage() throws IOException, InterruptedException {
-        ConfigServer.start(8001);
+        ConfigServer.start(8123);
         Thread.sleep(400);
 
         WebClient webClient = new WebClient();
-        HtmlPage page = webClient.getPage("http://127.0.0.1:8001/");
+        HtmlPage page = webClient.getPage("http://127.0.0.1:8123/");
         Assert.assertEquals(page.getTitleText(), "Wild Pet Science Setup");
 
         //TODO: add more tests here once page layout is finalised
