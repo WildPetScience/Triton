@@ -72,7 +72,7 @@ public class Driver<D> extends Thread {
                     cancel();
                 } else {
                     D result = filter.filter(img);
-                    out.onImageAvailable(result);
+                    out.onDataAvailable(result);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

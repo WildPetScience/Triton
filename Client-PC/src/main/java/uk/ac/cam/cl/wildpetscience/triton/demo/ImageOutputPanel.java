@@ -37,7 +37,7 @@ public class ImageOutputPanel extends JPanel implements OutputSink<Image> {
     private BufferedImage image;
 
     @Override
-    public void onImageAvailable(Image image) {
+    public void onDataAvailable(Image image) {
         if (image == null) {
             return;
         }
