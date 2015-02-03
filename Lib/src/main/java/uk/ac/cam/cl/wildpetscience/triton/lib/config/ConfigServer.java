@@ -61,6 +61,7 @@ public class ConfigServer {
     public static void start(int port) {
         Map<String, HTTPRoute> map = new HashMap<>();
         map.put("/", new HTTPRoute(new RootConfigRoute(), HTTPMethod.GET));
+        map.put("/:resource", new HTTPRoute(new StaticResourceRoute()));
         map.put("/:resource/*", new HTTPRoute(new StaticResourceRoute(), HTTPMethod.GET));
         ConfigServer.start(port, map);
     }
