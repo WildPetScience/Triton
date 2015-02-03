@@ -15,6 +15,14 @@ public class Image {
         this.data = data;
     }
 
+    /**
+     * Copy constructor
+     * @param img
+     */
+    public Image(Image img) {
+        this(img.getData().clone());
+    }
+
     public Mat getData() {
         return data;
     }
