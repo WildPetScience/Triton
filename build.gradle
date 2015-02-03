@@ -7,3 +7,9 @@ allprojects {
         jcenter()
     }
 }
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
