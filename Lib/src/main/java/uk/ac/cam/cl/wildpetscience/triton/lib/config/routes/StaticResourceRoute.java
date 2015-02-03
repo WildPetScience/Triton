@@ -42,7 +42,7 @@ public class StaticResourceRoute implements Route {
             out.close();
         } catch(FileNotFoundException e) {
             System.err.println(e.getMessage());
-            response.status(404);
+            response.redirect("/", 404);
         } catch(IOException e) {
             e.printStackTrace();
         }
