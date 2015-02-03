@@ -1,5 +1,7 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.models;
 
+import org.opencv.core.Point;
+
 import java.time.LocalDateTime;
 
 /**
