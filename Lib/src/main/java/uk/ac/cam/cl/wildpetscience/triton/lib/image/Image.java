@@ -20,7 +20,7 @@ public class Image {
     }
 
     /**
-     * Copy constructor
+     * Copy constructor - copies the Mat inside the Image
      * @param img
      */
     public Image(Image img) {
