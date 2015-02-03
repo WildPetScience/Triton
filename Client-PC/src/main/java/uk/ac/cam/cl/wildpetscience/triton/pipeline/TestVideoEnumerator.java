@@ -1,6 +1,8 @@
 package uk.ac.cam.cl.wildpetscience.triton.pipeline;
 
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.WebcamInputSource;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,11 +16,16 @@ public class TestVideoEnumerator {
 
     private ArrayList<TestVideo> sources = new ArrayList<>();
 
-    public TestVideoEnumerator(File path) {
+    private final int webcam;
+
+    public TestVideoEnumerator(File path, int webcam) {
         enumerateChangeDetection(path);
+        this.webcam = webcam;
     }
 
     private void enumerateChangeDetection(File root) {
+        sources.add(new WebcamVideo(webcam));
+
         File changeDetectionRoot = new File(root, "changedetection");
         if (!changeDetectionRoot.isDirectory()) {
             System.err.println("Changedetection.net dataset not present");
@@ -54,10 +61,12 @@ public class TestVideoEnumerator {
         return sources.toArray(new TestVideo[sources.size()]);
     }
 
-    public ImageInputSource getInputSource(TestVideo testVideo, int delay) {
+    public ImageInputSource getInputSource(TestVideo testVideo, int delay) throws InputFailedException {
         if (testVideo instanceof TestChangeDetectionVideo) {
             File photoDir = ((TestChangeDetectionVideo)testVideo).input;
             return new ImageSequenceInputSource(photoDir, "in%06d.jpg", delay);
+        } else if (testVideo instanceof WebcamVideo) {
+            return new WebcamInputSource(((WebcamVideo)testVideo).webcam);
         }
         return null;
     }
@@ -72,6 +81,19 @@ public class TestVideoEnumerator {
         @Override
         public String toString() {
             return name;
+        }
+    }
+
+    public static class WebcamVideo extends TestVideo {
+        public final int webcam;
+
+        public WebcamVideo(int webcam) {
+            this.webcam = webcam;
+        }
+
+        @Override
+        public String toString() {
+            return "Live webcam (" + webcam + ")";
         }
     }
 }

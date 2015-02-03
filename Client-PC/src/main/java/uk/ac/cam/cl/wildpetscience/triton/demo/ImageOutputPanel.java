@@ -38,6 +38,9 @@ public class ImageOutputPanel extends JPanel implements OutputSink<Image> {
 
     @Override
     public void onImageAvailable(Image image) {
+        if (image == null) {
+            return;
+        }
         this.image = createAwtImage(image.getData());
         image.release();
         EventQueue.invokeLater(new Runnable() {
