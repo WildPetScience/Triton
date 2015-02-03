@@ -11,6 +11,10 @@ public class Image {
      */
     private Mat data;
 
+    public Image() {
+        data = new Mat();
+    }
+
     public Image(Mat data) {
         this.data = data;
     }
