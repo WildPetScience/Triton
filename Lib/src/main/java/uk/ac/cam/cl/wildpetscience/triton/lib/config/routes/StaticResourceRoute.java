@@ -7,10 +7,10 @@ import spark.Route;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 
 //TODO: Write tests for this route
 //TODO: Improve error handling when copying bytes
-//TODO: Get file MIME type to make request info better
 //TODO: Have file not found redirect to a 404 page
 
 /**
@@ -27,6 +27,10 @@ public class StaticResourceRoute implements Route {
         String resourcePath = request.pathInfo();
         try {
             File resource = getResource(resourcePath);
+
+            //Sets the MIME type of the response correctly
+            String mime = Files.probeContentType(resource.toPath());
+            response.header("Content-Type", mime);
 
             InputStream in = new BufferedInputStream(
                     new FileInputStream(resource));
