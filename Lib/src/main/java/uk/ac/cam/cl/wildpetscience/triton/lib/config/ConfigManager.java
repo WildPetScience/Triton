@@ -1,6 +1,5 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.LogEntry;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
