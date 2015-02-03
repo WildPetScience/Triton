@@ -10,7 +10,7 @@ import java.io.IOException;
  */
 public class NoiseReductionFilter implements Filter<Image, Image> {
     @Override
-    public Image filter(Image input) {du
+    public Image filter(Image input) {
         return null;
     }
 
