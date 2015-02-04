@@ -9,7 +9,9 @@ import java.io.File;
  */
 public class Bootstrap {
     public static void init() {
-        if (!isWindows()) {
+        if (isPi()) {
+            System.load("/usr/lib/jni/libopencv_java249.so");
+        } else if (!isWindows()) {
             OpenCV.loadShared();
         } else {
             String arch = is64Bit() ? "x64" : "x86";
@@ -33,6 +35,10 @@ public class Bootstrap {
      */
     static boolean isWindows() {
         return System.getProperty("os.name").toLowerCase().contains("win");
+    }
+
+    static boolean isPi() {
+        return System.getProperty("os.arch").equals("arm");
     }
 
     static boolean is64Bit() {
