@@ -16,6 +16,8 @@ public class TestVideoEnumerator {
 
     private ArrayList<TestVideo> sources = new ArrayList<>();
 
+    private static ArrayList<EnclosedTestVideo> additionalSources = new ArrayList<>();
+
     private final int webcam;
 
     public TestVideoEnumerator(File path, int webcam) {
@@ -25,6 +27,8 @@ public class TestVideoEnumerator {
 
     private void enumerateChangeDetection(File root) {
         sources.add(new WebcamVideo(webcam));
+
+        sources.addAll(additionalSources);
 
         File changeDetectionRoot = new File(root, "changedetection");
         if (!changeDetectionRoot.isDirectory()) {
@@ -67,6 +71,8 @@ public class TestVideoEnumerator {
             return new ImageSequenceInputSource(photoDir, "in%06d.jpg", delay);
         } else if (testVideo instanceof WebcamVideo) {
             return new WebcamInputSource(((WebcamVideo)testVideo).webcam);
+        } else if (testVideo instanceof EnclosedTestVideo) {
+            return ((EnclosedTestVideo)testVideo).create();
         }
         return null;
     }
@@ -95,5 +101,13 @@ public class TestVideoEnumerator {
         public String toString() {
             return "Live webcam (" + webcam + ")";
         }
+    }
+
+    public static abstract class EnclosedTestVideo extends TestVideo {
+        public abstract ImageInputSource create();
+    }
+
+    public static void addAdditionalSource(EnclosedTestVideo source) {
+        additionalSources.add(source);
     }
 }
