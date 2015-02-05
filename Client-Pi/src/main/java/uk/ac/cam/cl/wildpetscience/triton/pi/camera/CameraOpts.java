@@ -6,14 +6,12 @@ package uk.ac.cam.cl.wildpetscience.triton.pi.camera;
 public class CameraOpts {
     private final int width;
     private final int height;
-    private final int fps;
-    private final int bitRate;
+    private final int delay;
 
-    public CameraOpts(int width, int height, int fps, int bitRate) {
+    public CameraOpts(int width, int height, int delay) {
         this.width = width;
         this.height = height;
-        this.fps = fps;
-        this.bitRate = bitRate;
+        this.delay = delay;
     }
 
     public int getWidth() {
@@ -24,11 +22,7 @@ public class CameraOpts {
         return height;
     }
 
-    public int getFps() {
-        return fps;
-    }
-
-    public int getBitRate() {
-        return bitRate;
+    public int getDelay() {
+        return delay;
     }
 }
