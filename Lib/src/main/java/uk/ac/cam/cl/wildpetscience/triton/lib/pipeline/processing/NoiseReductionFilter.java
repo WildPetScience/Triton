@@ -19,7 +19,7 @@ public class NoiseReductionFilter implements Filter<Image, Image> {
         Mat inputMat = input.getData();
         Mat inputMatGreyscale = new Mat();
         Imgproc.cvtColor(inputMat, inputMatGreyscale, Imgproc.COLOR_RGB2GRAY);
-        fastNlMeansDenoising(inputMatGreyscale, outputMat, 5, 7, 21);
+        fastNlMeansDenoising(inputMatGreyscale, outputMat, 5, 13, 21);
         input.release();
         Image output = new Image(outputMat);
         return output;
