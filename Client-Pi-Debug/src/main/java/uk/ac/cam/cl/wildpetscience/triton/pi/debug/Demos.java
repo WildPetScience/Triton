@@ -17,7 +17,7 @@ public class Demos {
 
             @Override
             public String toString() {
-                return "$classname{}";
+                return "Raspberry Pi Camera";
             }
         });
         uk.ac.cam.cl.wildpetscience.triton.demo.Demos.main(args);
