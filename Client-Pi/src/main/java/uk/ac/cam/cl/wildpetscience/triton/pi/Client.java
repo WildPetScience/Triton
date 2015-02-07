@@ -1,15 +1,12 @@
 package uk.ac.cam.cl.wildpetscience.triton.pi;
 
-import nu.pattern.OpenCV;
+import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
 
 /**
- * Main entry point for Triton running on a Raspberry Pi
+ * Main entry point for Triton running on a Raspberry Pi.
  */
 public class Client {
     public static void main(String[] args) {
-        System.out.println("Stub (on the Pi)");
-
-        // Library initialisation
-        OpenCV.loadShared();
+        Bootstrap.init();
     }
 }
