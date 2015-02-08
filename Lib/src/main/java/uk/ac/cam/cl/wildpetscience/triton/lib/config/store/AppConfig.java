@@ -62,7 +62,7 @@ public class AppConfig {
 
     /**
      * Constructs a configuration object from a given JSON file.
-     * @param configFile
+     * @param configFileName
      */
     public static AppConfig getConfig(String configFileName) throws IOException {
         Gson gson = new Gson();
