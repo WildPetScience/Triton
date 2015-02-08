@@ -7,11 +7,13 @@ public class CameraOpts {
     private final int width;
     private final int height;
     private final int delay;
+    private final boolean grayscale;
 
-    public CameraOpts(int width, int height, int delay) {
+    public CameraOpts(int width, int height, int delay, boolean grayscale) {
         this.width = width;
         this.height = height;
         this.delay = delay;
+        this.grayscale = grayscale;
     }
 
     public int getWidth() {
@@ -24,5 +26,9 @@ public class CameraOpts {
 
     public int getDelay() {
         return delay;
+    }
+
+    public boolean isGrayscale() {
+        return grayscale;
     }
 }

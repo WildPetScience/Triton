@@ -1,15 +1,11 @@
 package uk.ac.cam.cl.wildpetscience.triton.pi.camera;
 
-import org.apache.commons.imaging.ImageReadException;
-import org.apache.commons.imaging.Imaging;
-import uk.ac.cam.cl.wildpetscience.triton.lib.io.NonClosingInputStream;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.function.Consumer;
 
 /**
@@ -17,33 +13,35 @@ import java.util.function.Consumer;
  */
 public class RaspiStillRunner implements Closeable {
     private CameraOpts opts;
-    private final Consumer<BufferedImage> output;
+
+    private final byte[] buf = new byte[4096];
 
     private Process process;
-    private ImageDecoder imageDecoder;
 
-    public RaspiStillRunner(CameraOpts opts, Consumer<BufferedImage> output) throws IOException {
+    public RaspiStillRunner(CameraOpts opts) throws IOException {
         this.opts = opts;
-        this.output = output;
-        startStream();
     }
 
     /**
-     * Starts the stream
+     * Takes an image using the pi camera
      */
-    private synchronized void startStream() throws IOException {
+    public synchronized byte[] takeImage() throws IOException, InterruptedException {
         close();
         process = Runtime.getRuntime().exec(String.format(
-                "raspistill -t 99999999 -tl %d -o - -w %d -h %d",
-                opts.getDelay(),
+                "raspistill -t 1 -o - -w %d -h %d -e bmp",
                 opts.getWidth(),
                 opts.getHeight()));
-        imageDecoder = new ImageDecoder(process.getInputStream(), output);
-        imageDecoder.start();
-    }
-
-    private void restartStream() throws IOException {
-        startStream();
+        InputStream in = process.getInputStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int len;
+        while ((len = in.read(buf)) != -1) {
+            out.write(buf, 0, len);
+        }
+        process.waitFor();
+        process.destroy();
+        byte[] data = out.toByteArray();
+        out.close();
+        return data;
     }
 
     public CameraOpts getOpts() {
@@ -54,9 +52,8 @@ public class RaspiStillRunner implements Closeable {
      * Sets new camera options. Will cause a brief pause in stream.
      * @param opts
      */
-    public void setOpts(CameraOpts opts) throws IOException {
+    public synchronized void setOpts(CameraOpts opts) {
         this.opts = opts;
-        restartStream();
     }
 
     @Override
@@ -65,57 +62,6 @@ public class RaspiStillRunner implements Closeable {
             process.getInputStream().close();
             process.destroy();
             process = null;
-        }
-        if (imageDecoder != null) {
-            imageDecoder.cancel();
-            imageDecoder = null;
-        }
-    }
-
-    private static class ImageDecoder extends Thread {
-
-        private boolean cancelled = false;
-        private final NonClosingInputStream input;
-        private final Consumer<BufferedImage> output;
-
-        public ImageDecoder(InputStream input, Consumer<BufferedImage> output) {
-            this.input = new NonClosingInputStream(input);
-            this.output = output;
-        }
-
-        @Override
-        public void run() {
-            boolean localCancelled;
-            do {
-                try {
-                    BufferedImage img = Imaging.getBufferedImage(input);
-                    output.accept(img);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    try {
-                        input.reallyClose();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                    // Stop capturing when a failure happens
-                    break;
-                } catch (ImageReadException e) {
-                    e.printStackTrace();
-                }
-
-                synchronized (this) {
-                    localCancelled = cancelled;
-                }
-            } while (!localCancelled);
-            try {
-                input.reallyClose();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public void cancel() {
-            cancelled = true;
         }
     }
 }

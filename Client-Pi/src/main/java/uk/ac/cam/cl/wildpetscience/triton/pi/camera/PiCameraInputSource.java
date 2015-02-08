@@ -2,12 +2,12 @@ package uk.ac.cam.cl.wildpetscience.triton.pi.camera;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.highgui.Highgui;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.IOException;
 
 /**
@@ -15,72 +15,41 @@ import java.io.IOException;
  */
 public class PiCameraInputSource implements ImageInputSource {
 
-    private RaspiStillRunner runner;
-    private long imageCount = -1;
-    private long lastSentImage = -1;
-    private BufferedImage currentImage;
-
-    private Object notifier = new Object();
+    private RaspiStillRunner runner = null;
 
     private CameraOpts opts;
 
     public PiCameraInputSource(CameraOpts opts) {
         this.opts = opts;
+        try {
+            runner = new RaspiStillRunner(opts);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public Image getNext() throws InputFailedException {
         if (runner == null) {
-            try {
-                runner = new RaspiStillRunner(opts,
-                        img -> imageAvailable(img));
-            } catch (IOException e) {
-                // RPi camera failed to open
-                e.printStackTrace();
-            }
+            return null;
         }
-
-        long localImageCount;
-        long localLastSentImage;
-        synchronized (this) {
-            localImageCount = imageCount;
-            localLastSentImage = lastSentImage;
+        try {
+            MatOfByte data = new MatOfByte(runner.takeImage());
+            Mat img = Highgui.imdecode(data, opts.isGrayscale() ?
+                    Highgui.CV_LOAD_IMAGE_GRAYSCALE :
+                    Highgui.CV_LOAD_IMAGE_COLOR);
+            return new Image(img);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
         }
-        while (localImageCount == localLastSentImage) {
-            synchronized (notifier) {
-                try {
-                    notifier.wait();
-                } catch (InterruptedException e) {
-                }
-            }
-            synchronized (this) {
-                localImageCount = imageCount;
-                localLastSentImage = lastSentImage;
-            }
-        }
-
-        BufferedImage image;
-        synchronized (this) {
-            image = currentImage;
-            lastSentImage = imageCount;
-        }
-
-        if (image == null) {
-            System.out.println();
-        }
-
-        byte[] pixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-        Mat result = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
-        result.put(0, 0, pixels);
-        return new Image(result);
     }
 
-    private synchronized void imageAvailable(BufferedImage image) {
-        currentImage = image;
-        imageCount++;
-        synchronized (notifier) {
-            notifier.notifyAll();
-        }
+    public void setCameraOpts(CameraOpts opts) {
+        runner.setOpts(opts);
     }
 
     @Override
