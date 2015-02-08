@@ -13,11 +13,13 @@ public class StartStopRoute implements Route {
     public Object handle(Request request, Response response) {
         String[] pathSplit = request.pathInfo().split("/");
         String endpoint = pathSplit[pathSplit.length - 1];
+
         if(endpoint.equals("start")) {
             ConfigManager.startRecording();
         } else if(endpoint.equals("stop")) {
             ConfigManager.stopRecording();
         }
+
         response.status(200);
         return "";
     }
