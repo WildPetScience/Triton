@@ -22,12 +22,6 @@ public class ConfigServer {
      * @param routes A map of URL strings to HTTPRoute objects.
      */
     public static void start(int port, Map<String, HTTPRoute> routes) {
-        try {
-            AppConfig a = AppConfig.getConfig("config.json");
-            System.out.println(a.isRunning());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Spark.stop();
         Spark.port(port);
         for(Entry<String, HTTPRoute> r : routes.entrySet()) {
