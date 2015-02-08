@@ -1,12 +1,18 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config.store;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.ByteStreams;
+import com.google.gson.Gson;
+
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 /**
  * Represents the state of the application's config at a given time.
  * Can be loaded and stored from a JSON file.
  */
 public class AppConfig {
-
-    private static final String settingsPath = "";
 
     private boolean running;
 
@@ -23,16 +29,20 @@ public class AppConfig {
     /**
      * Sets this instance as the primary config.
      */
-    public static void setAsPrimaryConfig() {
-        throw new UnsupportedOperationException();
+    public void setAsPrimaryConfig() {
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(this));
     }
 
     /**
      * Constructs a configuration object from a given JSON file.
      * @param configFile
      */
-    public AppConfig(String configFile) {
-        throw new UnsupportedOperationException();
+    public AppConfig(String configFileName) throws IOException {
+        System.out.println(readConfigFile(configFileName));
+    }
+
+    public AppConfig() {
     }
 
     /**
@@ -47,6 +57,12 @@ public class AppConfig {
      */
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    private static String readConfigFile(String name) throws IOException {
+        String path = AppConfig.class.getResource("/config/" + name).getPath();
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(new File(path)));
+        return new String(ByteStreams.toByteArray(in), Charsets.UTF_8);
     }
 
 }
