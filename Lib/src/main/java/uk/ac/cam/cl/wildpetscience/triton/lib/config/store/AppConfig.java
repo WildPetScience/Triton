@@ -3,8 +3,12 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.config.store;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.LogEntry;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
 import java.io.*;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Represents the state of the application's config at a given time.
@@ -16,6 +20,9 @@ public class AppConfig {
     private static final String DEFAULT_CONFIG = "config.default.json";
 
     private boolean running;
+    private String dataCode;
+    private List<LogEntry> systemLogs;
+    private Set<Zone> zones;
 
     // Cache the primary config so that we're not accessing the SD card
     // too often (should help with IO performance)
@@ -82,6 +89,30 @@ public class AppConfig {
      */
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    public String getDataCode() {
+        return dataCode;
+    }
+
+    public void setDataCode(String dataCode) {
+        this.dataCode = dataCode;
+    }
+
+    public List<LogEntry> getSystemLogs() {
+        return systemLogs;
+    }
+
+    public void setSystemLogs(List<LogEntry> systemLogs) {
+        this.systemLogs = systemLogs;
+    }
+
+    public Set<Zone> getZones() {
+        return zones;
+    }
+
+    public void setZones(Set<Zone> zones) {
+        this.zones = zones;
     }
 
 }
