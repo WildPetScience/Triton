@@ -8,10 +8,14 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.PassthroughFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.CornerDetectionFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.NoiseReductionFilter;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.tracker.TrackingFilter;
 import uk.ac.cam.cl.wildpetscience.triton.pipeline.CornerDisplayFilter;
+import uk.ac.cam.cl.wildpetscience.triton.pipeline.DummyCornerDetectionFilter;
 import uk.ac.cam.cl.wildpetscience.triton.pipeline.TestVideoEnumerator;
+import uk.ac.cam.cl.wildpetscience.triton.pipeline.TrackingDisplayFilter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -99,6 +103,24 @@ public class Demos extends JFrame {
             }
         });
         grid.add(cornerDetection);
+
+        grid.add(new JLabel("Location tracking demo:"));
+        JButton locationTracking = new JButton("Start");
+        locationTracking.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VisualPipelineDemo demo = new VisualPipelineDemo(
+                        output -> new Driver<>(
+                                getInputSource(),
+                                new DummyCornerDetectionFilter(),
+                                new PassthroughFilter<>(new TrackingFilter()),
+                                new TrackingDisplayFilter(),
+                                output
+                        ), "Noise reduction");
+                demo.start();
+            }
+        });
+        grid.add(locationTracking);
 
         pack();
     }
