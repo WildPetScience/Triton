@@ -20,7 +20,9 @@ function toggleRunning() {
             },
 
             error: function() {
-                var errorMessage = createErrorMessage("Starting the system.", "start-error");
+                if($("#start-error").length == 0) {
+                    var errorMessage = createErrorMessage("Starting the system.", "start-error");
+                }
                 container.append(errorMessage);
             }
         });
@@ -36,7 +38,9 @@ function toggleRunning() {
             },
 
             error: function() {
-                var errorMessage = createErrorMessage("Stopping the system.", "stop-error");
+                if($("#start-error").length == 0) {
+                    var errorMessage = createErrorMessage("Stopping the system.", "start-error");
+                }
                 container.append(errorMessage);
             }
         });
