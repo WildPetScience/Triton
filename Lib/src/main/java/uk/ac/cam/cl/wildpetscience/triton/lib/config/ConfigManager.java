@@ -16,14 +16,14 @@ public class ConfigManager {
      * Start the system - begin to take pictures, process movement and upload data.
      */
     public static void startRecording() {
-        throw new UnsupportedOperationException();
+        System.out.println("Starting the system.");
     }
 
     /**
      * Stop the system - stop taking pictures and upload any remaining data.
      */
     public static void stopRecording() {
-        throw new UnsupportedOperationException();
+        System.out.println("Stopping the system.");
     }
 
     /**
