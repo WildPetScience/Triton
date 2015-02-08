@@ -2,6 +2,7 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
 import spark.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.RootConfigRoute;
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.StartStopRoute;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.StaticResourceRoute;
 
 import java.util.HashMap;
@@ -63,6 +64,8 @@ public class ConfigServer {
         map.put("/", new HTTPRoute(new RootConfigRoute(), HTTPMethod.GET));
         map.put("/:resource", new HTTPRoute(new StaticResourceRoute()));
         map.put("/:resource/*", new HTTPRoute(new StaticResourceRoute(), HTTPMethod.GET));
+        map.put("/start", new HTTPRoute(new StartStopRoute(), HTTPMethod.POST));
+        map.put("/stop", new HTTPRoute(new StartStopRoute(), HTTPMethod.POST));
         ConfigServer.start(port, map);
     }
 
