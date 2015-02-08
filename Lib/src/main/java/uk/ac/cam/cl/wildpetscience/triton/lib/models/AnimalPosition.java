@@ -17,7 +17,7 @@ public class AnimalPosition {
     public AnimalPosition(Point location, LocalDateTime time, double probability) {
         this.location = location;
         this.time = time;
-        this.probability = probability;
+        this.probability = Math.max(Math.min(probability, 1), 0);
     }
 
     public Point getLocation() {

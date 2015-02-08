@@ -122,6 +122,18 @@ public class Demos extends JFrame {
         });
         grid.add(locationTracking);
 
+        grid.add(new JLabel("Position classification demo:"));
+        JButton positionClassification = new JButton("Start");
+        positionClassification.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LocationPipelineDemo demo = new LocationPipelineDemo(
+                        "Position classification");
+                demo.start();
+            }
+        });
+        grid.add(positionClassification);
+
         pack();
     }
 
