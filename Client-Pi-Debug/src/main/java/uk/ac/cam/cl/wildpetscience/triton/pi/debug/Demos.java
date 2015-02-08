@@ -2,6 +2,8 @@ package uk.ac.cam.cl.wildpetscience.triton.pi.debug;
 
 import org.apache.commons.cli.ParseException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
+import uk.ac.cam.cl.wildpetscience.triton.pi.camera.CameraOpts;
+import uk.ac.cam.cl.wildpetscience.triton.pi.camera.PiCameraInputSource;
 import uk.ac.cam.cl.wildpetscience.triton.pipeline.TestVideoEnumerator;
 
 /**
@@ -12,7 +14,7 @@ public class Demos {
         TestVideoEnumerator.addAdditionalSource(new TestVideoEnumerator.EnclosedTestVideo() {
             @Override
             public ImageInputSource create() {
-                return null;
+                return new PiCameraInputSource(new CameraOpts(640,480,16));
             }
 
             @Override

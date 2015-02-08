@@ -31,8 +31,13 @@ public class PiCameraInputSource implements ImageInputSource {
     @Override
     public Image getNext() throws InputFailedException {
         if (runner == null) {
-            runner = new RaspiStillRunner(opts,
-                    img -> imageAvailable(img));
+            try {
+                runner = new RaspiStillRunner(opts,
+                        img -> imageAvailable(img));
+            } catch (IOException e) {
+                // RPi camera failed to open
+                e.printStackTrace();
+            }
         }
 
         long localImageCount;
@@ -42,15 +47,15 @@ public class PiCameraInputSource implements ImageInputSource {
             localLastSentImage = lastSentImage;
         }
         while (localImageCount == localLastSentImage) {
-            synchronized (this) {
-                localImageCount = imageCount;
-                localLastSentImage = lastSentImage;
-            }
             synchronized (notifier) {
                 try {
                     notifier.wait();
                 } catch (InterruptedException e) {
                 }
+            }
+            synchronized (this) {
+                localImageCount = imageCount;
+                localLastSentImage = lastSentImage;
             }
         }
 
@@ -58,6 +63,10 @@ public class PiCameraInputSource implements ImageInputSource {
         synchronized (this) {
             image = currentImage;
             lastSentImage = imageCount;
+        }
+
+        if (image == null) {
+            System.out.println();
         }
 
         byte[] pixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();

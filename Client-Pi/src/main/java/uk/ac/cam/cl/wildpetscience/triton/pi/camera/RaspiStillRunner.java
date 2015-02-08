@@ -1,5 +1,9 @@
 package uk.ac.cam.cl.wildpetscience.triton.pi.camera;
 
+import org.apache.commons.imaging.ImageReadException;
+import org.apache.commons.imaging.Imaging;
+import uk.ac.cam.cl.wildpetscience.triton.lib.io.NonClosingInputStream;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.Closeable;
@@ -18,9 +22,10 @@ public class RaspiStillRunner implements Closeable {
     private Process process;
     private ImageDecoder imageDecoder;
 
-    public RaspiStillRunner(CameraOpts opts, Consumer<BufferedImage> output) {
+    public RaspiStillRunner(CameraOpts opts, Consumer<BufferedImage> output) throws IOException {
         this.opts = opts;
         this.output = output;
+        startStream();
     }
 
     /**
@@ -29,12 +34,12 @@ public class RaspiStillRunner implements Closeable {
     private synchronized void startStream() throws IOException {
         close();
         process = Runtime.getRuntime().exec(String.format(
-                "raspistill -t 99999999 -tl 100 -o - -w %d -h %d",
+                "raspistill -t 99999999 -tl %d -o - -w %d -h %d",
+                opts.getDelay(),
                 opts.getWidth(),
-                opts.getHeight(),
-                opts.getDelay()));
+                opts.getHeight()));
         imageDecoder = new ImageDecoder(process.getInputStream(), output);
-        imageDecoder.run();
+        imageDecoder.start();
     }
 
     private void restartStream() throws IOException {
@@ -70,11 +75,11 @@ public class RaspiStillRunner implements Closeable {
     private static class ImageDecoder extends Thread {
 
         private boolean cancelled = false;
-        private final InputStream input;
+        private final NonClosingInputStream input;
         private final Consumer<BufferedImage> output;
 
         public ImageDecoder(InputStream input, Consumer<BufferedImage> output) {
-            this.input = input;
+            this.input = new NonClosingInputStream(input);
             this.output = output;
         }
 
@@ -83,23 +88,30 @@ public class RaspiStillRunner implements Closeable {
             boolean localCancelled;
             do {
                 try {
-                    BufferedImage img = ImageIO.read(input);
+                    BufferedImage img = Imaging.getBufferedImage(input);
                     output.accept(img);
                 } catch (IOException e) {
                     e.printStackTrace();
                     try {
-                        input.close();
+                        input.reallyClose();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
                     // Stop capturing when a failure happens
                     break;
+                } catch (ImageReadException e) {
+                    e.printStackTrace();
                 }
 
                 synchronized (this) {
                     localCancelled = cancelled;
                 }
             } while (!localCancelled);
+            try {
+                input.reallyClose();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         public void cancel() {
