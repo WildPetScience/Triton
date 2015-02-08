@@ -12,16 +12,37 @@ import java.io.*;
  */
 public class AppConfig {
 
+    private static final String PRIMARY_CONFIG = "config.json";
+    private static final String DEFAULT_CONFIG = "config.default.json";
+
     private boolean running;
+
+    // Cache the primary config so that we're not accessing the SD card
+    // too often (should help with IO performance)
+    private static AppConfig primary;
+
+    // Static construction methods & helpers
 
     /**
      * Gets an instance that corresponds to the application's primary
      * configuration (i.e. the config that the app operates on in
      * normal usage).
      * @return
+     * @throws IOException
      */
-    public static AppConfig getPrimaryConfig() {
-        throw new UnsupportedOperationException();
+    public static AppConfig getPrimaryConfig() throws IOException {
+        return getConfig(PRIMARY_CONFIG);
+    }
+
+    /**
+     * Gets an instance that corresponds to the application's default
+     * configuration (i.e. the config that the app operates on before
+     * it is first configured).
+     * @return
+     * @throws IOException
+     */
+    public static AppConfig getDefaultConfig() throws IOException {
+        return getConfig(DEFAULT_CONFIG);
     }
 
     /**
@@ -46,6 +67,8 @@ public class AppConfig {
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(new File(path)));
         return new String(ByteStreams.toByteArray(in), Charsets.UTF_8);
     }
+
+    // Property getter & setter methods
 
     /**
      * @return Whether or not the app is running.
