@@ -1,8 +1,10 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib;
 
 import nu.pattern.OpenCV;
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Initialises things that must be done at the start of runtime.
@@ -27,6 +29,13 @@ public class Bootstrap {
                             javaDir);
             String path = System.getProperty("java.library.path");
             System.load(javaDir + "opencv_java2410.dll");
+        }
+
+        try {
+            AppConfig def = AppConfig.getDefaultConfig();
+            def.setAsPrimaryConfig();
+        } catch(IOException e) {
+            System.err.println("No default configuration found.");
         }
     }
 

@@ -1,3 +1,5 @@
 {
-  "running" : false
+  "running" : false,
+  "systemLogs" : [],
+  "zones" : []
 }
