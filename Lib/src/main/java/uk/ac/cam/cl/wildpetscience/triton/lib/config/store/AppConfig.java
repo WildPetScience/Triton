@@ -38,11 +38,15 @@ public class AppConfig {
      * Constructs a configuration object from a given JSON file.
      * @param configFile
      */
-    public AppConfig(String configFileName) throws IOException {
-        System.out.println(readConfigFile(configFileName));
+    public static AppConfig getConfig(String configFileName) throws IOException {
+        Gson gson = new Gson();
+        return gson.fromJson(readConfigFile(configFileName), AppConfig.class);
     }
 
-    public AppConfig() {
+    private static String readConfigFile(String name) throws IOException {
+        String path = AppConfig.class.getResource("/config/" + name).getPath();
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(new File(path)));
+        return new String(ByteStreams.toByteArray(in), Charsets.UTF_8);
     }
 
     /**
@@ -57,12 +61,6 @@ public class AppConfig {
      */
     public void setRunning(boolean running) {
         this.running = running;
-    }
-
-    private static String readConfigFile(String name) throws IOException {
-        String path = AppConfig.class.getResource("/config/" + name).getPath();
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(new File(path)));
-        return new String(ByteStreams.toByteArray(in), Charsets.UTF_8);
     }
 
 }
