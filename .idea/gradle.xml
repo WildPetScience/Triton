@@ -10,6 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/Client-PC" />
             <option value="$PROJECT_DIR$/Client-Pi" />
+            <option value="$PROJECT_DIR$/Client-Pi-Debug" />
             <option value="$PROJECT_DIR$/Lib" />
           </set>
         </option>

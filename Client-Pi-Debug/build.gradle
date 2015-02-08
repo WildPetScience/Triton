@@ -1,0 +1,37 @@
+apply plugin: 'java'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
+    }
+}
+
+apply plugin: 'eu.appsatori.fatjar'
+
+fatJar {
+    manifest {
+        attributes 'Main-Class': 'uk.ac.cam.cl.wildpetscience.triton.pi.debug.Demos'
+    }
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    // Exclude prebuilt x86 binaries
+    exclude 'nu/pattern/opencv/'
+}
+
+sourceCompatibility = 1.8
+version = '0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':Client-PC')
+    compile project(':Client-Pi')
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
