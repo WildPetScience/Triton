@@ -5,8 +5,6 @@ import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 /**
  * Represents the state of the application's config at a given time.
