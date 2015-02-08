@@ -23,7 +23,8 @@ public class ConfigServer {
      */
     public static void start(int port, Map<String, HTTPRoute> routes) {
         try {
-            new AppConfig("config.json");
+            AppConfig a = AppConfig.getConfig("config.json");
+            System.out.println(a.isRunning());
         } catch (IOException e) {
             e.printStackTrace();
         }
