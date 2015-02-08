@@ -3,7 +3,9 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 import spark.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.RootConfigRoute;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.StaticResourceRoute;
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,6 +22,11 @@ public class ConfigServer {
      * @param routes A map of URL strings to HTTPRoute objects.
      */
     public static void start(int port, Map<String, HTTPRoute> routes) {
+        try {
+            new AppConfig("config.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Spark.stop();
         Spark.port(port);
         for(Entry<String, HTTPRoute> r : routes.entrySet()) {
