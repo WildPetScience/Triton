@@ -1,8 +1,7 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis;
 
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
-
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
 
 /**
