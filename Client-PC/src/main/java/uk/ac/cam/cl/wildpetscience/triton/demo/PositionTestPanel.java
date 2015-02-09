@@ -1,10 +1,8 @@
 package uk.ac.cam.cl.wildpetscience.triton.demo;
 
-import org.opencv.core.*;
 import org.opencv.core.Point;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zones;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis.Analysis;
 
 import javax.swing.*;
@@ -42,7 +40,12 @@ public class PositionTestPanel extends JPanel implements MouseMotionListener, Mo
         g2.draw(new Ellipse2D.Double(x, y, 4, 4));
 
         for (Zone zone : zones.getZones()) {
-            g2.drawRect(zone.area.x, zone.area.y, zone.area.width, zone.area.height);
+            Box scaled = zone.area.scale(getWidth(), getHeight());
+            g2.drawRect(
+                    (int)scaled.getX(),
+                    (int)scaled.getY(),
+                    (int)scaled.getWidth(),
+                    (int)scaled.getHeight());
         }
     }
 
