@@ -1,12 +1,9 @@
 package uk.ac.cam.cl.wildpetscience.triton.pi.camera;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.function.Consumer;
 
 /**
  * Runs raspistill and captures images. Calls a callback with each new image.

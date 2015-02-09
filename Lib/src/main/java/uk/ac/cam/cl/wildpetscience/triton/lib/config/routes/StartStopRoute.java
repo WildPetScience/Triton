@@ -4,9 +4,6 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigManager;
-import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigServer;
-
-import java.util.logging.LogManager;
 
 public class StartStopRoute implements Route {
 

@@ -1,9 +1,8 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.*;
-import spark.Route;
 import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
 
 import java.io.BufferedReader;

@@ -1,6 +1,5 @@
 package uk.ac.cam.cl.wildpetscience.triton.pi.camera;
 
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.highgui.Highgui;

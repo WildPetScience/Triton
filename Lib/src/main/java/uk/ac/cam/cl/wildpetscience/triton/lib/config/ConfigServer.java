@@ -1,6 +1,7 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
-import spark.*;
+import spark.Route;
+import spark.Spark;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.NextImageRoute;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.RootConfigRoute;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.StartStopRoute;
