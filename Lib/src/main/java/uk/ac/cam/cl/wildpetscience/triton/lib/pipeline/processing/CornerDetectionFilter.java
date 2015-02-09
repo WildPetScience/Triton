@@ -72,7 +72,7 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
         return null;
     }
 
-    // Sort corners to make a convex polygon
+    // Sort corners to make a convex polygon.
     private void sortCorners(ArrayList<Point> corners) {
         Collections.sort(corners, new Comparator<Point>() {
                     public int compare (Point a, Point b) {
@@ -99,7 +99,7 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
         }
     }
 
-    // Binary mask - white for marker, black otherwise
+    // Binary mask - white for marker, black otherwise.
     private Mat createMask(Mat inputMat) {
         Mat mask = new Mat();
         // Green colour range.
