@@ -23,6 +23,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import static uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver.makeSimpleDriver;
+
 /**
  * Demo classes that help development of the pipeline
  */
@@ -70,6 +72,21 @@ public class Demos extends JFrame {
 
         add(choose);
         add(grid);
+
+        grid.add(new JLabel("Input video:"));
+        JButton inputVideo = new JButton("Start");
+        inputVideo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VisualPipelineDemo demo = new VisualPipelineDemo(
+                        output -> makeSimpleDriver(
+                                getInputSource(),
+                                output
+                        ), "Input video");
+                demo.start();
+            }
+        });
+        grid.add(inputVideo);
 
         grid.add(new JLabel("Noise reduction demo:"));
         JButton noiseReduction = new JButton("Start");
