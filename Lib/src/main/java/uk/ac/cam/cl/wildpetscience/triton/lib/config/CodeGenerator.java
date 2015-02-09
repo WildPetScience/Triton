@@ -13,7 +13,7 @@ public class CodeGenerator {
         Random r = new Random();
         r.ints(0, 100)
                 .limit(3)
-                .forEach(i -> sb.append(words[i] + " "));
+                .forEach(i -> sb.append(words[i]).append(' '));
         return sb.toString().substring(0, sb.length() - 1); // remove trailing space
     }
 

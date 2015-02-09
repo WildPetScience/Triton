@@ -50,12 +50,7 @@ public class VisualPipelineDemo {
     }
 
     public void start() {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                frame.setVisible(true);
-            }
-        });
+        EventQueue.invokeLater(() -> frame.setVisible(true));
 
         driver.start();
     }

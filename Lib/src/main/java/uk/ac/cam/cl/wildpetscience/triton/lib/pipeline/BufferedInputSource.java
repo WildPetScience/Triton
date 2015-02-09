@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class BufferedInputSource implements ImageInputSource {
     private final ImageInputSource source;
-    private final BlockingQueue<Image> queue = new ArrayBlockingQueue<Image>(2);
+    private final BlockingQueue<Image> queue = new ArrayBlockingQueue<>(2);
 
     private boolean running = false, cancelled = false;
 

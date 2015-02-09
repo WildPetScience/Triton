@@ -75,79 +75,64 @@ public class Demos extends JFrame {
 
         grid.add(new JLabel("Input video:"));
         JButton inputVideo = new JButton("Start");
-        inputVideo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VisualPipelineDemo demo = new VisualPipelineDemo(
-                        output -> makeSimpleDriver(
-                                getInputSource(),
-                                output
-                        ), "Input video");
-                demo.start();
-            }
+        inputVideo.addActionListener(e -> {
+            VisualPipelineDemo demo = new VisualPipelineDemo(
+                    output -> makeSimpleDriver(
+                            getInputSource(),
+                            output
+                    ), "Input video");
+            demo.start();
         });
         grid.add(inputVideo);
 
         grid.add(new JLabel("Noise reduction demo:"));
         JButton noiseReduction = new JButton("Start");
-        noiseReduction.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VisualPipelineDemo demo = new VisualPipelineDemo(
-                        output -> new Driver<>(
-                                getInputSource(),
-                                new NoiseReductionFilter(),
-                                output
-                        ), "Noise reduction");
-                demo.start();
-            }
+        noiseReduction.addActionListener(e -> {
+            VisualPipelineDemo demo = new VisualPipelineDemo(
+                    output -> new Driver<>(
+                            getInputSource(),
+                            new NoiseReductionFilter(),
+                            output
+                    ), "Noise reduction");
+            demo.start();
         });
         grid.add(noiseReduction);
 
         grid.add(new JLabel("Corner detection demo:"));
         JButton cornerDetection = new JButton("Start");
-        cornerDetection.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VisualPipelineDemo demo = new VisualPipelineDemo(
-                        output -> new Driver<>(
-                                getInputSource(),
-                                new CornerDetectionFilter(),
-                                new CornerDisplayFilter(),
-                                output
-                        ), "Noise reduction");
-                demo.start();
-            }
+        cornerDetection.addActionListener(e -> {
+            VisualPipelineDemo demo = new VisualPipelineDemo(
+                    output -> new Driver<>(
+                            getInputSource(),
+                            new CornerDetectionFilter(),
+                            new CornerDisplayFilter(),
+                            output
+                    ), "Noise reduction");
+            demo.start();
         });
         grid.add(cornerDetection);
 
         grid.add(new JLabel("Location tracking demo:"));
         JButton locationTracking = new JButton("Start");
-        locationTracking.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VisualPipelineDemo demo = new VisualPipelineDemo(
-                        output -> new Driver<>(
-                                getInputSource(),
-                                new DummyCornerDetectionFilter(),
-                                new PassthroughFilter<>(new TrackingFilter()),
-                                new TrackingDisplayFilter(),
-                                output
-                        ), "Noise reduction");
-                demo.start();
-            }
+        locationTracking.addActionListener(e -> {
+            VisualPipelineDemo demo = new VisualPipelineDemo(
+                    output -> new Driver<>(
+                            getInputSource(),
+                            new DummyCornerDetectionFilter(),
+                            new PassthroughFilter<>(new TrackingFilter()),
+                            new TrackingDisplayFilter(),
+                            output
+                    ), "Noise reduction");
+            demo.start();
         });
         grid.add(locationTracking);
 
         grid.add(new JLabel("Position classification demo:"));
         JButton positionClassification = new JButton("Start");
-        positionClassification.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LocationPipelineDemo demo = new LocationPipelineDemo(
-                        "Position classification");
-                demo.start();
-            }
+        positionClassification.addActionListener(e -> {
+            LocationPipelineDemo demo = new LocationPipelineDemo(
+                    "Position classification");
+            demo.start();
         });
         grid.add(positionClassification);
 
