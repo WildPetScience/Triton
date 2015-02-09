@@ -46,3 +46,18 @@ function toggleRunning() {
         });
     }
 }
+
+function updateCanvas() {
+    var image = new Image(1280, 720);
+
+    image.onload = function() {
+        var ctx = $("#zone-canvas")[0].getContext("2d");
+        ctx.drawImage(image, 0, 0);
+    };
+
+    image.src = "/image";
+}
+
+(function() {
+    window.setInterval(updateCanvas, 200);
+})();
