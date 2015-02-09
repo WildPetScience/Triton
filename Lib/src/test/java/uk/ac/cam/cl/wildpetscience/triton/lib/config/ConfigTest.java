@@ -4,6 +4,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import org.junit.*;
 import spark.Route;
+import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,6 +19,11 @@ import java.util.Map;
  * Tests the usage of the ConfigServer.
  */
 public class ConfigTest {
+
+    @BeforeClass
+    public static void classSetUp() {
+        Bootstrap.init();
+    }
 
     @Before
     public void setUp() {
