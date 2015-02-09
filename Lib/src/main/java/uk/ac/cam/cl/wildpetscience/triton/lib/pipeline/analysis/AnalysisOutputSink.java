@@ -52,8 +52,8 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
                 return z;
             }
         }
-    /* If no zone found, return an ERROR zone encompassing the entire cage */
-        return new Zone(new Box(new Point(0.5, 0.5), 1, 1), "ERROR");
+        /* If no zone found, return an ERROR zone encompassing the entire cage */
+        return new Zone(new Box(0.5,0.5,1,1), "ERROR");
     }
 
     /* Computes speed between two points in time and space. NB: uses cageWidth and cageHeight */
@@ -73,13 +73,15 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         double speed = computeSpeed(lastKnownPosition.getLocation(), lastKnownPosition.getTime(), location, time);
         Zone currentZone = pointToZone(location);
 
-    /* Update visit count for zone */
+        /* Update visit count for zone */
         int visits = zoneVisits.get(currentZone);
         zoneVisits.put(currentZone, visits+1);
 
-    /* Deep copy the id -> visits map */
+        /* Deep copy the id -> visits map */
         HashMap<String, Integer> zoneIdVisits = new HashMap<String, Integer>(zoneVisits.size());
-        for (Zone z : zoneVisits.keySet()) zoneIdVisits.put(new String(z.id), new Integer(zoneVisits.get(z)));
+        for (Zone z : zoneVisits.keySet()) {
+            zoneIdVisits.put(new String(z.id), new Integer(zoneVisits.get(z)));
+        }
 
         DataFrame frame = new DataFrame(
                 time,
@@ -101,7 +103,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         LocalDateTime time = image.getTime();
         double probability = image.getProbability();
 
-    /* Only start sending when image has settled and position is likely */
+        /* Only start sending when image has settled and position is likely */
         if (lastKnownPosition == null) {
             if (probability > threshold) {
                 lastKnownPosition = image;
@@ -110,19 +112,19 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
             return;
         }
 
-    /* Queue position to be processed */
+        /* Queue position to be processed */
         positionQueue.add(image);
 
-    /* If ACCURATE position provided, linearly interpolate intermediate positions and flush queue */
+        /* If ACCURATE position provided, linearly interpolate intermediate positions and flush queue */
         if (probability > threshold) {
 
-        /* Calculate average velocity */
+            /* Calculate average velocity */
             Point lastPoint = lastKnownPosition.getLocation();
             double timeElapsed = ChronoUnit.SECONDS.between(lastKnownPosition.getTime(), time);
             double xRate = (location.x - lastPoint.x) / timeElapsed;
             double yRate = (location.y - lastPoint.y) / timeElapsed;
 
-        /* Update queue position using velocity, flush and send */
+            /* Update queue position using velocity, flush and send */
             while (!positionQueue.isEmpty()) {
                 AnimalPosition position = positionQueue.poll();
                 double t = ChronoUnit.SECONDS.between(lastKnownPosition.getTime(), position.getTime());
@@ -146,8 +148,12 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         this.cageWidth = config.getCageWidth();
         this.cageHeight = config.getCageHeight();
 
+        // TODO: Elaborate on this method
+
         /* Initialise the zone -> visit map, also acts as a zone set */
         this.zoneVisits = new HashMap<Zone, Integer>(config.getZones().size());
-        for (Zone z : config.getZones()) zoneVisits.put(z, 0);
+        for (Zone z : config.getZones()) {
+            zoneVisits.put(z, 0);
+        }
     }
 }
