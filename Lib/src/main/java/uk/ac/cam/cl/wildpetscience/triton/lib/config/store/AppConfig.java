@@ -38,7 +38,12 @@ public class AppConfig {
      * @throws IOException
      */
     public static AppConfig getPrimaryConfig() throws IOException {
-        return getConfig(PRIMARY_CONFIG);
+        if(primary != null) {
+            return primary;
+        } else {
+            //reads the config from a file if we don't have it cached
+            return getConfig(PRIMARY_CONFIG);
+        }
     }
 
     /**
@@ -58,6 +63,8 @@ public class AppConfig {
     public void setAsPrimaryConfig() {
         Gson gson = new Gson();
         System.out.println(gson.toJson(this));
+        primary = this;
+        //TODO: need to write to file as well
     }
 
     /**
