@@ -29,6 +29,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     private double cageWidth;
     private double cageHeight;
     private Map<Zone, Integer> zoneVisits;
+    private Zone nullZone;
     private AnimalPosition lastKnownPosition;
     private Queue<AnimalPosition> positionQueue;
     private double threshold = 0.4; // TODO: Experiment with values of threshold
@@ -42,7 +43,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
     /* TODO: Replace this dummy method */
     public void send(DataFrame data) {
-
+        System.out.println(data.toString());
     }
 
     /* Finds which zone a point is in. NB: assumes zones are disjoint */
@@ -52,8 +53,8 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
                 return z;
             }
         }
-        /* If no zone found, return an ERROR zone encompassing the entire cage */
-        return new Zone(new Box(0.5,0.5,1,1), "ERROR");
+        /* If no zone found, return the 'N/A' zone */
+        return nullZone;
     }
 
     /* Computes speed between two points in time and space. NB: uses cageWidth and cageHeight */
@@ -151,9 +152,11 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         // TODO: Elaborate on this method
 
         /* Initialise the zone -> visit map, also acts as a zone set */
-        this.zoneVisits = new HashMap<Zone, Integer>(config.getZones().size());
+        this.zoneVisits = new HashMap<Zone, Integer>(config.getZones().size()+1);
         for (Zone z : config.getZones()) {
             zoneVisits.put(z, 0);
         }
+        nullZone = new Zone(new Box(0,0,0,0), "N/A");
+        zoneVisits.put(nullZone,0);
     }
 }
