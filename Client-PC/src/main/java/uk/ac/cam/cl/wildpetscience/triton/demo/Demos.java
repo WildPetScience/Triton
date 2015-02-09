@@ -107,7 +107,7 @@ public class Demos extends JFrame {
                             new CornerDetectionFilter(),
                             new CornerDisplayFilter(),
                             output
-                    ), "Noise reduction");
+                    ), "Corner detection");
             demo.start();
         });
         grid.add(cornerDetection);
@@ -122,7 +122,7 @@ public class Demos extends JFrame {
                             new PassthroughFilter<>(new TrackingFilter()),
                             new TrackingDisplayFilter(),
                             output
-                    ), "Noise reduction");
+                    ), "Location tracking");
             demo.start();
         });
         grid.add(locationTracking);
