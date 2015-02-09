@@ -3,6 +3,8 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.models;
 import org.opencv.core.Point;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -29,4 +31,40 @@ public class DataFrame {
         this.zoneIdVisits = zoneIdVisits;
     }
 
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public String getZoneId() {
+        return zoneId;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public double getCageWidth() {
+        return cageWidth;
+    }
+
+    public double getCageHeight() {
+        return cageHeight;
+    }
+
+    public Map<String, Integer> getZoneIdVisits() {
+        return zoneIdVisits;
+    }
+
+    public String toString() {
+        String out =    "Time:          " + time.format(DateTimeFormatter.ISO_LOCAL_TIME) + "\n" +
+                        "Location:      " + location.toString() + "\n" +
+                        "Zone ID:       " + zoneId + "\n" +
+                        "Speed:         " + speed + "\n" +
+                        "Cage Size:     " + cageWidth + " x " + cageHeight + "\n";
+        return out;
+    }
 }
