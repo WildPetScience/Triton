@@ -23,8 +23,6 @@ public class App {
     }
 
     public void start() {
-        Bootstrap.init();
-
         ConfigData initialConfig = new ConfigData(
                 ConfigManager.getZones(),
                 ConfigManager.getCageWidth(),

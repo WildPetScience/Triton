@@ -5,6 +5,7 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.App;
+import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
 import uk.ac.cam.cl.wildpetscience.triton.pi.camera.CameraOpts;
 import uk.ac.cam.cl.wildpetscience.triton.pi.camera.PiCameraInputSource;
 
@@ -13,6 +14,8 @@ import uk.ac.cam.cl.wildpetscience.triton.pi.camera.PiCameraInputSource;
  */
 public class Client {
     public static void main(String[] args) throws ParseException {
+        Bootstrap.init();
+
         Options opts = new Options();
         opts.addOption("p", "port", true, "Port to run webserver on (default 8000)");
 
