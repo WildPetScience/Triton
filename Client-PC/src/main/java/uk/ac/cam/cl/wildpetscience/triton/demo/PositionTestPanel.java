@@ -9,17 +9,14 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis.Analysis;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 import java.time.LocalDateTime;
 
 /**
  * Lets the user input location data with the mouse.
  */
-public class PositionTestPanel extends JPanel implements MouseMotionListener, MouseWheelListener {
+public class PositionTestPanel extends JPanel implements MouseMotionListener, MouseWheelListener, MouseListener {
 
     private final ConfigData config;
     private final Analysis analysis;
@@ -32,6 +29,7 @@ public class PositionTestPanel extends JPanel implements MouseMotionListener, Mo
         this.analysis = analysis;
         addMouseMotionListener(this);
         addMouseWheelListener(this);
+        addMouseListener(this);
     }
 
     @Override
@@ -60,15 +58,26 @@ public class PositionTestPanel extends JPanel implements MouseMotionListener, Mo
         x = e.getX();
         y = e.getY();
         EventQueue.invokeLater(this::repaint);
-        onNewEvent();
     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         probability += (double)e.getWheelRotation() / 100.0;
         EventQueue.invokeLater(this::repaint);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        x = e.getX();
+        y = e.getY();
         onNewEvent();
     }
+
+    /* Unused mouse events */
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {}
 
     private void onNewEvent() {
         AnimalPosition position = new AnimalPosition(
