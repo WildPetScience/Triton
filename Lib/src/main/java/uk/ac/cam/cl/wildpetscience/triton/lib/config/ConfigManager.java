@@ -6,6 +6,7 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 //TODO: decide on method of storing config data
 
@@ -31,7 +32,7 @@ public class ConfigManager {
     /**
      * @return a list of interesting zones registered with the system.
      */
-    public static List<Zone> getZones() {
+    public static Set<Zone> getZones() {
         throw new UnsupportedOperationException();
     }
 
@@ -39,7 +40,23 @@ public class ConfigManager {
      * Updates the interesting zones registered with the system.
      * @param zones
      */
-    public static void setZones(List<Zone> zones) {
+    public static void setZones(Set<Zone> zones) {
+        throw new UnsupportedOperationException();
+    }
+
+    public static double getCageWidth() {
+        throw new UnsupportedOperationException();
+    }
+
+    public static double getCageHeight() {
+        throw new UnsupportedOperationException();
+    }
+
+    public static void setCageWidth(double width) {
+        throw new UnsupportedOperationException();
+    }
+
+    public static void setCageHeight(double width) {
         throw new UnsupportedOperationException();
     }
 
