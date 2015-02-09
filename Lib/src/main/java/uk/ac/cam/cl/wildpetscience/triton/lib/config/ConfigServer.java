@@ -4,7 +4,6 @@ import spark.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.NextImageRoute;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.RootConfigRoute;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.StartStopRoute;
-import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.StaticResourceRoute;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.WebcamInputSource;
