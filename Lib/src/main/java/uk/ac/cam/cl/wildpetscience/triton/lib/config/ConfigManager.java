@@ -1,8 +1,10 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.LogEntry;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
+import java.io.IOException;
 import java.util.List;
 
 //TODO: decide on method of storing config data
@@ -42,10 +44,17 @@ public class ConfigManager {
     }
 
     /**
-     * @return The unique, random access code for viewing data online.
+     * @return The unique, random access code for viewing data online. Null if the primary
+     * config cannot be found.
      */
     public static String getAccessCode() {
-        throw new UnsupportedOperationException();
+        try {
+            AppConfig conf = AppConfig.getPrimaryConfig();
+            return conf.getDataCode();
+        } catch(IOException e) {
+            System.err.println("No primary config found when getting code.");
+            return null;
+        }
     }
 
     /**

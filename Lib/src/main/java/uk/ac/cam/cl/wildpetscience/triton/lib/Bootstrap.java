@@ -1,6 +1,7 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib;
 
 import nu.pattern.OpenCV;
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.CodeGenerator;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
 
 import java.io.File;
@@ -33,6 +34,7 @@ public class Bootstrap {
 
         try {
             AppConfig def = AppConfig.getDefaultConfig();
+            def.setDataCode(new CodeGenerator().nextCode());
             def.setAsPrimaryConfig();
         } catch(IOException e) {
             System.err.println("No default configuration found.");
