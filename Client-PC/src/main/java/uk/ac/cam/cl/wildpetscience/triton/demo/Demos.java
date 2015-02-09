@@ -19,8 +19,6 @@ import uk.ac.cam.cl.wildpetscience.triton.pipeline.TrackingDisplayFilter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 import static uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver.makeSimpleDriver;
