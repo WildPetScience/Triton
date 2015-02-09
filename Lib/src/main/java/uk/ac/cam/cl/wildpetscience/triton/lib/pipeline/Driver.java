@@ -8,10 +8,10 @@ import java.io.IOException;
  * Pumps data from an ImageInputSource to an OutputSink.
  */
 public class Driver<D> extends Thread {
-    private final ImageInputSource in;
-    private final OutputSink<D> out;
+    protected final ImageInputSource in;
+    protected final OutputSink<D> out;
 
-    private final Filter<Image, D> filter;
+    protected final Filter<Image, D> filter;
 
     private Image latest;
     private final Object latestLock = new Object();
@@ -22,6 +22,7 @@ public class Driver<D> extends Thread {
         this.in = in;
         this.out = out;
         filter = flt;
+        setDaemon(true);
     }
 
     public <A> Driver(ImageInputSource in,

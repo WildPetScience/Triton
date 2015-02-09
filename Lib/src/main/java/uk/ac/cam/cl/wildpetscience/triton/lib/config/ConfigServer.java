@@ -4,9 +4,7 @@ import spark.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.NextImageRoute;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.RootConfigRoute;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.StartStopRoute;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.WebcamInputSource;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +60,7 @@ public class ConfigServer {
      * Starts the server with a sane default configuration.
      * @param port The port to listen on.
      */
-    public static void start(int port) {
+    public static void start(int port, Driver driver) {
         Map<String, HTTPRoute> map = new HashMap<>();
 
         Spark.staticFileLocation("/serve");
@@ -72,15 +70,15 @@ public class ConfigServer {
         map.put("/start", new HTTPRoute(new StartStopRoute(), HTTPMethod.POST));
         map.put("/stop", new HTTPRoute(new StartStopRoute(), HTTPMethod.POST));
 
-        try {
-            ImageInputSource in = new WebcamInputSource();
-            HTTPRoute route = new HTTPRoute(new NextImageRoute(in), HTTPMethod.GET);
-            map.put("/image", route);
-        } catch(InputFailedException e) {
-            System.err.println("Error initialising webcam feed.");
-        }
+        HTTPRoute route = new HTTPRoute(new NextImageRoute(driver), HTTPMethod.GET);
+        map.put("/image", route);
 
         ConfigServer.start(port, map);
+    }
+
+    public static void start(int port) {
+        Driver driver = new DummyDriver();
+        start(port, driver);
     }
 
     /**

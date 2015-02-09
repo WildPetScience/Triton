@@ -14,9 +14,7 @@ public class NextImageRoute implements Route {
 
     private Driver driver;
 
-    public NextImageRoute(ImageInputSource input) {
-        Driver driver = Driver.makeSimpleDriver(input, new IgnoreOutputSink<>());
-        new Thread(driver).start();
+    public NextImageRoute(Driver<?> driver) {
         this.driver = driver;
     }
 
