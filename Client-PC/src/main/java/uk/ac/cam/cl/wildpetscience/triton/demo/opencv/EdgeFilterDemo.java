@@ -26,7 +26,7 @@ public class EdgeFilterDemo {
         WebcamInputSource src = new WebcamInputSource(webcam);
 
         VisualPipelineDemo demo = new VisualPipelineDemo(
-                panel -> new Driver<Image>(src,
+                panel -> new Driver<>(src,
                         new EdgeFilter(),
                         panel),
                 "Live edge detection demo");

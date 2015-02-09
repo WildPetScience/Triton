@@ -57,14 +57,14 @@ public class PositionTestPanel extends JPanel implements MouseMotionListener, Mo
     public void mouseMoved(MouseEvent e) {
         x = e.getX();
         y = e.getY();
-        EventQueue.invokeLater(() -> repaint());
+        EventQueue.invokeLater(this::repaint);
         onNewEvent();
     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         probability += (double)e.getWheelRotation() / 100.0;
-        EventQueue.invokeLater(() -> repaint());
+        EventQueue.invokeLater(this::repaint);
         onNewEvent();
     }
 

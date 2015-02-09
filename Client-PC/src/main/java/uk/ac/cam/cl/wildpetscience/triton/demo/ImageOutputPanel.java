@@ -25,12 +25,7 @@ public class ImageOutputPanel extends JPanel implements OutputSink<Image> {
         }
         this.image = image.toAwtImage();
         image.release();
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                repaint();
-            }
-        });
+        EventQueue.invokeLater(() -> repaint());
     }
 
     @Override

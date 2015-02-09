@@ -1,14 +1,8 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.pipeline;
 
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 
-import java.io.IOException;
-import java.util.LinkedList;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests for BufferedInputSource

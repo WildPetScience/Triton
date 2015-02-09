@@ -1,7 +1,6 @@
 package uk.ac.cam.cl.wildpetscience.triton.pipeline;
 
 import org.opencv.core.Core;
-import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;

@@ -1,6 +1,9 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config.routes;
 
-import spark.*;
+import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
+import spark.Route;
 import spark.template.mustache.MustacheTemplateEngine;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigManager;
 

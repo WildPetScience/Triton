@@ -59,7 +59,7 @@ public class Driver<D> extends Thread {
 
     public static Driver<Image> makeSimpleDriver(ImageInputSource in,
                                                  OutputSink<Image> out) {
-        return new Driver<Image>(in, new IdentityFilter<>(), out);
+        return new Driver<>(in, new IdentityFilter<>(), out);
     }
 
     @Override

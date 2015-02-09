@@ -1,7 +1,6 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.tracker;
 
 import org.opencv.core.Point;
-import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.ImageWithCorners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Filter;
