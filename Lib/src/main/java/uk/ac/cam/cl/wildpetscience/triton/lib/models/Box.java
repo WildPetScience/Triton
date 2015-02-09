@@ -75,4 +75,20 @@ public class Box {
                 width * xFactor,
                 height * yFactor);
     }
+
+    public double getLeft() {
+        return getX() - getWidth() / 2.0;
+    }
+
+    public double getRight() {
+        return getX() + getWidth() / 2.0;
+    }
+
+    public double getTop() {
+        return getY() - getHeight() / 2.0;
+    }
+
+    public double getBottom() {
+        return getY() + getHeight() / 2.0;
+    }
 }

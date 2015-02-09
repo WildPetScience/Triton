@@ -42,8 +42,8 @@ public class PositionTestPanel extends JPanel implements MouseMotionListener, Mo
         for (Zone zone : zones.getZones()) {
             Box scaled = zone.area.scale(getWidth(), getHeight());
             g2.drawRect(
-                    (int)scaled.getX(),
-                    (int)scaled.getY(),
+                    (int)scaled.getLeft(),
+                    (int)scaled.getTop(),
                     (int)scaled.getWidth(),
                     (int)scaled.getHeight());
         }
