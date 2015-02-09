@@ -1,8 +1,9 @@
 package uk.ac.cam.cl.wildpetscience.triton.demo;
 
+
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zones;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis.AnalysisOutputSink;
 
 import javax.swing.*;
@@ -23,9 +24,9 @@ public class LocationPipelineDemo {
         Set<Zone> zoneSet = new HashSet<>();
         zoneSet.add(new Zone(new Box(0.2, 0.2, 0.2, 0.2), "WATER"));
         zoneSet.add(new Zone(new Box(0.9, 0.1, 0.2, 0.2), "FOOD"));
-        Zones zones = new Zones(zoneSet, 100, 200);
-        PositionTestPanel panel = new PositionTestPanel(zones,
-                new AnalysisOutputSink());
+        ConfigData config = new ConfigData(zoneSet, 100, 200);
+        PositionTestPanel panel = new PositionTestPanel(config,
+                new AnalysisOutputSink(config));
         frame.getContentPane().add(panel);
     }
 

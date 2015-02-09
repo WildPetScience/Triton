@@ -7,10 +7,26 @@ import java.util.Set;
  */
 public class ConfigData {
 
-    public final Set<Zone> zones;
+    private Set<Zone> zones;
+    private double cageWidth;
+    private double cageHeight;
 
-    public ConfigData(Set<Zone> zones) {
+    public ConfigData(Set<Zone> zones, double cageWidth, double cageHeight) {
         this.zones = zones;
+        this.cageWidth = cageWidth;
+        this.cageHeight = cageHeight;
+    }
+
+    public Set<Zone> getZones() {
+        return zones;
+    }
+
+    public double getCageWidth() {
+        return cageWidth;
+    }
+
+    public double getCageHeight() {
+        return cageHeight;
     }
 
 }

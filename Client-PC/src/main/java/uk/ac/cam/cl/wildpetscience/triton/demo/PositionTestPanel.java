@@ -1,8 +1,10 @@
 package uk.ac.cam.cl.wildpetscience.triton.demo;
 
 import org.opencv.core.Point;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis.Analysis;
 
 import javax.swing.*;
@@ -19,14 +21,14 @@ import java.time.LocalDateTime;
  */
 public class PositionTestPanel extends JPanel implements MouseMotionListener, MouseWheelListener {
 
-    private final Zones zones;
+    private final ConfigData config;
     private final Analysis analysis;
     private double probability = 0.5;
 
     private int x, y;
 
-    public PositionTestPanel(Zones zones, Analysis analysis) {
-        this.zones = zones;
+    public PositionTestPanel(ConfigData config, Analysis analysis) {
+        this.config = config;
         this.analysis = analysis;
         addMouseMotionListener(this);
         addMouseWheelListener(this);
@@ -39,7 +41,7 @@ public class PositionTestPanel extends JPanel implements MouseMotionListener, Mo
         g2.drawString(String.format("Probability: %.2f", probability), 10, 15);
         g2.draw(new Ellipse2D.Double(x, y, 4, 4));
 
-        for (Zone zone : zones.getZones()) {
+        for (Zone zone : config.getZones()) {
             Box scaled = zone.area.scale(getWidth(), getHeight());
             g2.drawRect(
                     (int)scaled.getLeft(),
