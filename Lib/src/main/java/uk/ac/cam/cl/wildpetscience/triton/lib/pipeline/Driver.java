@@ -13,6 +13,9 @@ public class Driver<D> extends Thread {
 
     private final Filter<Image, D> filter;
 
+    private Image latest;
+    private final Object latestLock = new Object();
+
     private boolean cancelled = false;
 
     public Driver(ImageInputSource in, Filter<Image, D> flt, OutputSink<D> out) {
@@ -71,6 +74,9 @@ public class Driver<D> extends Thread {
                     out.close();
                     cancel();
                 } else {
+                    synchronized (latestLock) {
+                        latest = img;
+                    }
                     D result = filter.filter(img);
                     out.onDataAvailable(result);
                 }
@@ -86,5 +92,11 @@ public class Driver<D> extends Thread {
 
     public synchronized boolean isCancelled() {
         return cancelled;
+    }
+
+    public Image getMostRecentInput() {
+        synchronized (latestLock) {
+            return latest;
+        }
     }
 }
