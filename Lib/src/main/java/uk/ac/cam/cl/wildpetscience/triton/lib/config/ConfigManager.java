@@ -33,7 +33,14 @@ public class ConfigManager {
      * @return a list of interesting zones registered with the system.
      */
     public static Set<Zone> getZones() {
-        throw new UnsupportedOperationException();
+        try {
+            AppConfig conf = AppConfig.getPrimaryConfig();
+            return conf.getZones();
+        } catch (IOException e) {
+            System.out.println("Error when getting zones.");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -41,7 +48,13 @@ public class ConfigManager {
      * @param zones
      */
     public static void setZones(Set<Zone> zones) {
-        throw new UnsupportedOperationException();
+        try {
+            AppConfig conf = AppConfig.getPrimaryConfig();
+            conf.setZones(zones);
+        } catch (IOException e) {
+            System.out.println("Error when setting zones.");
+            e.printStackTrace();
+        }
     }
 
     public static double getCageWidth() {

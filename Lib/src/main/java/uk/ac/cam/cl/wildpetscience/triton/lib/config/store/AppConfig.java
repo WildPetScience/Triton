@@ -7,10 +7,7 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.LogEntry;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Set;
 
@@ -82,9 +79,9 @@ public class AppConfig {
     }
 
     private static String readConfigFile(String name) throws IOException {
-        String path = AppConfig.class.getResource("/config/" + name).getPath();
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(new File(path)));
-        return new String(ByteStreams.toByteArray(in), Charsets.UTF_8);
+        InputStream in = AppConfig.class.getResourceAsStream("/config/" + name);
+        BufferedInputStream bin = new BufferedInputStream(in);
+        return new String(ByteStreams.toByteArray(bin), Charsets.UTF_8);
     }
 
     // Property getter & setter methods
