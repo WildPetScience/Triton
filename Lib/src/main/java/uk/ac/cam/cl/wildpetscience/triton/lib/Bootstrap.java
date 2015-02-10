@@ -37,6 +37,7 @@ public class Bootstrap {
             def.setDataCode(new CodeGenerator().nextCode());
             def.setAsPrimaryConfig();
         } catch(IOException e) {
+            e.printStackTrace();
             System.err.println("No default configuration found.");
         }
     }
