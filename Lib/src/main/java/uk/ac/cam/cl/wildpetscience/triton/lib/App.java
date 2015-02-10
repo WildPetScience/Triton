@@ -23,6 +23,8 @@ public class App {
     private final Filter<Image, Image> preFilter;
     private final int port;
 
+    private Driver<AnimalPosition> driver;
+
     public App(ImageInputSource input, Filter<Image, Image> preFilter, int port) {
         this.input = input;
         this.port = port;
@@ -34,12 +36,26 @@ public class App {
     }
 
     public void start() {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                driver.cancel();
+                try {
+                    // Wait for driver to finish (does lots of killing etc).
+                    driver.join(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                ConfigServer.stop();
+            }
+        });
         try {
             ConfigData initialConfig = new ConfigData(
                     ConfigManager.getZones(),
                     ConfigManager.getCageWidth(),
                     ConfigManager.getCageHeight());
-            Driver<AnimalPosition> driver = new Driver<>(
+            driver = new Driver<>(
                     input,
                     preFilter,
                     new CornerDetectionFilter(),
@@ -53,6 +69,5 @@ public class App {
             System.err.println("Fatal error setting system up.");
             System.exit(1);
         }
-
     }
 }
