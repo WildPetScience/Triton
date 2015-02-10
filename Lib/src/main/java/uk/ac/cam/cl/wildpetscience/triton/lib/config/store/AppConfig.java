@@ -72,9 +72,7 @@ public class AppConfig {
     }
 
     private void writeToConfig(String name) throws IOException {
-        if(!(new File(PREFS_DIR).mkdir())) {
-            throw new IOException("Could not create prefs directory.");
-        }
+        new File(PREFS_DIR).mkdir();
         String filePath = PREFS_DIR + name;
         OutputStream out = new BufferedOutputStream(
                 new FileOutputStream(filePath)
