@@ -19,6 +19,8 @@ public class AppConfig {
 
     private static final String PRIMARY_CONFIG = "config.json";
     private static final String DEFAULT_CONFIG = "config.default.json";
+    private static final String PREFS_DIR = System.getProperty("user.home")
+            + "/.wildpetscience/";
 
     private boolean running;
     private String dataCode;
@@ -44,7 +46,7 @@ public class AppConfig {
             return primary;
         } else {
             //reads the config from a file if we don't have it cached
-            return getConfig(PRIMARY_CONFIG);
+            return getUserConfig(PRIMARY_CONFIG);
         }
     }
 
@@ -56,30 +58,52 @@ public class AppConfig {
      * @throws IOException
      */
     public static AppConfig getDefaultConfig() throws IOException {
-        return getConfig(DEFAULT_CONFIG);
+        return getIncludedConfig(DEFAULT_CONFIG);
     }
 
     /**
      * Sets this instance as the primary config.
      */
-    public void setAsPrimaryConfig() {
+    public void saveAsPrimaryConfig() throws IOException {
         Gson gson = new Gson();
         System.out.println(gson.toJson(this));
         primary = this;
-        //TODO: need to write to file as well
+        this.writeToConfig(PRIMARY_CONFIG);
+    }
+
+    private void writeToConfig(String name) throws IOException {
+        new File(PREFS_DIR).mkdir();
+        String filePath = PREFS_DIR + name;
+        OutputStream out = new BufferedOutputStream(
+                new FileOutputStream(filePath)
+        );
+        Gson gson = new Gson();
+        out.write(gson.toJson(this).getBytes());
+        out.close();
     }
 
     /**
      * Constructs a configuration object from a given JSON file.
      * @param configFileName
      */
-    public static AppConfig getConfig(String configFileName) throws IOException {
+    public static AppConfig getIncludedConfig(String configFileName) throws IOException {
         Gson gson = new Gson();
-        return gson.fromJson(readConfigFile(configFileName), AppConfig.class);
+        return gson.fromJson(readIncludedConfigFile(configFileName), AppConfig.class);
     }
 
-    private static String readConfigFile(String name) throws IOException {
+    public static AppConfig getUserConfig(String configFileName) throws IOException {
+        Gson gson = new Gson();
+        return gson.fromJson(readUserConfigFile(configFileName), AppConfig.class);
+    }
+
+    private static String readIncludedConfigFile(String name) throws IOException {
         InputStream in = AppConfig.class.getResourceAsStream("/config/" + name);
+        BufferedInputStream bin = new BufferedInputStream(in);
+        return new String(ByteStreams.toByteArray(bin), Charsets.UTF_8);
+    }
+
+    private static String readUserConfigFile(String name) throws IOException {
+        InputStream in = new FileInputStream(PREFS_DIR + name);
         BufferedInputStream bin = new BufferedInputStream(in);
         return new String(ByteStreams.toByteArray(bin), Charsets.UTF_8);
     }
