@@ -5,6 +5,7 @@ import org.opencv.core.Mat;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
+import java.time.LocalDateTime;
 
 /**
  * An image
@@ -15,12 +16,24 @@ public class Image {
      */
     private Mat data;
 
+    /**
+     * The time at which this image was captured.
+     */
+    private LocalDateTime timestamp;
+
     public Image() {
         data = new Mat();
+        timestamp = LocalDateTime.now();
     }
 
     public Image(Mat data) {
         this.data = data;
+        timestamp = LocalDateTime.now();
+    }
+
+    public Image(Mat data, LocalDateTime timestamp) {
+        this.data = data;
+        this.timestamp = timestamp;
     }
 
     /**
@@ -28,7 +41,7 @@ public class Image {
      * @param img
      */
     public Image(Image img) {
-        this(img.getData().clone());
+        this(img.getData().clone(), img.timestamp);
     }
 
     public Mat getData() {
@@ -60,6 +73,10 @@ public class Image {
         mat.get(0, 0, data);
 
         return image;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
 }
