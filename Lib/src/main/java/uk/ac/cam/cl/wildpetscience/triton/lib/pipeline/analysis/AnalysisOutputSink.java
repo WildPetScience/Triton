@@ -62,9 +62,9 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         double xDiff = Math.abs(p1.x - p2.x) * cageWidth;
         double yDiff = Math.abs(p1.y - p2.y) * cageHeight;
         double displacement = Math.sqrt(xDiff*xDiff + yDiff*yDiff);
-        double time = ChronoUnit.SECONDS.between(t2, t1);
-        if (time == 0.0) return 0.0;
-        else return displacement / time;
+        double time = ChronoUnit.MILLIS.between(t1, t2);
+        if (time == 0) return 0;
+        else return displacement / (time/1000); // time/1000: scale to seconds
     }
 
     /* Makes a DataFrame object for sending to server. NB: utilises lastKnownPosition */
@@ -121,19 +121,23 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
             /* Calculate average velocity */
             Point lastPoint = lastKnownPosition.getLocation();
-            double timeElapsed = ChronoUnit.SECONDS.between(lastKnownPosition.getTime(), time);
-            double xRate = (location.x - lastPoint.x) / timeElapsed;
-            double yRate = (location.y - lastPoint.y) / timeElapsed;
+            double xRate = 0;
+            double yRate = 0;
+            double timeElapsed = ChronoUnit.MILLIS.between(lastKnownPosition.getTime(), time);
+            if (timeElapsed != 0) { // avoid divide by zero
+                xRate = (location.x - lastPoint.x) / timeElapsed;
+                yRate = (location.y - lastPoint.y) / timeElapsed;
+            }
 
             /* Update queue position using velocity, flush and send */
             while (!positionQueue.isEmpty()) {
                 AnimalPosition position = positionQueue.poll();
-                double t = ChronoUnit.SECONDS.between(lastKnownPosition.getTime(), position.getTime());
+                double t = ChronoUnit.MILLIS.between(lastKnownPosition.getTime(), position.getTime());
                 double xNew = lastKnownPosition.getLocation().x + xRate * t;
                 double yNew = lastKnownPosition.getLocation().y + yRate * t;
                 position.setLocation(new Point(xNew, yNew));
-                lastKnownPosition = position;
                 send(makeFrame(position));
+                lastKnownPosition = position;
             }
 
         }
