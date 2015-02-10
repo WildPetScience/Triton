@@ -2,6 +2,7 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.models;
 
 import org.opencv.core.Point;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -60,10 +61,14 @@ public class DataFrame {
     }
 
     public String toString() {
-        String out =    "Time:          " + time.format(DateTimeFormatter.ISO_LOCAL_TIME) + "\n" +
-                        "Location:      " + location.toString() + "\n" +
+        DecimalFormat df = new DecimalFormat("#0.00");
+        String xString = df.format(location.x*cageWidth);
+        String yString = df.format(location.y*cageHeight);
+        String timeString = time.format(DateTimeFormatter.ISO_LOCAL_TIME);
+        String out =    "Time:          " + timeString + "\n" +
+                        "Location:      " + "("+xString+","+yString+")" + "\n" +
                         "Zone ID:       " + zoneId + "\n" +
-                        "Speed:         " + speed + "\n" +
+                        "Speed:         " + df.format(speed) + "\n" +
                         "Cage Size:     " + cageWidth + " x " + cageHeight + "\n";
         return out;
     }
