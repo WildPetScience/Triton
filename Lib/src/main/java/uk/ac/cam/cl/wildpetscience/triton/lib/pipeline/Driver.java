@@ -89,6 +89,13 @@ public class Driver<D> extends Thread {
                 e.printStackTrace();
             }
         } while (!localCancelled);
+        try {
+            in.close();
+            filter.close();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public synchronized void cancel() {
