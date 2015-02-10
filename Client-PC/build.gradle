@@ -6,6 +6,12 @@ version = '0.1'
 
 mainClassName = 'uk.ac.cam.cl.wildpetscience.triton.client.Client'
 
+run {
+    if ( project.hasProperty("appArgs") ) {
+        args Eval.me(appArgs)
+    }
+}
+
 dependencies {
     compile project(':Lib')
 
