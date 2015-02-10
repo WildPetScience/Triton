@@ -69,10 +69,10 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
             framesBuf = 3;
 
         if(prevFrame == null)
-            return new AnimalPosition(new Point(0.0, 0.0), LocalDateTime.now(), 0.0);
+            return new AnimalPosition(new Point(0.0, 0.0), input.getTimestamp(), 0.0);
 
         if(prevFrame.getData() == null)
-            return new AnimalPosition(new Point(0.0, 0.0), LocalDateTime.now(), 0.0);
+            return new AnimalPosition(new Point(0.0, 0.0), input.getTimestamp(), 0.0);
 
         Mat result = getDiff();
 
@@ -92,7 +92,7 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
             prob = 1.0;
 
         if(count == 0)
-            return new AnimalPosition(new Point(0.0, 0.0), LocalDateTime.now(), 0.0);
+            return new AnimalPosition(new Point(0.0, 0.0), input.getTimestamp(), 0.0);
 
         double xNew = xav/count/result.cols();
         double yNew = yav/count/result.rows();
@@ -102,7 +102,7 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
 
         result.release();
 
-        return new AnimalPosition(new Point(xPos, yPos), LocalDateTime.now(), prob);
+        return new AnimalPosition(new Point(xPos, yPos), input.getTimestamp(), prob);
     }
 
     @Override
