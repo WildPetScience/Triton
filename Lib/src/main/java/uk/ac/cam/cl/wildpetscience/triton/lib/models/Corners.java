@@ -1,6 +1,9 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.models;
 
-import org.opencv.core.Point;
+import org.opencv.core.*;
+import org.opencv.imgproc.Imgproc;
+
+import static org.opencv.core.Core.perspectiveTransform;
 
 /**
  * Contains the positions of the 4 detected markers
@@ -23,6 +26,30 @@ public class Corners {
         upperRight = new Point(1, 0);
         lowerLeft = new Point(0, 1);
         lowerRight = new Point(1, 1);
+    }
+
+    public Point getTransform(Point input) {
+        Mat src = new MatOfPoint(upperLeft,upperRight,lowerLeft,lowerRight);
+        Mat dst = new MatOfPoint(new Point(0, 0), new Point(1, 0), new Point(0, 1), new Point(1, 1));
+        Mat transform = Imgproc.getPerspectiveTransform(src, dst);
+
+        MatOfPoint in = new MatOfPoint(input);
+        MatOfPoint out = new MatOfPoint();
+        perspectiveTransform(in, out, transform);
+
+        return out.toArray()[0];
+    }
+
+    public Point getInverseTransform(Point input) {
+        Mat dst = new MatOfPoint(upperLeft,upperRight,lowerLeft,lowerRight);
+        Mat src = new MatOfPoint(new Point(0, 0), new Point(1, 0), new Point(0, 1), new Point(1, 1));
+        Mat transform = Imgproc.getPerspectiveTransform(src, dst);
+
+        MatOfPoint in = new MatOfPoint(input);
+        MatOfPoint out = new MatOfPoint();
+        perspectiveTransform(in, out, transform);
+
+        return out.toArray()[0];
     }
 
     public Point getLowerLeft() {
