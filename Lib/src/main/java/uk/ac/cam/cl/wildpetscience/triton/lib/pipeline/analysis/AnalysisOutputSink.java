@@ -7,10 +7,7 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Performs the analysis stage of the client-side pipeline.
@@ -32,6 +29,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     private Zone nullZone;
     private AnimalPosition lastKnownPosition;
     private Queue<AnimalPosition> positionQueue;
+    private List<DataFrame> path; // NB: for demo only
     private double threshold = 0.4; // TODO: Experiment with values of threshold
 
     public AnalysisOutputSink (ConfigData config) {
@@ -39,12 +37,16 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
         lastKnownPosition = null;
         positionQueue = new LinkedList<AnimalPosition>();
+        path = new LinkedList<DataFrame>();
     }
 
     /* TODO: Replace this dummy method */
-    public void send(DataFrame data) {
+    public void sendData(DataFrame data) {
         System.out.println(data.toString());
+        path.add(data);
     }
+
+    public List<DataFrame> getPath() { return path; }
 
     /* Finds which zone a point is in. NB: assumes zones are disjoint */
     public Zone pointToZone(Point point) {
@@ -108,7 +110,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         if (lastKnownPosition == null) {
             if (probability > threshold) {
                 lastKnownPosition = image;
-                send(makeFrame(image));
+                sendData(makeFrame(image));
             }
             return;
         }
@@ -136,7 +138,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
                 double xNew = lastKnownPosition.getLocation().x + xRate * t;
                 double yNew = lastKnownPosition.getLocation().y + yRate * t;
                 position.setLocation(new Point(xNew, yNew));
-                send(makeFrame(position));
+                sendData(makeFrame(position));
                 lastKnownPosition = position;
             }
 
