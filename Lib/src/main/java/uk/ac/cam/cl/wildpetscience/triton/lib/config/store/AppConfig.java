@@ -3,6 +3,7 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.config.store;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.LogEntry;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
@@ -26,6 +27,7 @@ public class AppConfig {
     private String dataCode;
     private List<LogEntry> systemLogs;
     private Set<Zone> zones;
+    private Box dimensions;
 
     // Cache the primary config so that we're not accessing the SD card
     // too often (should help with IO performance)
@@ -123,6 +125,14 @@ public class AppConfig {
 
     public void setZones(Set<Zone> zones) {
         this.zones = zones;
+    }
+
+    public Box getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(Box dimensions) {
+        this.dimensions = dimensions;
     }
 
 }
