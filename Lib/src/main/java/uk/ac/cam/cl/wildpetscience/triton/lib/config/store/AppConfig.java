@@ -46,7 +46,7 @@ public class AppConfig {
             return primary;
         } else {
             //reads the config from a file if we don't have it cached
-            return getIncludedConfig(PRIMARY_CONFIG);
+            return getUserConfig(PRIMARY_CONFIG);
         }
     }
 
@@ -72,7 +72,9 @@ public class AppConfig {
     }
 
     private void writeToConfig(String name) throws IOException {
-        new File(PREFS_DIR).mkdir();
+        if(!(new File(PREFS_DIR).mkdir())) {
+            throw new IOException("Could not create prefs directory.");
+        }
         String filePath = PREFS_DIR + name;
         OutputStream out = new BufferedOutputStream(
                 new FileOutputStream(filePath)
