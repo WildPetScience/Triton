@@ -24,10 +24,7 @@ public class RaspiStillRunner implements Closeable {
      */
     public synchronized byte[] takeImage() throws IOException, InterruptedException {
         close();
-        process = Runtime.getRuntime().exec(String.format(
-                "raspistill -t 1 -o - -w %d -h %d -e bmp",
-                opts.getWidth(),
-                opts.getHeight()));
+        process = Runtime.getRuntime().exec(opts.toCommandLine());
         InputStream in = process.getInputStream();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         int len;
