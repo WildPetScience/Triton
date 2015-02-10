@@ -6,6 +6,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.App;
 import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
+import uk.ac.cam.cl.wildpetscience.triton.pi.camera.CameraAdjustFilter;
 import uk.ac.cam.cl.wildpetscience.triton.pi.camera.CameraOpts;
 import uk.ac.cam.cl.wildpetscience.triton.pi.camera.PiCameraInputSource;
 
@@ -24,7 +25,11 @@ public class Client {
 
         CameraOpts cameraOpts = new CameraOpts(640, 480);
 
-        App app = new App(new PiCameraInputSource(cameraOpts), port);
+        PiCameraInputSource camera = new PiCameraInputSource(cameraOpts);
+
+        CameraAdjustFilter cameraAdjustFilter = new CameraAdjustFilter(camera);
+
+        App app = new App(camera, cameraAdjustFilter, port);
         app.start();
     }
 }

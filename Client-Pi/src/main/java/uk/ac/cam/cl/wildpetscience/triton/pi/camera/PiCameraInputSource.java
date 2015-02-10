@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * An ImageInputSource that fetches images from a Raspberry Pi camera.
  */
-public class PiCameraInputSource implements ImageInputSource {
+public class PiCameraInputSource implements ImageInputSource, Camera {
 
     private RaspiStillRunner runner = null;
 
