@@ -32,24 +32,28 @@ public class ConfigManager {
     /**
      * @return a list of interesting zones registered with the system.
      */
-    public static Set<Zone> getZones() {
-        throw new UnsupportedOperationException();
+    public static Set<Zone> getZones() throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        return conf.getZones();
     }
 
     /**
      * Updates the interesting zones registered with the system.
      * @param zones
      */
-    public static void setZones(Set<Zone> zones) {
-        throw new UnsupportedOperationException();
+    public static void setZones(Set<Zone> zones) throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        conf.setZones(zones);
     }
 
-    public static double getCageWidth() {
-        throw new UnsupportedOperationException();
+    public static double getCageWidth() throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        return conf.getDimensions().getWidth();
     }
 
-    public static double getCageHeight() {
-        throw new UnsupportedOperationException();
+    public static double getCageHeight() throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        return conf.getDimensions().getHeight();
     }
 
     public static void setCageWidth(double width) {

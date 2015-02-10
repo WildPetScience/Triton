@@ -3,13 +3,11 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.config.store;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.LogEntry;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +24,7 @@ public class AppConfig {
     private String dataCode;
     private List<LogEntry> systemLogs;
     private Set<Zone> zones;
+    private Box dimensions;
 
     // Cache the primary config so that we're not accessing the SD card
     // too often (should help with IO performance)
@@ -80,9 +79,9 @@ public class AppConfig {
     }
 
     private static String readConfigFile(String name) throws IOException {
-        String path = AppConfig.class.getResource("/config/" + name).getPath();
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(new File(path)));
-        return new String(ByteStreams.toByteArray(in), Charsets.UTF_8);
+        InputStream in = AppConfig.class.getResourceAsStream("/config/" + name);
+        BufferedInputStream bin = new BufferedInputStream(in);
+        return new String(ByteStreams.toByteArray(bin), Charsets.UTF_8);
     }
 
     // Property getter & setter methods
@@ -123,6 +122,14 @@ public class AppConfig {
 
     public void setZones(Set<Zone> zones) {
         this.zones = zones;
+    }
+
+    public Box getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(Box dimensions) {
+        this.dimensions = dimensions;
     }
 
 }
