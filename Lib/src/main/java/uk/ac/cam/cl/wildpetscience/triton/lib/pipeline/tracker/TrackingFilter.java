@@ -11,27 +11,55 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static org.opencv.core.Core.absdiff;
-import static org.opencv.imgproc.Imgproc.threshold;
+import static org.opencv.imgproc.Imgproc.*;
 
 /**
  * Filter that given an image outputs the position of the animal
  */
 
 public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> {
-    static int framesBuf = 0;
-    static ImageWithCorners prevFrame, currFrame, nextFrame;
+    private static int framesBuf = 0;
+    private static ImageWithCorners prevFrame, currFrame, nextFrame;
+    private static double xPos, yPos;
 
     public TrackingFilter() {
         super();
         prevFrame = null;
         currFrame = null;
         nextFrame = null;
+        framesBuf = 0;
+        xPos = 0;
+        yPos = 0;
+    }
+
+    private Mat getDiff() {
+        Mat d1 = new Mat();
+        Mat d2 = new Mat();
+        Mat result = new Mat();
+
+        Mat prev = prevFrame.getData();
+        Mat curr = currFrame.getData();
+        Mat next = nextFrame.getData();
+
+        medianBlur(next, next, 5);
+
+        absdiff(prev, next, d1);
+        absdiff(curr, next, d2);
+        Core.bitwise_and(d1, d2, result);
+
+        d1.release();
+        d2.release();
+
+        threshold(result, result, 35, 255, Imgproc.THRESH_BINARY);
+
+        return result;
     }
 
     @Override
     public AnimalPosition filter(ImageWithCorners input) {
         if(prevFrame != null)
             prevFrame.release();
+
         prevFrame = currFrame;
         currFrame = nextFrame;
         nextFrame = new ImageWithCorners(input);
@@ -46,15 +74,7 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
         if(prevFrame.getData() == null)
             return new AnimalPosition(new Point(0.0, 0.0), LocalDateTime.now(), 0.0);
 
-        Mat d1 = new Mat();
-        Mat d2 = new Mat();
-        Mat result = new Mat();
-
-        absdiff(prevFrame.getData(), nextFrame.getData(), d1);
-        absdiff(currFrame.getData(), nextFrame.getData(), d2);
-        Core.bitwise_and(d1, d2, result);
-
-        threshold(result, result, 30, 255, Imgproc.THRESH_BINARY);
+        Mat result = getDiff();
 
         int count=0;
         double xav = 0.0, yav = 0.0;
@@ -62,8 +82,8 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
         for(int i=0; i<result.rows(); ++i)
             for(int j=0; j<result.cols(); ++j)
                 if(result.get(i,j)[0]==255) {
-                    xav+=j;
-                    yav+=i;
+                    xav += j;
+                    yav += i;
                     ++count;
                 }
 
@@ -74,7 +94,15 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
         if(count == 0)
             return new AnimalPosition(new Point(0.0, 0.0), LocalDateTime.now(), 0.0);
 
-        return new AnimalPosition(new Point(xav/count/result.cols(), yav/count/result.rows()), LocalDateTime.now(), prob);
+        double xNew = xav/count/result.cols();
+        double yNew = yav/count/result.rows();
+
+        xPos = (xPos + 2*xNew) / 3;
+        yPos = (yPos + 2*yNew) / 3;
+
+        result.release();
+
+        return new AnimalPosition(new Point(xPos, yPos), LocalDateTime.now(), prob);
     }
 
     @Override
