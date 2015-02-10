@@ -1,17 +1,18 @@
 package uk.ac.cam.cl.wildpetscience.triton.demo;
 
 import org.opencv.core.Point;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis.Analysis;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.LinkedList;
 
 /**
  * Lets the user input location data with the mouse.
@@ -37,15 +38,40 @@ public class PositionTestPanel extends JPanel implements MouseMotionListener, Mo
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
         g2.drawString(String.format("Probability: %.2f", probability), 10, 15);
-        g2.draw(new Ellipse2D.Double(x, y, 4, 4));
+        g2.draw(new Ellipse2D.Double(x-2, y-2, 4, 4)); // -2 for centering
 
         for (Zone zone : config.getZones()) {
             Box scaled = zone.area.scale(getWidth(), getHeight());
-            g2.drawRect(
-                    (int)scaled.getLeft(),
-                    (int)scaled.getTop(),
-                    (int)scaled.getWidth(),
-                    (int)scaled.getHeight());
+            Rectangle2D.Double rect = new Rectangle2D.Double(
+                    (int) scaled.getLeft(),
+                    (int) scaled.getTop(),
+                    (int) scaled.getWidth(),
+                    (int) scaled.getHeight()
+            );
+            g2.setColor(new Color(100,100,100,100));
+            g2.fill(rect);
+        }
+
+        /* Draw the path */
+        List<DataFrame> path = analysis.getPath();
+        Point lastPoint = null;
+        for (DataFrame data : path) {
+            Point location = data.getLocation();
+            int xNew = (int) (location.x * getWidth());
+            int yNew = (int) (location.y * getHeight());
+            /* Draw lines */
+            if (lastPoint != null) {
+                int xOld = (int) (lastPoint.x * getWidth());
+                int yOld = (int) (lastPoint.y * getHeight());
+                g2.setColor(Color.RED);
+                g2.drawLine(xOld, yOld, xNew, yNew);
+            }
+            /* Plot points */
+            Ellipse2D.Double plotted = new Ellipse2D.Double(xNew-2, yNew-2, 4, 4); // -2 for centering
+            if (!data.getZoneId().equals("N/A")) g2.setColor(Color.BLUE); // point BLUE if in user-defined zone
+            g2.draw(plotted);
+            g2.fill(plotted);
+            lastPoint = location;
         }
     }
 

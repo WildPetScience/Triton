@@ -23,7 +23,7 @@ public class LocationPipelineDemo {
 
         Set<Zone> zoneSet = new HashSet<>();
         zoneSet.add(new Zone(new Box(0.2, 0.2, 0.2, 0.2), "WATER"));
-        zoneSet.add(new Zone(new Box(0.9, 0.1, 0.2, 0.2), "FOOD"));
+        zoneSet.add(new Zone(new Box(0.8, 0.6, 0.2, 0.2), "FOOD"));
         ConfigData config = new ConfigData(zoneSet, 100, 200);
         PositionTestPanel panel = new PositionTestPanel(config,
                 new AnalysisOutputSink(config));
