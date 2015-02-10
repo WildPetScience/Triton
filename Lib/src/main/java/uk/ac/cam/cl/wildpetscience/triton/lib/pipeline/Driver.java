@@ -14,6 +14,7 @@ public class Driver<D> extends Thread {
     protected final Filter<Image, D> filter;
 
     private Image latest;
+    private boolean latestWanted = false;
     private final Object latestLock = new Object();
 
     private boolean cancelled = false;
@@ -76,7 +77,10 @@ public class Driver<D> extends Thread {
                     cancel();
                 } else {
                     synchronized (latestLock) {
-                        latest = img;
+                        if (latestWanted) {
+                            latest = new Image(img);
+                            latestLock.notify();
+                        }
                     }
                     D result = filter.filter(img);
                     out.onDataAvailable(result);
@@ -97,7 +101,16 @@ public class Driver<D> extends Thread {
 
     public Image getMostRecentInput() {
         synchronized (latestLock) {
-            return latest;
+            latestWanted = true;
+            try {
+                latestLock.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            latestWanted = false;
+            Image img = latest;
+            latest = null;
+            return img;
         }
     }
 }
