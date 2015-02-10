@@ -64,7 +64,7 @@ public class AppConfig {
     /**
      * Sets this instance as the primary config.
      */
-    public void setAsPrimaryConfig() throws IOException {
+    public void saveAsPrimaryConfig() throws IOException {
         Gson gson = new Gson();
         System.out.println(gson.toJson(this));
         primary = this;

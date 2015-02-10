@@ -35,7 +35,7 @@ public class Bootstrap {
         try {
             AppConfig def = AppConfig.getDefaultConfig();
             def.setDataCode(new CodeGenerator().nextCode());
-            def.setAsPrimaryConfig();
+            def.saveAsPrimaryConfig();
         } catch(IOException e) {
             e.printStackTrace();
             System.err.println("No default configuration found.");
