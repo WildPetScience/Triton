@@ -24,7 +24,7 @@ public class NextImageRoute implements Route {
         try {
             response.header("Content-Type", "image/jpeg");
             ImageIO.write(bi, "JPEG", response.raw().getOutputStream());
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.err.println("Error writing image to output stream.");
         }
         return response;
