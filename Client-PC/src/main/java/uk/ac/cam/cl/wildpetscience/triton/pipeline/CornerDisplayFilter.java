@@ -17,7 +17,7 @@ public class CornerDisplayFilter implements Filter<ImageWithCorners, Image> {
     @Override
     public Image filter(ImageWithCorners input) {
         Mat dat = input.getData();
-        Scalar col = new Scalar(0, 255, 0);
+        Scalar col = new Scalar(0, 0, 255);
         for (Point point : input.getCorners().get()) {
             Core.circle(dat,
                     new Point(point.x * dat.width(), point.y * dat.height()),

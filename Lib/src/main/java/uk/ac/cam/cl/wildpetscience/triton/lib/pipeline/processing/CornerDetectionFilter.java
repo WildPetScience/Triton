@@ -1,11 +1,15 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing;
 
 import org.opencv.core.*;
+import org.opencv.highgui.Highgui;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.ImageWithCorners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Corners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Filter;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,13 +23,18 @@ import static org.opencv.imgproc.Imgproc.*;
  */
 public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
 
-    final static int MARKER_AREA_MIN = 300;
-    final static int MARKER_AREA_MAX = 500;
+    final static int MARKER_AREA_MIN = 100;
+    final static int MARKER_AREA_MAX = 1000;
+
+    double width, height;
+
     @Override
     public ImageWithCorners filter(Image input) {
+
         Mat inputMat = input.getData();
         Mat mask = createMask(inputMat);
-        Mat maskCopy = mask.clone();
+        width = inputMat.width();
+        height = inputMat.height();
 
         // Get list of corner markers.
         List<MatOfPoint> contours = new ArrayList<>();
@@ -40,6 +49,7 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
         }
 
         Corners imageCorners = findCorners(markers);
+        // System.out.println(markers.size() + "#########");
 
         ImageWithCorners output;
         if (imageCorners != null) {
@@ -62,10 +72,14 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
                 sumy += p.y;
             }
             corners.add(new Point(sumx/list.size(), sumy/list.size()));
-            System.out.println(list.size());
+            // System.out.println(list.size());
         }
-        for (Point p : corners) System.out.println(p.x + " " + p.y);
         sortCorners(corners);
+        // for (Point p : corners) System.out.println(p.x + " " + p.y);
+        for (int i = 0; i < corners.size(); i++) {
+            corners.get(i).x /= width;
+            corners.get(i).y /= height;
+        }
         if (corners.size() > 3) {
             return new Corners(corners.get(0), corners.get(1), corners.get(2), corners.get(3));
         }
