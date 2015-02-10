@@ -49,6 +49,7 @@ public class BufferedInputSource implements ImageInputSource {
     private final Thread worker = new Thread() {
         @Override
         public void run() {
+            setDaemon(true);
             while (!cancelled) {
                 Image img = null;
                 try {
