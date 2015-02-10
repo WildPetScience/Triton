@@ -32,13 +32,19 @@ public class Bootstrap {
             System.load(javaDir + "opencv_java2410.dll");
         }
 
+        // I'm not proud of this code
         try {
-            AppConfig def = AppConfig.getDefaultConfig();
-            def.setDataCode(new CodeGenerator().nextCode());
-            def.saveAsPrimaryConfig();
+            AppConfig primary = AppConfig.getPrimaryConfig();
+            primary.saveAsPrimaryConfig();
         } catch(IOException e) {
-            e.printStackTrace();
-            System.err.println("No default configuration found.");
+            // Couldn't get the primary config so see if we can get a default
+            try {
+                AppConfig def = AppConfig.getDefaultConfig();
+                def.setDataCode(new CodeGenerator().nextCode());
+                def.saveAsPrimaryConfig();
+            } catch(IOException ee) {
+                System.err.println("Problem getting default config.");
+            }
         }
     }
 
