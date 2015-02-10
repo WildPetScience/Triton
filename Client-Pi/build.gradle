@@ -25,6 +25,13 @@ fatJar {
     exclude 'nu/pattern/opencv/'
 }
 
+Properties properties = new Properties()
+properties.load(project.file('local.properties').newDataInputStream())
+
+task deploy(type: org.gradle.api.tasks.Exec, dependsOn: 'fatJar') {
+    commandLine './pi-deploy.sh', properties.getProperty('piAddress')
+}
+
 dependencies {
     compile project(':Lib')
 

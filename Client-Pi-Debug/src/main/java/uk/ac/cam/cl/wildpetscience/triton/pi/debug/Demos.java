@@ -14,7 +14,7 @@ public class Demos {
         TestVideoEnumerator.addAdditionalSource(new TestVideoEnumerator.EnclosedTestVideo() {
             @Override
             public ImageInputSource create() {
-                return new PiCameraInputSource(new CameraOpts(640, 480, true));
+                return new PiCameraInputSource(new CameraOpts(640, 480));
             }
 
             @Override

@@ -22,7 +22,7 @@ public class Client {
         CommandLine cmd = new GnuParser().parse(opts, args);
         int port = Integer.valueOf(cmd.getOptionValue('p', "8000"));
 
-        CameraOpts cameraOpts = new CameraOpts(640, 480, false);
+        CameraOpts cameraOpts = new CameraOpts(640, 480);
 
         App app = new App(new PiCameraInputSource(cameraOpts), port);
         app.start();
