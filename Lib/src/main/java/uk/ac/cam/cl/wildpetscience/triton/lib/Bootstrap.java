@@ -13,6 +13,9 @@ import java.io.IOException;
 public class Bootstrap {
     public static void init() {
         if (isPi()) {
+            // RPi camera V4L module
+            System.load("/usr/lib/uv4l/uv4lext/armv6l/libuv4lext.so");
+            // OpenCV
             System.load("/usr/lib/jni/libopencv_java249.so");
         } else if (!isWindows()) {
             OpenCV.loadShared();

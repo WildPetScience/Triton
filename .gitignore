@@ -3,6 +3,9 @@
 .idea/tasks.xml
 .idea/libraries
 
+# Local config
+local.properties
+
 # Gradle
 .gradle
 
