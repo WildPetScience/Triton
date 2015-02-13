@@ -12,5 +12,6 @@ import java.util.List;
  */
 public interface Analysis extends OutputSink<AnimalPosition> {
     public void setConfigData(ConfigData configData);
+    public void sendData(DataFrame data);
     public List<DataFrame> getPath();
 }

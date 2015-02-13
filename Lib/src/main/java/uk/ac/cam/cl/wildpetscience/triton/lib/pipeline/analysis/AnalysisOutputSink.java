@@ -118,28 +118,14 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         /* Queue position to be processed */
         positionQueue.add(image);
 
-        /* If ACCURATE position provided, linearly interpolate intermediate positions and flush queue */
+        /* If ACCURATE position provided, interpolate intermediate positions and flush queue */
         if (probability > threshold) {
 
-            /* Calculate average velocity */
-            Point lastPoint = lastKnownPosition.getLocation();
-            double xRate = 0;
-            double yRate = 0;
-            double timeElapsed = ChronoUnit.MILLIS.between(lastKnownPosition.getTime(), time);
-            if (timeElapsed != 0) { // avoid divide by zero
-                xRate = (location.x - lastPoint.x) / timeElapsed;
-                yRate = (location.y - lastPoint.y) / timeElapsed;
-            }
-
-            /* Update queue position using velocity, flush and send */
-            while (!positionQueue.isEmpty()) {
-                AnimalPosition position = positionQueue.poll();
-                double t = ChronoUnit.MILLIS.between(lastKnownPosition.getTime(), position.getTime());
-                double xNew = lastKnownPosition.getLocation().x + xRate * t;
-                double yNew = lastKnownPosition.getLocation().y + yRate * t;
-                position.setLocation(new Point(xNew, yNew));
-                sendData(makeFrame(position));
-                lastKnownPosition = position;
+            /* The interpolator also flushes the queue */
+            List<AnimalPosition> predictedPoints = (new LinearInterpolator()).predictPoints(lastKnownPosition, image, positionQueue);
+            for (AnimalPosition prediction : predictedPoints) {
+                sendData(makeFrame(prediction));
+                lastKnownPosition = prediction;
             }
 
         }
