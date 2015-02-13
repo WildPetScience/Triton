@@ -68,6 +68,11 @@ function drawRect(box) {
     ctx.stroke();
 }
 
+/**
+ * Immediately invoked on the page loading - used to do one tim
+ * setup of necessary page components (e.g. setting the canvas
+ * to refresh the camera image every 200ms).
+ */
 (function() {
     window.setInterval(updateCanvas, 200);
 })();
