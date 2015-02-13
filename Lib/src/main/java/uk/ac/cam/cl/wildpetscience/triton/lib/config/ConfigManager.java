@@ -64,6 +64,15 @@ public class ConfigManager {
         throw new UnsupportedOperationException();
     }
 
+    public static String getServerURL() throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        return conf.getServerURL();
+    }
+
+    public static void setServerURL(String serverURL) {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * @return The unique, random access code for viewing data online. Null if the primary
      * config cannot be found.
