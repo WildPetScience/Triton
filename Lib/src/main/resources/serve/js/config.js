@@ -58,6 +58,16 @@ function updateCanvas() {
     image.src = "/image";
 }
 
+function drawRect(box) {
+    var ctx = $("#zone-canvas")[0].getContext("2d");
+    ctx.rect(box.x, box.y, box.w, box.h);
+
+    ctx.strokeStyle = "#FF0000"; // red lined box
+    ctx.fillOpacity = 0;
+
+    ctx.stroke();
+}
+
 (function() {
     window.setInterval(updateCanvas, 200);
 })();
