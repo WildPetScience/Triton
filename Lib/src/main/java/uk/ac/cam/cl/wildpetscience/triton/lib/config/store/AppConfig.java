@@ -27,6 +27,7 @@ public class AppConfig {
     private List<LogEntry> systemLogs;
     private Set<Zone> zones;
     private Box dimensions;
+    private String serverURL;
 
     // Cache the primary config so that we're not accessing the SD card
     // too often (should help with IO performance)
@@ -154,6 +155,14 @@ public class AppConfig {
 
     public void setDimensions(Box dimensions) {
         this.dimensions = dimensions;
+    }
+
+    public String getServerURL() {
+        return serverURL;
+    }
+
+    public void setServerURL(String serverURL) {
+        this.serverURL = serverURL;
     }
 
 }

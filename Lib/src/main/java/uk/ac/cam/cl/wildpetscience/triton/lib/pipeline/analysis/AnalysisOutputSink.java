@@ -5,6 +5,8 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -25,12 +27,16 @@ import java.util.*;
 public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis {
     private double cageWidth;
     private double cageHeight;
+    private String serverURL;
     private Map<Zone, Integer> zoneVisits;
     private Zone nullZone;
     private AnimalPosition lastKnownPosition;
     private Queue<AnimalPosition> positionQueue;
+    private Queue<DataFrame> dataQueue;
     private List<DataFrame> path; // NB: for demo only
+
     private double threshold = 0.4; // TODO: Experiment with values of threshold
+    private int maxDataQueueSize = 5;
 
     public AnalysisOutputSink (ConfigData config) {
         setConfigData(config);
@@ -40,16 +46,10 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         path = new LinkedList<DataFrame>();
     }
 
-    /* TODO: Replace this dummy method */
-    public void sendData(DataFrame data) {
-        System.out.println(data.toString());
-        path.add(data);
-    }
-
-    public List<DataFrame> getPath() { return path; }
+    public List<DataFrame> getPath() { return path; } // NB: for demo only
 
     /* Finds which zone a point is in. NB: assumes zones are disjoint */
-    public Zone pointToZone(Point point) {
+    private Zone pointToZone(Point point) {
         for (Zone z : zoneVisits.keySet()) {
             if (z.area.contains(point)) {
                 return z;
@@ -60,7 +60,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     }
 
     /* Computes speed between two points in time and space. NB: uses cageWidth and cageHeight */
-    public double computeSpeed(Point p1, LocalDateTime t1, Point p2, LocalDateTime t2) {
+    private double computeSpeed(Point p1, LocalDateTime t1, Point p2, LocalDateTime t2) {
         double xDiff = Math.abs(p1.x - p2.x) * cageWidth;
         double yDiff = Math.abs(p1.y - p2.y) * cageHeight;
         double displacement = Math.sqrt(xDiff*xDiff + yDiff*yDiff);
@@ -100,8 +100,37 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     }
 
     @Override
-    public void onDataAvailable(AnimalPosition image) {
+    public void setConfigData(ConfigData config) {
+        this.cageWidth = config.getCageWidth();
+        this.cageHeight = config.getCageHeight();
+        this.serverURL = config.getServerURL();
 
+        this.serverURL = "http://localhost:8080/condor"; // TODO: Remove this default value
+
+        /* Initialise the zone -> visit map, also acts as a zone set */
+        this.zoneVisits = new HashMap<Zone, Integer>(config.getZones().size()+1);
+        for (Zone z : config.getZones()) {
+            zoneVisits.put(z, 0);
+        }
+        nullZone = new Zone(new Box(0,0,0,0), "N/A");
+        zoneVisits.put(nullZone,0);
+
+    }
+
+    @Override
+    public void sendData(DataFrame data) {
+        System.out.println(data.toString()); // NB: for demo only
+        path.add(data); // NB: for demo only
+        dataQueue.add(data);
+
+        /* If too much data in queue, flush to server */
+        if (dataQueue.size() >= maxDataQueueSize) {
+            // TODO: send to server
+        }
+    }
+
+    @Override
+    public void onDataAvailable(AnimalPosition image) {
         Point location = image.getLocation();
         LocalDateTime time = image.getTime();
         double probability = image.getProbability();
@@ -136,19 +165,4 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
     }
 
-    @Override
-    public void setConfigData(ConfigData config) {
-        this.cageWidth = config.getCageWidth();
-        this.cageHeight = config.getCageHeight();
-
-        // TODO: Elaborate on this method
-
-        /* Initialise the zone -> visit map, also acts as a zone set */
-        this.zoneVisits = new HashMap<Zone, Integer>(config.getZones().size()+1);
-        for (Zone z : config.getZones()) {
-            zoneVisits.put(z, 0);
-        }
-        nullZone = new Zone(new Box(0,0,0,0), "N/A");
-        zoneVisits.put(nullZone,0);
-    }
 }

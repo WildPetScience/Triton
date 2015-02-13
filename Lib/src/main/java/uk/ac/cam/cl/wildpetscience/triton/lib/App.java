@@ -54,7 +54,8 @@ public class App {
             ConfigData initialConfig = new ConfigData(
                     ConfigManager.getZones(),
                     ConfigManager.getCageWidth(),
-                    ConfigManager.getCageHeight());
+                    ConfigManager.getCageHeight(),
+                    ConfigManager.getServerURL());
             driver = new Driver<>(
                     input,
                     preFilter,
