@@ -1,5 +1,6 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -32,6 +33,18 @@ public class LogEntry {
     public LogEntry(String m, Date d) {
         message = m;
         logTime = d;
+    }
+
+    @Override
+    public String toString() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM d, yyyy h:mm a");
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        sb.append(formatter.format(logTime));
+        sb.append("]");
+        sb.append(": ");
+        sb.append(message);
+        return sb.toString();
     }
 
 }
