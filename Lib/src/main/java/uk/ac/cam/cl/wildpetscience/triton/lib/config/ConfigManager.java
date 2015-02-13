@@ -43,6 +43,7 @@ public class ConfigManager {
     public static void setZones(Set<Zone> zones) throws IOException {
         AppConfig conf = AppConfig.getPrimaryConfig();
         conf.setZones(zones);
+        conf.saveAsPrimaryConfig();
     }
 
     public static double getCageWidth() throws IOException {
@@ -60,6 +61,7 @@ public class ConfigManager {
         Box dimensions = conf.getDimensions();
         dimensions.setWidth(width);
         conf.setDimensions(dimensions);
+        conf.saveAsPrimaryConfig();
     }
 
     public static void setCageHeight(double height) throws IOException {
@@ -67,6 +69,7 @@ public class ConfigManager {
         Box dimensions = conf.getDimensions();
         dimensions.setHeight(height);
         conf.setDimensions(dimensions);
+        conf.saveAsPrimaryConfig();
     }
 
     /**
@@ -98,6 +101,7 @@ public class ConfigManager {
         AppConfig conf = AppConfig.getPrimaryConfig();
         List<LogEntry> logs = conf.getSystemLogs();
         logs.add(entry);
+        conf.saveAsPrimaryConfig();
     }
 
 }

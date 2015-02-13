@@ -90,8 +90,12 @@
         <h2>
             System Logs
         </h2>
-        <pre>31/01/15 - Uploaded 1.8kB of data.
-29/01/15 - Begin recording.</pre>
+        <code>
+            {{#logs}}
+                    {{ toString }}
+                <br />
+            {{/logs}}
+        </code>
     </div>
 </div>
 
