@@ -1,14 +1,13 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.LogEntry;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-
-//TODO: decide on method of storing config data
 
 /**
  * Static class to manage the state of a Wild Pet Science installation.
@@ -56,12 +55,18 @@ public class ConfigManager {
         return conf.getDimensions().getHeight();
     }
 
-    public static void setCageWidth(double width) {
-        throw new UnsupportedOperationException();
+    public static void setCageWidth(double width) throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        Box dimensions = conf.getDimensions();
+        dimensions.setWidth(width);
+        conf.setDimensions(dimensions);
     }
 
-    public static void setCageHeight(double width) {
-        throw new UnsupportedOperationException();
+    public static void setCageHeight(double height) throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        Box dimensions = conf.getDimensions();
+        dimensions.setHeight(height);
+        conf.setDimensions(dimensions);
     }
 
     /**
@@ -81,15 +86,18 @@ public class ConfigManager {
     /**
      * @return A List of logged system events.
      */
-    public static List<LogEntry> getSystemLogs() {
-        throw new UnsupportedOperationException();
+    public static List<LogEntry> getSystemLogs() throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        return conf.getSystemLogs();
     }
 
     /**
      * @param entry A new system event to log.
      */
-    public static void addLogEntry(LogEntry entry) {
-        throw new UnsupportedOperationException();
+    public static void addLogEntry(LogEntry entry) throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        List<LogEntry> logs = conf.getSystemLogs();
+        logs.add(entry);
     }
 
 }
