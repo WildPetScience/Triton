@@ -52,7 +52,11 @@ function updateCanvas() {
 
     image.onload = function() {
         var ctx = $("#zone-canvas")[0].getContext("2d");
+        ctx.clearRect(0, 0, 1280, 720);
         ctx.drawImage(image, 0, 0);
+        if(window.editState.dragging) {
+            drawRect(window.newRect);
+        }
     };
 
     image.src = "/image";
@@ -60,6 +64,7 @@ function updateCanvas() {
 
 function drawRect(box) {
     var ctx = $("#zone-canvas")[0].getContext("2d");
+    ctx.beginPath();
     ctx.rect(box.x, box.y, box.w, box.h);
 
     ctx.strokeStyle = "#FF0000"; // red lined box
@@ -74,5 +79,40 @@ function drawRect(box) {
  * to refresh the camera image every 200ms).
  */
 (function() {
-    window.setInterval(updateCanvas, 200);
+    var canvas = $("#zone-canvas");
+
+    window.zones = [];
+    window.newRect = {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0
+    };
+
+    window.editState = {
+        dragging: false
+    };
+
+    canvas.mousedown(function(event) {
+        window.editState.dragging = true;
+        window.newRect.x = event.offsetX;
+        window.newRect.y = event.offsetY;
+        window.newRect.h = 0;
+        window.newRect.w = 0;
+    });
+
+    canvas.mousemove(function(event) {
+        if (window.editState.dragging) {
+            window.newRect.w =
+                event.offsetX - window.newRect.x;
+            window.newRect.h =
+                event.offsetY - window.newRect.y;
+        }
+    });
+
+    canvas.mouseup(function(event) {
+        window.editState.dragging = false
+    });
+
+    window.setInterval(updateCanvas, 10);
 })();
