@@ -128,6 +128,25 @@ function clearZones() {
     window.zones = [];
 }
 
+function drawRect(box) {
+    var ctx = $("#zone-canvas")[0].getContext("2d");
+    ctx.beginPath();
+    ctx.rect(box.x, box.y, box.w, box.h);
+
+    ctx.strokeStyle = "#FF0000"; // red lined box
+    ctx.fillOpacity = 0;
+
+    ctx.stroke();
+}
+
+function drawZones() {
+    var zo = $("#zone-canvas")[0].getContext("2d");
+    zo.clearRect(0, 0, 1280, 720);
+    if(window.editState.dragging) {
+        drawRect(window.newRect);
+    }
+}
+
 /**
  * Immediately invoked on the page loading - used to do one tim
  * setup of necessary page components (e.g. setting the canvas
@@ -161,19 +180,34 @@ function clearZones() {
 
     canvas.mousemove(function(event) {
         if (window.editState.dragging && window.editState.editing) {
-            window.newRect.w =
-                event.offsetX - window.newRect.x;
-            window.newRect.h =
-                event.offsetY - window.newRect.y;
+            dragging: false
         }
-    });
+        ;
 
-    canvas.mouseup(function(event) {
-        if(window.editState.editing) {
+        canvas.mousedown(function (event) {
+            window.editState.dragging = true;
+            window.newRect.x = event.offsetX;
+            window.newRect.y = event.offsetY;
+            window.newRect.h = 0;
+            window.newRect.w = 0;
+        });
+
+        canvas.mousemove(function (event) {
+            if (window.editState.dragging) {
+                window.newRect.w =
+                    event.offsetX - window.newRect.x;
+                window.newRect.h =
+                    event.offsetY - window.newRect.y;
+            }
+        });
+
+        canvas.mouseup(function (event) {
+            if (window.editState.editing) {
+                window.editState.dragging = false
+            }
             window.editState.dragging = false
-        }
-    });
+        });
 
-    window.setInterval(updateCanvas, 150);
-    window.setInterval(drawZones, 15);
+        window.setInterval(updateCanvas, 150);
+        window.setInterval(drawZones, 15);
 })();
