@@ -1,5 +1,6 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis;
 
+import org.eclipse.jetty.util.ArrayQueue;
 import org.opencv.core.Point;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
@@ -32,11 +33,11 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     private Zone nullZone;
     private AnimalPosition lastKnownPosition;
     private Queue<AnimalPosition> positionQueue;
-    private Queue<DataFrame> dataQueue;
     private List<DataFrame> path; // NB: for demo only
 
     private double threshold = 0.4; // TODO: Experiment with values of threshold
     private int maxDataQueueSize = 5;
+    private Queue<DataFrame> dataQueue = new ArrayQueue<>(maxDataQueueSize);
 
     public AnalysisOutputSink (ConfigData config) {
         setConfigData(config);
@@ -125,6 +126,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         /* If too much data in queue, flush to server */
         if (dataQueue.size() >= maxDataQueueSize) {
             // TODO: send to server
+            dataQueue.clear();
         }
     }
 
