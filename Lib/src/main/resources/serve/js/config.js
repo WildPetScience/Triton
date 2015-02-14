@@ -161,34 +161,19 @@ function clearZones() {
 
     canvas.mousemove(function(event) {
         if (window.editState.dragging && window.editState.editing) {
-            dragging: false
+            window.newRect.w =
+                event.offsetX - window.newRect.x;
+            window.newRect.h =
+                event.offsetY - window.newRect.y;
         }
-
-        canvas.mousedown(function (event) {
-            window.editState.dragging = true;
-            window.newRect.x = event.offsetX;
-            window.newRect.y = event.offsetY;
-            window.newRect.h = 0;
-            window.newRect.w = 0;
-        });
-
-        canvas.mousemove(function (event) {
-            if (window.editState.dragging) {
-                window.newRect.w =
-                    event.offsetX - window.newRect.x;
-                window.newRect.h =
-                    event.offsetY - window.newRect.y;
-            }
-        });
-
-        canvas.mouseup(function (event) {
-            if (window.editState.editing) {
-                window.editState.dragging = false
-            }
-            window.editState.dragging = false
-        });
-
-        window.setInterval(updateCanvas, 150);
-        window.setInterval(drawZones, 15);
     });
+
+    canvas.mouseup(function(event) {
+        if(window.editState.editing) {
+            window.editState.dragging = false
+        }
+    });
+
+    window.setInterval(updateCanvas, 150);
+    window.setInterval(drawZones, 15);
 })();
