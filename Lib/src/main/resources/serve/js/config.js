@@ -128,25 +128,6 @@ function clearZones() {
     window.zones = [];
 }
 
-function drawRect(box) {
-    var ctx = $("#zone-canvas")[0].getContext("2d");
-    ctx.beginPath();
-    ctx.rect(box.x, box.y, box.w, box.h);
-
-    ctx.strokeStyle = "#FF0000"; // red lined box
-    ctx.fillOpacity = 0;
-
-    ctx.stroke();
-}
-
-function drawZones() {
-    var zo = $("#zone-canvas")[0].getContext("2d");
-    zo.clearRect(0, 0, 1280, 720);
-    if(window.editState.dragging) {
-        drawRect(window.newRect);
-    }
-}
-
 /**
  * Immediately invoked on the page loading - used to do one tim
  * setup of necessary page components (e.g. setting the canvas
@@ -182,7 +163,6 @@ function drawZones() {
         if (window.editState.dragging && window.editState.editing) {
             dragging: false
         }
-        ;
 
         canvas.mousedown(function (event) {
             window.editState.dragging = true;
@@ -210,4 +190,5 @@ function drawZones() {
 
         window.setInterval(updateCanvas, 150);
         window.setInterval(drawZones, 15);
+    });
 })();
