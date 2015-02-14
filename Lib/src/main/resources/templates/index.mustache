@@ -64,6 +64,20 @@
             Mark Zones
         </h2>
         <p>Use this tool to mark areas of interest on your pet's cage.</p>
+        <button type="button" id="new-button" class="btn btn-primary btn-lg" onclick="addZone()">Add Zone</button>
+        <button type="button" id="new-button" class="btn btn-primary btn-lg btn-success" onclick="saveZones()">Save Zones</button>
+        <button type="button" id="new-button" class="btn btn-primary btn-lg btn-danger" onclick="clearZones()">Clear Zones</button>
+        <hr />
+        <div id="name-entry-container" class="hidden">
+            <div class="input-group">
+                <input id="name-entry" type="text" placeholder="Zone name..." class="form-control" />
+                <span class="input-group-btn">
+                    <button type="button" id="confirm-button" class="btn btn-success" onclick="confirmZone()">Confirm</button>
+                    <button type="button" id="confirm-button" class="btn btn-danger" onclick="cancelZone()">Cancel</button>
+                </span>
+            </div>
+            <hr />
+        </div>
         <div class="layer-container">
             <canvas id="image-canvas" width="1280" height="720"></canvas>
             <canvas id="zone-canvas" width="1280" height="720"></canvas>
@@ -92,12 +106,7 @@
         <h2>
             System Logs
         </h2>
-        <code>
-            {{#logs}}
-                    {{ toString }}
-                <br />
-            {{/logs}}
-        </code>
+        <pre>{{#logs}}{{ toString }}<br />{{/logs}}{{^logs}}No logs available{{/logs}}</pre>
     </div>
 </div>
 

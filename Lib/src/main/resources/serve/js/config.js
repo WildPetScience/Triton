@@ -47,6 +47,43 @@ function toggleRunning() {
     }
 }
 
+function addZone() {
+    window.editState.editing = true;
+    $("#name-entry-container").removeClass("hidden");
+}
+
+function confirmZone() {
+    window.editState.editing = false;
+    var entry = $("#name-entry");
+    var canvas = $("#zone-canvas");
+    var newZone = {
+        id: entry.val(),
+        x: window.newRect.x / canvas.width(),
+        y: window.newRect.y / canvas.height(),
+        w: window.newRect.w / canvas.width(),
+        h: window.newRect.h / canvas.height()
+    };
+    window.zones.push(newZone);
+    resetZoneInput();
+}
+
+function cancelZone() {
+    resetZoneInput();
+}
+
+function resetZoneInput() {
+    var entry = $("#name-entry");
+    entry.val("");
+    window.editState.editing = false;
+    window.newRect = {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0
+    };
+    $("#name-entry-container").addClass("hidden");
+}
+
 function updateCanvas() {
     var image = new Image(1280, 720);
 
@@ -56,15 +93,16 @@ function updateCanvas() {
         drawZones();
     };
 
-    image.src = "/image";
+    var d = new Date();
+    image.src = "/image?d=" + d.getMilliseconds();
 }
 
-function drawRect(box) {
+function drawRect(box, color) {
     var ctx = $("#zone-canvas")[0].getContext("2d");
     ctx.beginPath();
     ctx.rect(box.x, box.y, box.w, box.h);
 
-    ctx.strokeStyle = "#FF0000"; // red lined box
+    ctx.strokeStyle = color; // red lined box
     ctx.fillOpacity = 0;
 
     ctx.stroke();
@@ -73,9 +111,21 @@ function drawRect(box) {
 function drawZones() {
     var zo = $("#zone-canvas")[0].getContext("2d");
     zo.clearRect(0, 0, 1280, 720);
-    if(window.editState.dragging) {
-        drawRect(window.newRect);
+    drawRect(window.newRect, "#00FF00");
+    for(var i = 0; i < window.zones.length; i++) {
+        var zone = window.zones[i];
+        var rect = {
+            x: zone.x * zo.canvas.width,
+            y: zone.y * zo.canvas.height,
+            w: zone.w * zo.canvas.width,
+            h: zone.h * zo.canvas.height
+        };
+        drawRect(rect, "#0000FF");
     }
+}
+
+function clearZones() {
+    window.zones = [];
 }
 
 /**
@@ -95,19 +145,22 @@ function drawZones() {
     };
 
     window.editState = {
-        dragging: false
+        dragging: false,
+        editing: false
     };
 
     canvas.mousedown(function(event) {
-        window.editState.dragging = true;
-        window.newRect.x = event.offsetX;
-        window.newRect.y = event.offsetY;
-        window.newRect.h = 0;
-        window.newRect.w = 0;
+        if(window.editState.editing) {
+            window.editState.dragging = true;
+            window.newRect.x = event.offsetX;
+            window.newRect.y = event.offsetY;
+            window.newRect.h = 0;
+            window.newRect.w = 0;
+        }
     });
 
     canvas.mousemove(function(event) {
-        if (window.editState.dragging) {
+        if (window.editState.dragging && window.editState.editing) {
             window.newRect.w =
                 event.offsetX - window.newRect.x;
             window.newRect.h =
@@ -116,7 +169,9 @@ function drawZones() {
     });
 
     canvas.mouseup(function(event) {
-        window.editState.dragging = false
+        if(window.editState.editing) {
+            window.editState.dragging = false
+        }
     });
 
     window.setInterval(updateCanvas, 150);
