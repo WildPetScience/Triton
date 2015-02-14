@@ -51,12 +51,9 @@ function updateCanvas() {
     var image = new Image(1280, 720);
 
     image.onload = function() {
-        var ctx = $("#zone-canvas")[0].getContext("2d");
-        ctx.clearRect(0, 0, 1280, 720);
-        ctx.drawImage(image, 0, 0);
-        if(window.editState.dragging) {
-            drawRect(window.newRect);
-        }
+        var im = $("#image-canvas")[0].getContext("2d");
+        im.drawImage(image, 0, 0);
+        drawZones();
     };
 
     image.src = "/image";
@@ -71,6 +68,14 @@ function drawRect(box) {
     ctx.fillOpacity = 0;
 
     ctx.stroke();
+}
+
+function drawZones() {
+    var zo = $("#zone-canvas")[0].getContext("2d");
+    zo.clearRect(0, 0, 1280, 720);
+    if(window.editState.dragging) {
+        drawRect(window.newRect);
+    }
 }
 
 /**
@@ -114,5 +119,6 @@ function drawRect(box) {
         window.editState.dragging = false
     });
 
-    window.setInterval(updateCanvas, 10);
+    window.setInterval(updateCanvas, 150);
+    window.setInterval(drawZones, 15);
 })();
