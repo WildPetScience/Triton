@@ -2,10 +2,14 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.LogEntry;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +17,8 @@ import java.util.Set;
  * Static class to manage the state of a Wild Pet Science installation.
  */
 public class ConfigManager {
+    private static List<WeakReference<ConfigChangedListener>> listeners =
+            new ArrayList<>();
 
     /**
      * Start the system - begin to take pictures, process movement and upload data.
@@ -44,6 +50,7 @@ public class ConfigManager {
         AppConfig conf = AppConfig.getPrimaryConfig();
         conf.setZones(zones);
         conf.saveAsPrimaryConfig();
+        broadcastToListeners();
     }
 
     public static double getCageWidth() throws IOException {
@@ -62,6 +69,7 @@ public class ConfigManager {
         dimensions.setWidth(width);
         conf.setDimensions(dimensions);
         conf.saveAsPrimaryConfig();
+        broadcastToListeners();
     }
 
     public static void setCageHeight(double height) throws IOException {
@@ -70,6 +78,24 @@ public class ConfigManager {
         dimensions.setHeight(height);
         conf.setDimensions(dimensions);
         conf.saveAsPrimaryConfig();
+        broadcastToListeners();
+    }
+
+    public static final String PUBLIC_ENDPOINT = "https://wps-condor.herokuapp.com/condor";
+
+    private static String remoteServer = PUBLIC_ENDPOINT;
+
+    /**
+     * Sets the remote server. This value isn't persisted since it is set as a
+     * command line parameter
+     * @param remoteServer
+     */
+    public static void setRemoteServer(String remoteServer) {
+        ConfigManager.remoteServer = remoteServer;
+    }
+
+    public static String getRemoteServer() {
+        return remoteServer;
     }
 
     /**
@@ -104,4 +130,30 @@ public class ConfigManager {
         conf.saveAsPrimaryConfig();
     }
 
+    public static ConfigData getConfigData() throws IOException {
+        return new ConfigData(getZones(), getCageWidth(), getCageHeight(), remoteServer);
+    }
+
+    private static void broadcastToListeners() {
+        Iterator<WeakReference<ConfigChangedListener>> it = listeners.iterator();
+        ConfigData data;
+        try {
+            data = getConfigData();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        while (it.hasNext()) {
+            ConfigChangedListener listener = it.next().get();
+            if (listener == null) {
+                it.remove();
+                continue;
+            }
+            listener.onConfigChanged(data);
+        }
+    }
+
+    public static void addListener(ConfigChangedListener listener) {
+        listeners.add(new WeakReference<>(listener));
+    }
 }
