@@ -6,8 +6,6 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -40,7 +38,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     private Queue<DataFrame> dataQueue = new ArrayQueue<>(maxDataQueueSize);
 
     public AnalysisOutputSink (ConfigData config) {
-        setConfigData(config);
+        onConfigChanged(config);
 
         lastKnownPosition = null;
         positionQueue = new LinkedList<AnimalPosition>();
@@ -84,7 +82,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         /* Deep copy the id -> visits map */
         HashMap<String, Integer> zoneIdVisits = new HashMap<String, Integer>(zoneVisits.size());
         for (Zone z : zoneVisits.keySet()) {
-            zoneIdVisits.put(new String(z.id), new Integer(zoneVisits.get(z)));
+            zoneIdVisits.put(z.id, zoneVisits.get(z));
         }
 
         DataFrame frame = new DataFrame(
@@ -101,7 +99,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     }
 
     @Override
-    public void setConfigData(ConfigData config) {
+    public void onConfigChanged(ConfigData config) {
         this.cageWidth = config.getCageWidth();
         this.cageHeight = config.getCageHeight();
         //this.serverURL = config.getServerURL(); // TODO: Make serverURL part of config

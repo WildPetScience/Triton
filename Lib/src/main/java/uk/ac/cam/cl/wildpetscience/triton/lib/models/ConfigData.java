@@ -10,11 +10,13 @@ public class ConfigData {
     private Set<Zone> zones;
     private double cageWidth;
     private double cageHeight;
+    private String remoteServer;
 
-    public ConfigData(Set<Zone> zones, double cageWidth, double cageHeight) {
+    public ConfigData(Set<Zone> zones, double cageWidth, double cageHeight, String remoteServer) {
         this.zones = zones;
         this.cageWidth = cageWidth;
         this.cageHeight = cageHeight;
+        this.remoteServer = remoteServer;
     }
 
     public Set<Zone> getZones() {
@@ -29,4 +31,7 @@ public class ConfigData {
         return cageHeight;
     }
 
+    public String getRemoteServer() {
+        return remoteServer;
+    }
 }
