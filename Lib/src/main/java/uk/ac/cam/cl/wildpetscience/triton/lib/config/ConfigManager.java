@@ -81,7 +81,7 @@ public class ConfigManager {
         broadcastToListeners();
     }
 
-    public static final String PUBLIC_ENDPOINT = "https://wps-condor.herokuapp.com";
+    public static final String PUBLIC_ENDPOINT = "https://wps-condor.herokuapp.com/condor";
 
     private static String remoteServer = PUBLIC_ENDPOINT;
 

@@ -102,9 +102,8 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     public void onConfigChanged(ConfigData config) {
         this.cageWidth = config.getCageWidth();
         this.cageHeight = config.getCageHeight();
-        //this.serverURL = config.getServerURL(); // TODO: Make serverURL part of config
-        this.serverURL = "http://localhost:8080/condor"; // default
-        
+        this.serverURL = config.getRemoteServer();
+
         /* Initialise the zone -> visit map, also acts as a zone set */
         this.zoneVisits = new HashMap<Zone, Integer>(config.getZones().size()+1);
         for (Zone z : config.getZones()) {
