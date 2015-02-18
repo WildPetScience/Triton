@@ -17,6 +17,8 @@ public class Driver<D> extends Thread {
     private boolean latestWanted = false;
     private final Object latestLock = new Object();
 
+    private boolean keepInputAlive = false;
+
     private boolean cancelled = false;
 
     public Driver(ImageInputSource in, Filter<Image, D> flt, OutputSink<D> out) {
@@ -91,7 +93,9 @@ public class Driver<D> extends Thread {
         } while (!localCancelled);
         try {
             System.out.println("Stopping Driver");
-            in.close();
+            if (!keepInputAlive) {
+                in.close();
+            }
             filter.close();
             out.close();
         } catch (IOException e) {
@@ -129,5 +133,13 @@ public class Driver<D> extends Thread {
             latest = null;
             return img;
         }
+    }
+
+    public boolean isKeepInputAlive() {
+        return keepInputAlive;
+    }
+
+    public void setKeepInputAlive(boolean keepInputAlive) {
+        this.keepInputAlive = keepInputAlive;
     }
 }

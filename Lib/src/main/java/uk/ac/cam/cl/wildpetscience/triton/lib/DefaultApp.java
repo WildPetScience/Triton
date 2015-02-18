@@ -64,6 +64,8 @@ public class DefaultApp implements App {
                 new TrackingFilter(),
                 outputSink);
 
+        driver.setKeepInputAlive(true);
+
         driver.start();
 
         ConfigServer.setDriver(driver);
