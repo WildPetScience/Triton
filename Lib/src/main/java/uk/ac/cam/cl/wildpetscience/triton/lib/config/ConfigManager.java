@@ -1,5 +1,7 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
+import uk.ac.cam.cl.wildpetscience.triton.lib.App;
+import uk.ac.cam.cl.wildpetscience.triton.lib.DummyApp;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
@@ -20,11 +22,18 @@ public class ConfigManager {
     private static List<WeakReference<ConfigChangedListener>> listeners =
             new ArrayList<>();
 
+    private static App app = new DummyApp();
+
+    public static void setApp(App app) {
+        ConfigManager.app = app;
+    }
+
     /**
      * Start the system - begin to take pictures, process movement and upload data.
      */
     public static void startRecording() {
         System.out.println("Starting the system.");
+        app.startDriver();
     }
 
     /**
@@ -32,6 +41,7 @@ public class ConfigManager {
      */
     public static void stopRecording() {
         System.out.println("Stopping the system.");
+        app.stopDriver();
     }
 
     /**

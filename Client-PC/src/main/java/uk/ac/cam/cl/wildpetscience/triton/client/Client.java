@@ -4,7 +4,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import uk.ac.cam.cl.wildpetscience.triton.lib.App;
+import uk.ac.cam.cl.wildpetscience.triton.lib.DefaultApp;
 import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigManager;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
@@ -27,7 +27,7 @@ public class Client {
         int port = Integer.valueOf(cmd.getOptionValue('p', "8000"));
         String remote = cmd.getOptionValue('r', ConfigManager.getRemoteServer());
 
-        App app = new App(new WebcamInputSource(webcam), remote, port);
+        DefaultApp app = new DefaultApp(new WebcamInputSource(webcam), remote, port);
         app.start();
     }
 }

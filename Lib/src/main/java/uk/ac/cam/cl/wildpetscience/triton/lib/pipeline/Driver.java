@@ -17,6 +17,8 @@ public class Driver<D> extends Thread {
     private boolean latestWanted = false;
     private final Object latestLock = new Object();
 
+    private boolean keepInputAlive = false;
+
     private boolean cancelled = false;
 
     public Driver(ImageInputSource in, Filter<Image, D> flt, OutputSink<D> out) {
@@ -90,7 +92,10 @@ public class Driver<D> extends Thread {
             }
         } while (!localCancelled);
         try {
-            in.close();
+            System.out.println("Stopping Driver");
+            if (!keepInputAlive) {
+                in.close();
+            }
             filter.close();
             out.close();
         } catch (IOException e) {
@@ -100,6 +105,9 @@ public class Driver<D> extends Thread {
 
     public synchronized void cancel() {
         cancelled = true;
+        synchronized (latestLock) {
+            latestLock.notify();
+        }
     }
 
     public synchronized boolean isCancelled() {
@@ -107,6 +115,9 @@ public class Driver<D> extends Thread {
     }
 
     public Image getMostRecentInput() {
+        if (isCancelled()) {
+            return null;
+        }
         synchronized (latestLock) {
             latestWanted = true;
             try {
@@ -114,10 +125,21 @@ public class Driver<D> extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            if (isCancelled()) {
+                return null;
+            }
             latestWanted = false;
             Image img = latest;
             latest = null;
             return img;
         }
+    }
+
+    public boolean isKeepInputAlive() {
+        return keepInputAlive;
+    }
+
+    public void setKeepInputAlive(boolean keepInputAlive) {
+        this.keepInputAlive = keepInputAlive;
     }
 }
