@@ -90,6 +90,7 @@ public class Driver<D> extends Thread {
             }
         } while (!localCancelled);
         try {
+            System.out.println("Stopping Driver");
             in.close();
             filter.close();
             out.close();
@@ -100,6 +101,9 @@ public class Driver<D> extends Thread {
 
     public synchronized void cancel() {
         cancelled = true;
+        synchronized (latestLock) {
+            latestLock.notify();
+        }
     }
 
     public synchronized boolean isCancelled() {
@@ -107,12 +111,18 @@ public class Driver<D> extends Thread {
     }
 
     public Image getMostRecentInput() {
+        if (isCancelled()) {
+            return null;
+        }
         synchronized (latestLock) {
             latestWanted = true;
             try {
                 latestLock.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+            if (isCancelled()) {
+                return null;
             }
             latestWanted = false;
             Image img = latest;

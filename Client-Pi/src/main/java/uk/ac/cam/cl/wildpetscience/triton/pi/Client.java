@@ -4,7 +4,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import uk.ac.cam.cl.wildpetscience.triton.lib.App;
+import uk.ac.cam.cl.wildpetscience.triton.lib.DefaultApp;
 import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigManager;
 import uk.ac.cam.cl.wildpetscience.triton.pi.camera.CameraAdjustFilter;
@@ -32,7 +32,7 @@ public class Client {
 
         CameraAdjustFilter cameraAdjustFilter = new CameraAdjustFilter(camera);
 
-        App app = new App(camera, cameraAdjustFilter, remote, port);
+        DefaultApp app = new DefaultApp(camera, cameraAdjustFilter, remote, port);
         app.start();
     }
 }

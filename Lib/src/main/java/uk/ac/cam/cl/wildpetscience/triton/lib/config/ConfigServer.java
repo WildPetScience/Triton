@@ -17,6 +17,8 @@ import java.util.Map.Entry;
  */
 public class ConfigServer {
 
+    private static NextImageRoute nextImageRoute;
+
     /**
      * Launches the configuration server if it is not running, configured with a mapping of URLs to routes.
      * Restarts with new routes if the server is already running.
@@ -72,7 +74,7 @@ public class ConfigServer {
         map.put("/start", new HTTPRoute(new StartStopRoute(), HTTPMethod.POST));
         map.put("/stop", new HTTPRoute(new StartStopRoute(), HTTPMethod.POST));
 
-        HTTPRoute route = new HTTPRoute(new NextImageRoute(driver), HTTPMethod.GET);
+        HTTPRoute route = new HTTPRoute(nextImageRoute = new NextImageRoute(driver), HTTPMethod.GET);
         map.put("/image", route);
 
         map.put("/zones", new HTTPRoute(new ManageZonesRoute()));
@@ -85,12 +87,19 @@ public class ConfigServer {
         start(port, driver);
     }
 
+    public static void setDriver(Driver<?> driver) {
+        if (nextImageRoute != null) {
+            nextImageRoute.setDriver(driver);
+        }
+    }
+
     /**
      * Stops the server if it is running.
      * Has no effect if the server is not running.
      */
     public static void stop() {
         Spark.stop();
+        nextImageRoute = null;
     }
 
     // Private constructor to prevent instantiation
