@@ -66,6 +66,10 @@ public class Image {
             return null;
         }
 
+        if (mat.width() <= 0 || mat.height() <= 0) {
+            return null;
+        }
+
         BufferedImage image = new BufferedImage(mat.width(), mat.height(), type);
         WritableRaster raster = image.getRaster();
         DataBufferByte dataBuffer = (DataBufferByte) raster.getDataBuffer();

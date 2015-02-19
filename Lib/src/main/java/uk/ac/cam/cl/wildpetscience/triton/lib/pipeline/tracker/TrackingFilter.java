@@ -32,7 +32,7 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
         yPos = 0;
     }
 
-    private Mat getDiff() {
+    public Mat getDiff() {
         Mat d1 = new Mat();
         Mat d2 = new Mat();
         Mat result = new Mat();
