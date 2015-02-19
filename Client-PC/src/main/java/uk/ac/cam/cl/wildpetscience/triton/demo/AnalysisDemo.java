@@ -1,10 +1,10 @@
 package uk.ac.cam.cl.wildpetscience.triton.demo;
 
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
+import uk.ac.cam.cl.wildpetscience.triton.lib.image.ImageWithCorners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.PassthroughFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis.Analysis;
@@ -19,8 +19,8 @@ public class AnalysisDemo {
     private final JFrame frame;
     private final Driver driver;
 
-    public AnalysisDemo(Function<OutputSink<PassthroughFilter.Passthrough<Image, AnimalPosition>>,
-            Driver<Image>> creator,
+    public AnalysisDemo(Function<OutputSink<PassthroughFilter.Passthrough<ImageWithCorners, AnimalPosition>>,
+            Driver<PassthroughFilter.Passthrough<ImageWithCorners, AnimalPosition>>> creator,
                         ConfigData configData,
                         Analysis analysis,
                         String title) {

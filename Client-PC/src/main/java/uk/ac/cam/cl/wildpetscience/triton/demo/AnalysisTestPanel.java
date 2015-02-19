@@ -2,6 +2,7 @@ package uk.ac.cam.cl.wildpetscience.triton.demo;
 
 import org.opencv.core.Point;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
+import uk.ac.cam.cl.wildpetscience.triton.lib.image.ImageWithCorners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * Tests the analysis system with real data being passed in.
  */
-public class AnalysisTestPanel extends JPanel implements OutputSink<PassthroughFilter.Passthrough<Image, AnimalPosition>> {
+public class AnalysisTestPanel extends JPanel implements OutputSink<PassthroughFilter.Passthrough<ImageWithCorners, AnimalPosition>> {
 
     private final ConfigData config;
     private final Analysis analysis;
@@ -78,8 +79,9 @@ public class AnalysisTestPanel extends JPanel implements OutputSink<PassthroughF
     }
 
     @Override
-    public void onDataAvailable(PassthroughFilter.Passthrough<Image, AnimalPosition> data) {
+    public void onDataAvailable(PassthroughFilter.Passthrough<ImageWithCorners, AnimalPosition> data) {
         analysis.onDataAvailable(data.data);
+        probability = data.data.getProbability();
         image = data.passthrough;
         EventQueue.invokeLater(() -> repaint());
     }
