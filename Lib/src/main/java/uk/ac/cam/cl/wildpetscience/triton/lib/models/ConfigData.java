@@ -11,12 +11,14 @@ public class ConfigData {
     private double cageWidth;
     private double cageHeight;
     private String remoteServer;
+    private String animalType;
 
-    public ConfigData(Set<Zone> zones, double cageWidth, double cageHeight, String remoteServer) {
+    public ConfigData(Set<Zone> zones, double cageWidth, double cageHeight, String remoteServer, String animalType) {
         this.zones = zones;
         this.cageWidth = cageWidth;
         this.cageHeight = cageHeight;
         this.remoteServer = remoteServer;
+        this.animalType = animalType;
     }
 
     public Set<Zone> getZones() {
@@ -33,5 +35,9 @@ public class ConfigData {
 
     public String getRemoteServer() {
         return remoteServer;
+    }
+
+    public String getAnimalType() {
+        return animalType;
     }
 }
