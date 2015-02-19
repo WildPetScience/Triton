@@ -10,4 +10,13 @@ public class Zone {
         this.id = id;
     }
 
+    public Zone(double x, double y, double w, double h, String id) {
+        this.area = new Box(x, y, w, h);
+        this.id = id;
+    }
+
+    public String toString() {
+        return "ZONE " + id + " [" + area + "]";
+    }
+
 }
