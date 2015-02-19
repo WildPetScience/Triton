@@ -33,24 +33,27 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
     }
 
     public Mat getDiff() {
-        Mat d1 = new Mat();
-        Mat d2 = new Mat();
-        Mat result = new Mat();
-
         Mat prev = prevFrame.getData();
         Mat curr = currFrame.getData();
         Mat next = nextFrame.getData();
+
+        Mat d1 = new Mat(prev.rows(), prev.cols(), CvType.CV_8UC1);
+        Mat d2 = new Mat(prev.rows(), prev.cols(), CvType.CV_8UC1);
+        Mat result = new Mat(prev.rows(), prev.cols(), CvType.CV_8UC1);
 
         medianBlur(next, next, 5);
 
         absdiff(prev, next, d1);
         absdiff(curr, next, d2);
+        Imgproc.cvtColor(d1, d1, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(d2, d2, Imgproc.COLOR_BGR2GRAY);
+
         Core.bitwise_and(d1, d2, result);
 
         d1.release();
         d2.release();
 
-        threshold(result, result, 35, 255, Imgproc.THRESH_BINARY);
+        threshold(result, result, 15, 255, Imgproc.THRESH_BINARY);
 
         return result;
     }
@@ -76,11 +79,11 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
 
         Mat result = getDiff();
 
-        ClusteringModule clMod = new ClusteringModule(result);
+        ClusteringModule.Process(result);
 
-        double xNew = clMod.getX();
-        double yNew = clMod.getY();
-        double probNew = clMod.getConfidence();
+        double xNew = ClusteringModule.getX();
+        double yNew = ClusteringModule.getY();
+        double probNew = ClusteringModule.getConfidence();
 
         if(probNew < 0.15) {
             prob = prob - 0.05;
@@ -89,8 +92,8 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
             return new AnimalPosition(new Point(xPos, yPos), input.getTimestamp(), prob);
         }
 
-        xPos = (xPos*2 + xNew) / 3;
-        yPos = (yPos*2 + yNew) / 3;
+        xPos = (xPos + xNew*2) / 3;
+        yPos = (yPos + yNew*2) / 3;
         prob = probNew;
 
         result.release();
