@@ -1,12 +1,16 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.config.routes;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigManager;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.*;
 
 public class ManageZonesRoute implements Route {
 
@@ -21,7 +25,21 @@ public class ManageZonesRoute implements Route {
             if (request.requestMethod().equals("GET")) {
                 return gson.toJson(ConfigManager.getZones());
             } else if (request.requestMethod().equals("POST")) {
-                //TODO: handle updating zones
+                Type zonesType = new TypeToken<List<HashMap<String, String>>>() {}.getType();
+                List<HashMap<String, String>> zones = gson.fromJson(request.body(), zonesType);
+
+                Set<Zone> newZones = new HashSet<>();
+
+                for (HashMap<String, String> z : zones) {
+                    double x = Double.parseDouble(z.get("x"));
+                    double y = Double.parseDouble(z.get("y"));
+                    double w = Double.parseDouble(z.get("w"));
+                    double h = Double.parseDouble(z.get("h"));
+                    String id = z.get("id");
+                    newZones.add(new Zone(x, y, w, h, id));
+                }
+
+                ConfigManager.setZones(newZones);
             }
         } catch(IOException e) {
             e.printStackTrace();

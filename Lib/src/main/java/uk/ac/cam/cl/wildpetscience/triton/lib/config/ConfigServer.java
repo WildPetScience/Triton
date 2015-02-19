@@ -78,6 +78,7 @@ public class ConfigServer {
         map.put("/image", route);
 
         map.put("/zones", new HTTPRoute(new ManageZonesRoute()));
+        map.put("/zones", new HTTPRoute(new ManageZonesRoute(), HTTPMethod.POST));
 
         ConfigServer.start(port, map);
     }

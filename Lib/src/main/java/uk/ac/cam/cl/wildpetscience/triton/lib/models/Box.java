@@ -91,4 +91,9 @@ public class Box {
     public double getBottom() {
         return getY() + getHeight() / 2.0;
     }
+
+    public String toString() {
+        return getWidth() + " x " + getHeight() + " @ " +
+                "(" + getX() + ", " + getY() + ")";
+    }
 }
