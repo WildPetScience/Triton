@@ -96,4 +96,17 @@ public class Box {
         return getWidth() + " x " + getHeight() + " @ " +
                 "(" + getX() + ", " + getY() + ")";
     }
+
+    public Point getTopLeft() {
+        return new Point(getLeft(), getTop());
+    }
+    public Point getTopRight() {
+        return new Point(getRight(), getTop());
+    }
+    public Point getBottomLeft() {
+        return new Point(getLeft(), getBottom());
+    }
+    public Point getBottomRight() {
+        return new Point(getRight(), getBottom());
+    }
 }

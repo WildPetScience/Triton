@@ -25,7 +25,7 @@ public class AnalysisTestPanel extends JPanel implements OutputSink<PassthroughF
     private final Analysis analysis;
     private double probability = 0.5;
 
-    private Image image;
+    private ImageWithCorners image;
 
     public AnalysisTestPanel(ConfigData config, Analysis analysis) {
         this.config = config;
@@ -41,6 +41,8 @@ public class AnalysisTestPanel extends JPanel implements OutputSink<PassthroughF
             g.drawImage(image.toAwtImage(), 0, 0, getWidth(), getHeight(), null);
         }
 
+        Corners corners = image == null ? new Corners() : image.getCorners();
+
         g2.drawString(String.format("Probability: %.2f", probability), 10, 15);
 
         for (Zone zone : config.getZones()) {
@@ -51,15 +53,31 @@ public class AnalysisTestPanel extends JPanel implements OutputSink<PassthroughF
                     (int) scaled.getWidth(),
                     (int) scaled.getHeight()
             );
+            Point tl = corners.getInverseTransform(zone.area.getTopLeft());
+            Point tr = corners.getInverseTransform(zone.area.getTopRight());
+            Point bl = corners.getInverseTransform(zone.area.getBottomLeft());
+            Point br = corners.getInverseTransform(zone.area.getBottomRight());
+            Polygon shape = new Polygon(
+                    new int[] {
+                            (int) (tl.x * getWidth()),
+                            (int) (tr.x * getWidth()),
+                            (int) (br.x * getWidth()),
+                            (int) (bl.x * getWidth())
+                    }, new int[] {
+                            (int) (tl.y * getHeight()),
+                            (int) (tr.y * getHeight()),
+                            (int) (br.y * getHeight()),
+                            (int) (bl.y * getHeight())
+            }, 4);
             g2.setColor(new Color(100,100,100,100));
-            g2.fill(rect);
+            g2.fill(shape);
         }
 
         /* Draw the path */
         List<PositionDataFrame> path = analysis.getPath();
         Point lastPoint = null;
         for (PositionDataFrame data : path) {
-            Point location = data.getLocation();
+            Point location = corners.getInverseTransform(data.getLocation());
             int xNew = (int) (location.x * getWidth());
             int yNew = (int) (location.y * getHeight());
             /* Draw lines */
