@@ -9,6 +9,7 @@ dependencies {
     compile 'com.sparkjava:spark-core:2.1'
     compile 'com.sparkjava:spark-template-mustache:1.0.0'
     compile 'com.google.code.gson:gson:1.7.2'
+    compile 'org.apache.httpcomponents:httpclient:4.4'
 
     // Unit tests - junit, htmlunit and mockito for class mocking
     testCompile 'net.sourceforge.htmlunit:htmlunit:2.15'
