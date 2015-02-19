@@ -12,10 +12,7 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.PassthroughFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.CornerDetectionFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.NoiseReductionFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.tracker.TrackingFilter;
-import uk.ac.cam.cl.wildpetscience.triton.pipeline.CornerDisplayFilter;
-import uk.ac.cam.cl.wildpetscience.triton.pipeline.DummyCornerDetectionFilter;
-import uk.ac.cam.cl.wildpetscience.triton.pipeline.TestVideoEnumerator;
-import uk.ac.cam.cl.wildpetscience.triton.pipeline.TrackingDisplayFilter;
+import uk.ac.cam.cl.wildpetscience.triton.pipeline.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -124,6 +121,20 @@ public class Demos extends JFrame {
             demo.start();
         });
         grid.add(locationTracking);
+
+        grid.add(new JLabel("Motion diff demo:"));
+        JButton motionDiff = new JButton("Start");
+        motionDiff.addActionListener(e -> {
+            VisualPipelineDemo demo = new VisualPipelineDemo(
+                    output -> new Driver<>(
+                            getInputSource(),
+                            new DummyCornerDetectionFilter(),
+                            new MotionDiffFilter(new TrackingFilter()),
+                            output
+                    ), "Motion diff");
+            demo.start();
+        });
+        grid.add(motionDiff);
 
         grid.add(new JLabel("Position classification demo:"));
         JButton positionClassification = new JButton("Start");
