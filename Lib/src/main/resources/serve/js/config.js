@@ -71,6 +71,20 @@ function cancelZone() {
     resetZoneInput();
 }
 
+function saveZones() {
+    $.ajax("/zones", {
+       type: "POST",
+
+       data: JSON.stringify(window.zones),
+
+       success: function() {
+       },
+
+       error: function() {
+       }
+    });
+}
+
 function resetZoneInput() {
     var entry = $("#name-entry");
     entry.val("");
