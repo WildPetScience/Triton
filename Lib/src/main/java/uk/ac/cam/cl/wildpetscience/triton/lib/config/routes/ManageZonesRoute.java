@@ -36,10 +36,10 @@ public class ManageZonesRoute implements Route {
                     double w = Double.parseDouble(z.get("w"));
                     double h = Double.parseDouble(z.get("h"));
                     String id = z.get("id");
-                    Zone zz = new Zone(x, y, w, h, id);
-                    System.out.println(zz);
-                    newZones.add(zz);
+                    newZones.add(new Zone(x, y, w, h, id));
                 }
+
+                ConfigManager.setZones(newZones);
             }
         } catch(IOException e) {
             e.printStackTrace();
