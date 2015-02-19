@@ -5,13 +5,11 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
+import uk.ac.cam.cl.wildpetscience.triton.lib.image.ImageWithCorners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.PassthroughFilter;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis.AnalysisOutputSink;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.CornerDetectionFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.NoiseReductionFilter;
@@ -107,6 +105,7 @@ public class Demos extends JFrame {
                             getInputSource(),
                             new CornerDetectionFilter(),
                             new CornerDisplayFilter(),
+                            new ReducingFilter<>(),
                             output
                     ), "Corner detection");
             demo.start();
@@ -153,6 +152,7 @@ public class Demos extends JFrame {
                     output -> new Driver<>(
                             getInputSource(),
                             new CornerDetectionFilter(),
+                            new CornerDisplayFilter(),
                             new PassthroughFilter<>(new TrackingFilter()),
                             output),
                     config,

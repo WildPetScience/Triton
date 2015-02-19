@@ -13,9 +13,9 @@ import java.io.IOException;
 /**
  * Shows the corners of an ImageWithCorners
  */
-public class CornerDisplayFilter implements Filter<ImageWithCorners, Image> {
+public class CornerDisplayFilter implements Filter<ImageWithCorners, ImageWithCorners> {
     @Override
-    public Image filter(ImageWithCorners input) {
+    public ImageWithCorners filter(ImageWithCorners input) {
         Mat dat = input.getData();
         Scalar col = new Scalar(0, 0, 255);
         for (Point point : input.getCorners().get()) {
