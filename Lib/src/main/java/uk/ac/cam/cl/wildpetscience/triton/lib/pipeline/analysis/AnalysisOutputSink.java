@@ -35,6 +35,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     private double cageWidth;
     private double cageHeight;
     private String serverURL;
+    private String animalType;
     private Set<Zone> zones;
     private Zone nullZone;
     private AnimalPosition lastKnownPosition;
@@ -99,6 +100,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         this.cageWidth = config.getCageWidth();
         this.cageHeight = config.getCageHeight();
         this.serverURL = config.getRemoteServer();
+        this.animalType = config.getAnimalType();
 
         /* Copy the zone set from config, add the null zone */
         zones = new HashSet<Zone>(config.getZones());
@@ -106,7 +108,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         zones.add(nullZone);
 
         /* Send updated data to server */
-        sendCageData(new CageDataFrame(cageWidth, cageHeight));
+        sendCageData(new CageDataFrame(cageWidth, cageHeight, animalType));
         sendZoneData(new ZoneDataFrame(zones));
 
     }

@@ -145,7 +145,7 @@ public class ConfigManager {
     }
 
     public static ConfigData getConfigData() throws IOException {
-        return new ConfigData(getZones(), getCageWidth(), getCageHeight(), remoteServer);
+        return new ConfigData(getZones(), getCageWidth(), getCageHeight(), remoteServer, getAnimal());
     }
 
     private static void broadcastToListeners() {
