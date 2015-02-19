@@ -41,7 +41,8 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     private Queue<AnimalPosition> positionQueue;
     private List<PositionDataFrame> path; // NB: for demo only
 
-    private double threshold = 0.4; // TODO: Experiment with values of threshold
+    private double likelyThreshold = 0.7; // TODO: Experiment with values of likelyThreshold
+    private double ignoreThreshold = 0.2; // TODO: Experiment with values of ignoreThreshold
     private int maxDataQueueSize = 5;
     private Queue<PositionDataFrame> dataQueue = new ArrayQueue<>(maxDataQueueSize);
 
@@ -159,9 +160,12 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         LocalDateTime time = image.getTime();
         double probability = image.getProbability();
 
+        /* Ignore data points with too low a probability */
+        if (probability < ignoreThreshold) return;
+
         /* Only start sending when image has settled and position is likely */
         if (lastKnownPosition == null) {
-            if (probability > threshold) {
+            if (probability > likelyThreshold) {
                 lastKnownPosition = image;
                 sendPositionData(makeFrame(image));
             }
@@ -172,7 +176,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         positionQueue.add(image);
 
         /* If ACCURATE position provided, interpolate intermediate positions and flush queue */
-        if (probability > threshold) {
+        if (probability > likelyThreshold) {
 
             /* The interpolator also flushes the queue */
             List<AnimalPosition> predictedPoints = (new LinearInterpolator()).predictPoints(lastKnownPosition, image, positionQueue);
