@@ -73,6 +73,10 @@ public class ConfigManager {
         return conf.getDimensions().getHeight();
     }
 
+    public static String getAnimal() throws IOException {
+        return "Hamster";
+    }
+
     public static void setCageWidth(double width) throws IOException {
         AppConfig conf = AppConfig.getPrimaryConfig();
         Box dimensions = conf.getDimensions();
