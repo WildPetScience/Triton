@@ -56,9 +56,9 @@ public class AnalysisTestPanel extends JPanel implements OutputSink<PassthroughF
         }
 
         /* Draw the path */
-        List<DataFrame> path = analysis.getPath();
+        List<PositionDataFrame> path = analysis.getPath();
         Point lastPoint = null;
-        for (DataFrame data : path) {
+        for (PositionDataFrame data : path) {
             Point location = data.getLocation();
             int xNew = (int) (location.x * getWidth());
             int yNew = (int) (location.y * getHeight());
