@@ -5,10 +5,14 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.PassthroughFilter;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis.AnalysisOutputSink;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.CornerDetectionFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.NoiseReductionFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.tracker.TrackingFilter;
@@ -17,6 +21,8 @@ import uk.ac.cam.cl.wildpetscience.triton.pipeline.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import static uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver.makeSimpleDriver;
 
@@ -135,6 +141,26 @@ public class Demos extends JFrame {
             demo.start();
         });
         grid.add(motionDiff);
+
+        Set<Zone> zoneSet = new HashSet<>();
+        zoneSet.add(new Zone(new Box(0.2, 0.2, 0.2, 0.2), "WATER"));
+        zoneSet.add(new Zone(new Box(0.8, 0.6, 0.2, 0.2), "FOOD"));
+        ConfigData config = new ConfigData(zoneSet, 100, 200, "http://localhost:8080/condor");
+        grid.add(new JLabel("Complete demo:"));
+        JButton completeDemo = new JButton("Start");
+        completeDemo.addActionListener(e -> {
+            AnalysisDemo demo = new AnalysisDemo(
+                    output -> new Driver<>(
+                            getInputSource(),
+                            new CornerDetectionFilter(),
+                            new PassthroughFilter<>(new TrackingFilter()),
+                            output),
+                    config,
+                    new AnalysisOutputSink(config),
+                    "Complete demo");
+            demo.start();
+        });
+        grid.add(completeDemo);
 
         grid.add(new JLabel("Position classification demo:"));
         JButton positionClassification = new JButton("Start");
