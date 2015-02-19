@@ -1,12 +1,21 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.eclipse.jetty.util.ArrayQueue;
 import org.opencv.core.Point;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -122,9 +131,37 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
         /* If too much data in queue, flush to server */
         if (dataQueue.size() >= maxDataQueueSize) {
-            // TODO: send to server
-            dataQueue.clear();
+            while (!dataQueue.isEmpty()) {
+                DataFrame frame = dataQueue.poll();
+
+                /* Make HTTP Requests */
+                HttpClient client = HttpClients.createDefault();
+                try {
+
+                    HttpPost animalPositionPost = makeAnimalPositionPost(frame);
+
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
+    }
+
+    private HttpPost makeAnimalPositionPost(DataFrame data) throws UnsupportedEncodingException {
+        HttpPost post = new HttpPost(serverURL + "/api/clients/${ClientId}/api/positions");
+        List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+
+        DecimalFormat df = new DecimalFormat("#0.00");
+        String x = df.format(data.getLocation().x * data.getCageWidth());
+        String y = df.format(data.getLocation().y * data.getCageHeight());
+
+        params.add(new BasicNameValuePair("x", x));
+        params.add(new BasicNameValuePair("y", y));
+        params.add(new BasicNameValuePair("t", data.getTime().format(DateTimeFormatter.ISO_LOCAL_TIME)));
+        post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
+        return post;
     }
 
     @Override
