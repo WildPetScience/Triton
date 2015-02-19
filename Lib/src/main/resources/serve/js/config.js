@@ -77,10 +77,8 @@ function saveZones() {
 
        data: JSON.stringify(window.zones),
 
-       success: function() {
-       },
-
        error: function() {
+           console.log("Could not save zones.");
        }
     });
 }
