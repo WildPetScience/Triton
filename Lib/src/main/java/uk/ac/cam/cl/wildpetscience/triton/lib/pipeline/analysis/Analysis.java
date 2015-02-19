@@ -1,11 +1,8 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis;
 
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigChangedListener;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.DataFrame;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
-
 import java.util.List;
 
 /**
@@ -13,6 +10,8 @@ import java.util.List;
  */
 public interface Analysis extends OutputSink<AnimalPosition>, ConfigChangedListener {
     public void onConfigChanged(ConfigData configData);
-    public void sendData(DataFrame data);
-    public List<DataFrame> getPath();
+    public void sendPositionData(PositionDataFrame data);
+    public void sendCageData(CageDataFrame data);
+    public void sendZoneData(ZoneDataFrame data);
+    public List<PositionDataFrame> getPath();
 }

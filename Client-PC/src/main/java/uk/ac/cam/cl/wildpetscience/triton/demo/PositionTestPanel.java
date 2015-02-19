@@ -12,7 +12,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.LinkedList;
 
 /**
  * Lets the user input location data with the mouse.
@@ -53,9 +52,9 @@ public class PositionTestPanel extends JPanel implements MouseMotionListener, Mo
         }
 
         /* Draw the path */
-        List<DataFrame> path = analysis.getPath();
+        List<PositionDataFrame> path = analysis.getPath();
         Point lastPoint = null;
-        for (DataFrame data : path) {
+        for (PositionDataFrame data : path) {
             Point location = data.getLocation();
             int xNew = (int) (location.x * getWidth());
             int yNew = (int) (location.y * getHeight());
