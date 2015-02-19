@@ -122,7 +122,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
             PositionDataFrame frame = dataQueue.poll();
 
             // TODO: [Nick] Interact with API
-            HttpPost post = new HttpPost(serverURL + "/api/clients/${ClientId}/api/positions"); // TODO: ClientId?
+            HttpPost post = new HttpPost(serverURL + "/api/clients/$ClientId/api/positions"); // TODO: ClientId?
 
             /* --- Obviously this doesn't work with using JSON in API, but left as an example --- */
             List<NameValuePair> params = new ArrayList<NameValuePair>(4);
