@@ -72,8 +72,8 @@
             <div class="input-group">
                 <input id="name-entry" type="text" placeholder="Zone name..." class="form-control" />
                 <span class="input-group-btn">
-                    <button type="button" id="confirm-button" class="btn btn-success" onclick="confirmZone()">Confirm</button>
-                    <button type="button" id="confirm-button" class="btn btn-danger" onclick="cancelZone()">Cancel</button>
+                    <button type="button" id="confirm-zones-button" class="btn btn-success" onclick="confirmZone()">Confirm</button>
+                    <button type="button" id="cancel-zones-button" class="btn btn-danger" onclick="cancelZone()">Cancel</button>
                 </span>
             </div>
             <hr />
@@ -81,6 +81,22 @@
         <div class="layer-container">
             <canvas id="image-canvas" width="1280" height="720"></canvas>
             <canvas id="zone-canvas" width="1280" height="720"></canvas>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="container">
+    <div id="code-gen">
+        <h2>
+            Animal Type
+        </h2>
+        <div class="input-group">
+            <input id="type-entry" type="text" placeholder="Animal Type..." class="form-control" />
+            <span class="input-group-btn">
+                <button type="button" id="confirm-type-button" class="btn btn-success" onclick="saveType()">Save</button>
+            </span>
         </div>
     </div>
 </div>

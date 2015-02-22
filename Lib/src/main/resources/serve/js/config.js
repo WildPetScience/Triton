@@ -83,6 +83,15 @@ function saveZones() {
     });
 }
 
+function saveType() {
+    var entry = $("#type-entry");
+
+    $.ajax("/animal", {
+       type: "POST",
+
+       data: JSON.stringify(entry.val())
+    });
+}
 function resetZoneInput() {
     var entry = $("#name-entry");
     entry.val("");
