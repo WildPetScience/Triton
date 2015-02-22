@@ -52,7 +52,12 @@
         <p>
             Here you can start and stop your system.
         </p>
-        <button type="button" id="toggle-button" class="btn btn-primary btn-lg btn-success" onclick="toggleRunning()">Start</button>
+        {{^running}}
+            <button type="button" id="toggle-button" class="btn btn-primary btn-lg btn-success" onclick="toggleRunning()">Start</button>
+        {{/running}}
+        {{#running}}
+            <button type="button" id="toggle-button" class="btn btn-primary btn-lg btn-danger" onclick="toggleRunning()">Stop</button>
+        {{/running}}
     </div>
 </div>
 

@@ -31,17 +31,19 @@ public class ConfigManager {
     /**
      * Start the system - begin to take pictures, process movement and upload data.
      */
-    public static void startRecording() {
+    public static void startRecording() throws IOException {
         System.out.println("Starting the system.");
         app.startDriver();
+        setRunning(true);
     }
 
     /**
      * Stop the system - stop taking pictures and upload any remaining data.
      */
-    public static void stopRecording() {
+    public static void stopRecording() throws IOException {
         System.out.println("Stopping the system.");
         app.stopDriver();
+        setRunning(false);
     }
 
     /**
@@ -100,6 +102,17 @@ public class ConfigManager {
         conf.setDimensions(dimensions);
         conf.saveAsPrimaryConfig();
         broadcastToListeners();
+    }
+
+    public static boolean isRunning() throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        return conf.isRunning();
+    }
+
+    public static void setRunning(boolean running) throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        conf.setRunning(running);
+        conf.saveAsPrimaryConfig();
     }
 
     public static final String PUBLIC_ENDPOINT = "https://wps-condor.herokuapp.com/condor";

@@ -23,6 +23,13 @@ public class RootConfigRoute implements Route {
     public Object handle(Request request, Response response) {
         Map<String, Object> vars = new HashMap<>();
         vars.put("code", ConfigManager.getAccessCode());
+
+        try {
+            vars.put("running", ConfigManager.isRunning());
+        } catch(IOException e) {
+            vars.put("running", false);
+        }
+
         try {
             vars.put("logs", ConfigManager.getSystemLogs());
         } catch(IOException e) {
