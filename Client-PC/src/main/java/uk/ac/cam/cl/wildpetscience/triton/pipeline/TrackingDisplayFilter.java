@@ -12,7 +12,7 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.PassthroughFilter;
 import java.io.IOException;
 
 /**
- * Shows the corners of an ImageWithCorners
+ * Shows centre of tracking
  */
 public class TrackingDisplayFilter implements
         Filter<PassthroughFilter.Passthrough<ImageWithCorners, AnimalPosition>, Image> {

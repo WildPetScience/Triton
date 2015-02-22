@@ -65,7 +65,7 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
 
         prevFrame = currFrame;
         currFrame = nextFrame;
-        nextFrame = new ImageWithCorners(input);
+        nextFrame = input;
 
         ++framesBuf;
         if(framesBuf > 3)

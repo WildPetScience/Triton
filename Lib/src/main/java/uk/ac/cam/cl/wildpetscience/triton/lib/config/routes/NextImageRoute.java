@@ -6,8 +6,6 @@ import spark.Route;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class NextImageRoute implements Route {
@@ -27,13 +25,13 @@ public class NextImageRoute implements Route {
         synchronized (this) {
             image = driver.getMostRecentInput();
         }
-        BufferedImage bi = image.toAwtImage();
         try {
             response.header("Content-Type", "image/jpeg");
-            ImageIO.write(bi, "JPEG", response.raw().getOutputStream());
+            response.raw().getOutputStream().write(image.toJpeg());
         } catch (IOException e) {
             System.err.println("Error writing image to output stream.");
         }
+        image.release();
         return response;
     }
 
