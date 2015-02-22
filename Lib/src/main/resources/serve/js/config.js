@@ -83,6 +83,15 @@ function saveZones() {
     });
 }
 
+function saveType() {
+    var entry = $("#type-entry");
+
+    $.ajax("/animal", {
+       type: "POST",
+
+       data: JSON.stringify(entry.val())
+    });
+}
 function resetZoneInput() {
     var entry = $("#name-entry");
     entry.val("");
@@ -145,10 +154,30 @@ function clearZones() {
  * setup of necessary page components (e.g. setting the canvas
  * to refresh the camera image every 200ms).
  */
-(function() {
+(function () {
     var canvas = $("#zone-canvas");
 
     window.zones = [];
+    $.ajax("/getzones", {
+        type: "GET",
+
+        success: function (data) {
+            var zoneList = $.parseJSON(data);
+
+            for (var i = 0; i < zoneList.length; ++i) {
+                console.log(zoneList[i]);
+                var newZone = {
+                    x: zoneList[i].area.centre.x,
+                    y: zoneList[i].area.centre.y,
+                    w: zoneList[i].area.width,
+                    h: zoneList[i].area.height,
+                    id: zoneList[i].id
+                };
+                window.zones.push(newZone);
+            }
+        }
+    });
+
     window.newRect = {
         x: 0,
         y: 0,

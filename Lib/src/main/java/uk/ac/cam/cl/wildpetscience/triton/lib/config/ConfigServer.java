@@ -2,10 +2,7 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 
 import spark.Route;
 import spark.Spark;
-import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.ManageZonesRoute;
-import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.NextImageRoute;
-import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.RootConfigRoute;
-import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.StartStopRoute;
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.routes.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.*;
 
 import java.util.HashMap;
@@ -77,8 +74,11 @@ public class ConfigServer {
         HTTPRoute route = new HTTPRoute(nextImageRoute = new NextImageRoute(driver), HTTPMethod.GET);
         map.put("/image", route);
 
-        map.put("/zones", new HTTPRoute(new ManageZonesRoute()));
+        map.put("/getzones", new HTTPRoute(new ManageZonesRoute()));
         map.put("/zones", new HTTPRoute(new ManageZonesRoute(), HTTPMethod.POST));
+
+        map.put("/getanimal", new HTTPRoute(new AnimalTypeRoute()));
+        map.put("/animal", new HTTPRoute(new AnimalTypeRoute(), HTTPMethod.POST));
 
         ConfigServer.start(port, map);
     }
