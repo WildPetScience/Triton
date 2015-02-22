@@ -27,6 +27,7 @@ public class AppConfig {
     private List<LogEntry> systemLogs;
     private Set<Zone> zones;
     private Box dimensions;
+    private String animalType;
 
     // Cache the primary config so that we're not accessing the SD card
     // too often (should help with IO performance)
@@ -156,4 +157,11 @@ public class AppConfig {
         this.dimensions = dimensions;
     }
 
+    public String getAnimalType() {
+        return animalType;
+    }
+
+    public void setAnimalType(String animalType) {
+        this.animalType = animalType;
+    }
 }

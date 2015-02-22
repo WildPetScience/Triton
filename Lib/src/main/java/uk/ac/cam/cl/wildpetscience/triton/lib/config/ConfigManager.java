@@ -74,7 +74,14 @@ public class ConfigManager {
     }
 
     public static String getAnimal() throws IOException {
-        return "Hamster";
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        return conf.getAnimalType();
+    }
+
+    public static void setAnimal(String type) throws IOException {
+        AppConfig conf = AppConfig.getPrimaryConfig();
+        conf.setAnimalType(type);
+        conf.saveAsPrimaryConfig();
     }
 
     public static void setCageWidth(double width) throws IOException {
