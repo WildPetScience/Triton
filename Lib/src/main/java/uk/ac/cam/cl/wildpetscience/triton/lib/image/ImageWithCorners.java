@@ -42,6 +42,14 @@ public class ImageWithCorners extends Image {
      * Copy constructor
      * @param image
      */
+    public ImageWithCorners(ImageWithCorners image) {
+        this(image, image.getCorners());
+    }
+
+    /**
+     * Copy constructor
+     * @param image
+     */
     public ImageWithCorners(Image image) {
         this(image.getData().clone());
     }

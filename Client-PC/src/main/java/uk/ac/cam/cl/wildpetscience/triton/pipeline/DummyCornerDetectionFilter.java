@@ -12,7 +12,8 @@ import java.io.IOException;
 public class DummyCornerDetectionFilter implements Filter<Image, ImageWithCorners> {
     @Override
     public ImageWithCorners filter(Image input) {
-        return new ImageWithCorners(input);
+        // Move semantics - don't call clone(). The var input is no longer valid.
+        return new ImageWithCorners(input.getData());
     }
 
     @Override

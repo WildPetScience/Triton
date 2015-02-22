@@ -40,24 +40,28 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
         List<MatOfPoint> contours = new ArrayList<>();
         Mat hie = new Mat();
         findContours(mask, contours, hie, RETR_LIST, CHAIN_APPROX_SIMPLE);
+        mask.release();
+        hie.release();
         ArrayList<MatOfPoint> markers = new ArrayList<>();
         for (MatOfPoint cnt: contours) {
             double area = contourArea(cnt);
             if (MARKER_AREA_MIN < area && area < MARKER_AREA_MAX) {
                 markers.add(cnt);
+            } else {
+                cnt.release();
             }
         }
 
         Corners imageCorners = findCorners(markers);
         // System.out.println(markers.size() + "#########");
 
+        // Using move semantics, from input to output. input no longer valid.
         ImageWithCorners output;
         if (imageCorners != null) {
-            output = new ImageWithCorners(input, imageCorners);
+            output = new ImageWithCorners(input.getData(), imageCorners);
         } else {
-            output = new ImageWithCorners(input);
+            output = new ImageWithCorners(input.getData());
         }
-        input.release();
         return output;
     }
 
@@ -66,6 +70,7 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
         ArrayList<Point> corners = new ArrayList<>();
         for (MatOfPoint mrk : markers) {
             List<Point> list = mrk.toList();
+            mrk.release();
             double sumx = 0, sumy = 0;
             for (Point p : list) {
                 sumx += p.x;

@@ -17,7 +17,6 @@ import static org.opencv.imgproc.Imgproc.*;
 
 //
 public class ClusteringModule {
-    private static double prob;
     private static boolean[][] used, movement;
 
     private static int area, maxArea, totalArea;
@@ -26,14 +25,11 @@ public class ClusteringModule {
 
     private static int xCurr, yCurr, xAns, yAns;
 
-    private static Mat image;
-
-    private ClusteringModule(Mat img) {
+    private ClusteringModule() {
     }
 
-    public static void Process(Mat img) {
+    public static void process(Mat img) {
         totalArea = 0;
-        prob = 0.0;
 
         if (rows != img.rows() || cols != img.cols()) {
             rows = img.rows();
@@ -46,8 +42,6 @@ public class ClusteringModule {
         xAns = 0;
         yAns = 0;
         maxArea = 0;
-        prob = 0;
-        image = img;
 
         if (rows == 0 || cols == 0)
             return;

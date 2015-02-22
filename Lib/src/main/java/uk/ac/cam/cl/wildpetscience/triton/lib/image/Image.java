@@ -1,6 +1,8 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.image;
 
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.highgui.Highgui;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -77,6 +79,18 @@ public class Image {
         mat.get(0, 0, data);
 
         return image;
+    }
+
+    /**
+     * Converts this image to a JPEG.
+     * @return
+     */
+    public byte[] toJpeg() {
+        MatOfByte buf = new MatOfByte();
+        Highgui.imencode(".jpg", getData(), buf);
+        byte[] data = buf.toArray();
+        buf.release();
+        return data;
     }
 
     public LocalDateTime getTimestamp() {

@@ -73,7 +73,9 @@ public class DefaultApp implements App {
 
     public void stopDriver() {
         ConfigServer.setDriver(new DummyDriver());
-        driver.cancel();
-        driver = null;
+        if (driver != null) {
+            driver.cancel();
+            driver = null;
+        }
     }
 }
