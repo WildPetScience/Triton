@@ -2,13 +2,11 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.tracker;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.*;
-import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.ImageWithCorners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Filter;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 import static org.opencv.core.Core.absdiff;
 import static org.opencv.imgproc.Imgproc.*;
@@ -18,9 +16,9 @@ import static org.opencv.imgproc.Imgproc.*;
  */
 
 public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> {
-    private static int framesBuf = 0;
-    private static ImageWithCorners prevFrame, currFrame, nextFrame;
-    private static double xPos, yPos, prob;
+    private int framesBuf = 0;
+    private ImageWithCorners prevFrame, currFrame, nextFrame;
+    private double xPos, yPos, prob;
 
     public TrackingFilter() {
         super();
@@ -79,7 +77,7 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
 
         Mat result = getDiff();
 
-        ClusteringModule.Process(result);
+        ClusteringModule.process(result);
 
         double xNew = ClusteringModule.getX();
         double yNew = ClusteringModule.getY();

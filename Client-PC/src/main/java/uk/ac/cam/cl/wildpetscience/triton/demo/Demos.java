@@ -119,7 +119,7 @@ public class Demos extends JFrame {
                     output -> new Driver<>(
                             getInputSource(),
                             new DummyCornerDetectionFilter(),
-                            new PassthroughFilter<>(new TrackingFilter()),
+                            new ImageWithCornersClonePassthroughFilter<>(new TrackingFilter()),
                             new TrackingDisplayFilter(),
                             output
                     ), "Location tracking");
