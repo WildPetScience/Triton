@@ -31,6 +31,12 @@ public class RootConfigRoute implements Route {
         }
 
         try {
+            vars.put("animal", ConfigManager.getAnimal());
+        } catch (IOException e) {
+            vars.put("animal", "");
+        }
+
+        try {
             vars.put("logs", ConfigManager.getSystemLogs());
         } catch(IOException e) {
             List<String> errorList = new ArrayList<>();
