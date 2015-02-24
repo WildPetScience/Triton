@@ -24,11 +24,11 @@ public class DualCornerDisplayFilter implements Filter<PassthroughFilter.Passthr
 
         Scalar col = new Scalar(0, 0, 255);
         Scalar col2 = new Scalar(0, 255, 255);
-        for (Point point : img1.getCorners().get()) {
+        /*for (Point point : img1.getCorners().get()) {
             Core.circle(dat,
                     new Point(point.x * dat.width(), point.y * dat.height()),
                     10, col, 3);
-        }
+        }*/
         for (Point point : img2.getCorners().get()) {
             Core.circle(dat,
                     new Point(point.x * dat.width(), point.y * dat.height()),
