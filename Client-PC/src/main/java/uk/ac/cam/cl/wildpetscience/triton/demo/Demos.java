@@ -4,6 +4,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import uk.ac.cam.cl.wildpetscience.triton.WildAnimalTool;
 import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.ImageWithCorners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
@@ -20,6 +21,7 @@ import uk.ac.cam.cl.wildpetscience.triton.pipeline.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -171,6 +173,21 @@ public class Demos extends JFrame {
             demo.start();
         });
         grid.add(positionClassification);
+
+        grid.add(new JLabel("Upload wild animals"));
+        JButton upload = new JButton("Upload");
+        upload.addActionListener(e -> {
+            JFileChooser csvChooser = new JFileChooser("~/Downloads");
+            if (csvChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    new WildAnimalTool(csvChooser.getSelectedFile()).start();
+                } catch (IOException e1) {
+                    System.err.print("Failed to parse CSV");
+                    e1.printStackTrace();
+                }
+            }
+        });
+        grid.add(upload);
 
         pack();
     }

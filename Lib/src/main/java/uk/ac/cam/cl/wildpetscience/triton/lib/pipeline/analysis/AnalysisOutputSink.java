@@ -115,7 +115,6 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
     @Override
     public void sendPositionData(PositionDataFrame data) {
-        System.out.println(data.toString()); // NB: for demo only
         path.add(data); // NB: for demo only
         dataQueue.add(data);
 
