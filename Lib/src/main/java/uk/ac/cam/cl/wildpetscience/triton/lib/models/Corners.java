@@ -28,6 +28,15 @@ public class Corners {
         lowerRight = new Point(1, 1);
     }
 
+    public Corners(Point[] cList) {
+        if (cList.length == 4) {
+            upperLeft = cList[0];
+            upperRight = cList[1];
+            lowerRight = cList[2];
+            lowerLeft = cList[3];
+        }
+    }
+
     public Point getTransform(Point input) {
         Mat src = new MatOfPoint2f(upperLeft,lowerLeft,upperRight,lowerRight);
         Mat dst = new MatOfPoint2f(new Point(0, 0), new Point(0, 1), new Point(1, 0), new Point(1, 1));
