@@ -12,6 +12,7 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis.AnalysisOutputSink;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.CornerDetectionFilter;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.CornerNormalisationFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.processing.NoiseReductionFilter;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.tracker.TrackingFilter;
 import uk.ac.cam.cl.wildpetscience.triton.pipeline.*;
@@ -104,8 +105,8 @@ public class Demos extends JFrame {
                     output -> new Driver<>(
                             getInputSource(),
                             new CornerDetectionFilter(),
-                            new CornerDisplayFilter(),
-                            new ReducingFilter<>(),
+                            new PassthroughFilter<>(new CornerNormalisationFilter()),
+                            new DualCornerDisplayFilter(),
                             output
                     ), "Corner detection");
             demo.start();

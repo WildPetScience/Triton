@@ -23,6 +23,7 @@ public class ImageOutputPanel extends JPanel implements OutputSink<Image> {
         if (image == null) {
             return;
         }
+        if (image.getData() == null) System.out.println   ("sfsfsfsdsf");
         this.image = image.toAwtImage();
         image.release();
         EventQueue.invokeLater(() -> repaint());
