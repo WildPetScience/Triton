@@ -4,6 +4,7 @@ import org.opencv.core.*;
 import org.opencv.imgproc.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.ImageWithCorners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Corners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Filter;
 
 import java.io.IOException;
@@ -96,7 +97,11 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
 
         result.release();
 
-        return new AnimalPosition(new Point(xPos, yPos), input.getTimestamp(), prob);
+        Point absolutePos = new Point(xPos, yPos);
+        Corners corners = input.getCorners();
+        Point relativePos = corners.getTransform(absolutePos);
+
+        return new AnimalPosition(relativePos, input.getTimestamp(), prob);
     }
 
     @Override
