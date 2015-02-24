@@ -29,8 +29,8 @@ public class Corners {
     }
 
     public Point getTransform(Point input) {
-        Mat src = new MatOfPoint2f(upperLeft,upperRight,lowerLeft,lowerRight);
-        Mat dst = new MatOfPoint2f(new Point(0, 0), new Point(1, 0), new Point(0, 1), new Point(1, 1));
+        Mat src = new MatOfPoint2f(upperLeft,lowerLeft,upperRight,lowerRight);
+        Mat dst = new MatOfPoint2f(new Point(0, 0), new Point(0, 1), new Point(1, 0), new Point(1, 1));
         Mat transform = Imgproc.getPerspectiveTransform(src, dst);
 
         MatOfPoint2f in = new MatOfPoint2f(input);
@@ -41,8 +41,8 @@ public class Corners {
     }
 
     public Point getInverseTransform(Point input) {
-        Mat dst = new MatOfPoint2f(upperLeft,upperRight,lowerLeft,lowerRight);
-        Mat src = new MatOfPoint2f(new Point(0, 0), new Point(1, 0), new Point(0, 1), new Point(1, 1));
+        Mat dst = new MatOfPoint2f(upperLeft,lowerLeft,upperRight,lowerRight);
+        Mat src = new MatOfPoint2f(new Point(0, 0),  new Point(0, 1), new Point(1, 0), new Point(1, 1));
         Mat transform = Imgproc.getPerspectiveTransform(src, dst);
 
         MatOfPoint2f in = new MatOfPoint2f(input);
