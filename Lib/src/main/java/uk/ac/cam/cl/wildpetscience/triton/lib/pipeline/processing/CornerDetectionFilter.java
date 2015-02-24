@@ -23,7 +23,7 @@ import static org.opencv.imgproc.Imgproc.*;
  */
 public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
 
-    final static int MARKER_AREA_MIN = 100;
+    final static int MARKER_AREA_MIN = 10;
     final static int MARKER_AREA_MAX = 1000;
 
     double width, height;

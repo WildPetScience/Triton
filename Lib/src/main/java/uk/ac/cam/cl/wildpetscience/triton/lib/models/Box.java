@@ -9,6 +9,11 @@ public class Box {
     private Point centre;
     private double width, height;
 
+    public Box() {
+        width = height = 0;
+        centre = new Point(0,0);
+    }
+
     public Box(Point centre, double width, double height) {
         this.centre = centre;
         this.width = width;

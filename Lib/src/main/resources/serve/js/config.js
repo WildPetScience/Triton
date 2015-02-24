@@ -8,6 +8,8 @@ function createErrorMessage(message, id) {
 function toggleRunning() {
     var button = $("#toggle-button");
     var container = $("#start-stop");
+    var canvas = $("#image-canvas");
+    var ctx = canvas[0].getContext('2d');
     if(button.text() === "Start") {
         $.ajax("/start", {
             type: "POST",
@@ -17,6 +19,8 @@ function toggleRunning() {
                 button.removeClass("btn-success");
                 button.addClass("btn-danger");
                 $("#start-error").remove();
+                $(".stop-hidden").removeClass("hidden");
+                window.shouldDrawZones = true;
             },
 
             error: function() {
@@ -35,6 +39,9 @@ function toggleRunning() {
                 button.removeClass("btn-danger");
                 button.addClass("btn-success");
                 $("#stop-error").remove();
+                setTimeout(function() { ctx.clearRect(0, 0, 1280, 720); }, 100);
+                $(".stop-hidden").addClass("hidden");
+                window.shouldDrawZones = false;
             },
 
             error: function() {
@@ -132,16 +139,18 @@ function drawRect(box, color) {
 function drawZones() {
     var zo = $("#zone-canvas")[0].getContext("2d");
     zo.clearRect(0, 0, 1280, 720);
-    drawRect(window.newRect, "#00FF00");
-    for(var i = 0; i < window.zones.length; i++) {
-        var zone = window.zones[i];
-        var rect = {
-            x: zone.x * zo.canvas.width,
-            y: zone.y * zo.canvas.height,
-            w: zone.w * zo.canvas.width,
-            h: zone.h * zo.canvas.height
-        };
-        drawRect(rect, "#0000FF");
+    if(window.shouldDrawZones) {
+        drawRect(window.newRect, "#00FF00");
+        for (var i = 0; i < window.zones.length; i++) {
+            var zone = window.zones[i];
+            var rect = {
+                x: zone.x * zo.canvas.width,
+                y: zone.y * zo.canvas.height,
+                w: zone.w * zo.canvas.width,
+                h: zone.h * zo.canvas.height
+            };
+            drawRect(rect, "#0000FF");
+        }
     }
 }
 
@@ -158,6 +167,14 @@ function clearZones() {
     var canvas = $("#zone-canvas");
 
     window.zones = [];
+    window.shouldDrawZones = $("#toggle-button").text() === "Stop";
+
+    if(window.shouldDrawZones) {
+        $(".stop-hidden").removeClass("hidden");
+    } else {
+        $(".stop-hidden").addClass("hidden");
+    }
+
     $.ajax("/getzones", {
         type: "GET",
 
@@ -215,6 +232,6 @@ function clearZones() {
         }
     });
 
-    window.setInterval(updateCanvas, 150);
+    window.setInterval(updateCanvas, 250);
     window.setInterval(drawZones, 15);
 })();
