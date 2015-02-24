@@ -1,3 +1,5 @@
 rootProject.name = 'Triton'
 include 'Client-Pi', 'Client-PC', 'Lib'
 
+include 'Client-Pi-Debug'
+

@@ -1,25 +1,28 @@
 package uk.ac.cam.cl.wildpetscience.triton.demo;
 
-import nu.pattern.OpenCV;
-import org.opencv.core.Mat;
+import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Driver;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.InputFailedException;
-import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.WebcamInputSource;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.ImageInputSource;
+import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.OutputSink;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.IOException;
+import java.util.function.Function;
 
-public class ImageCaptureDemo {
-    public static void main(String[] args) throws IOException {
-        OpenCV.loadShared();
-        final JFrame frame = new JFrame("Image capture demo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+public class VisualPipelineDemo {
+    private final JFrame frame;
+    private final Driver driver;
+
+    public VisualPipelineDemo(ImageInputSource input, String title) {
+        this(panel -> Driver.makeSimpleDriver(input, panel), title);
+    }
+
+    public VisualPipelineDemo(Function<OutputSink<Image>,
+                                      Driver<Image>> creator,
+                              String title) {
+        frame = new JFrame(title);
         frame.setSize(640, 480);
 
         frame.setResizable(true);
@@ -28,14 +31,7 @@ public class ImageCaptureDemo {
         ImageOutputPanel panel = new ImageOutputPanel();
         frame.getContentPane().add(panel);
 
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                frame.setVisible(true);
-            }
-        });
-
-        final Driver driver = new Driver(new WebcamInputSource(), panel);
+        driver = creator.apply(panel);
 
         frame.addWindowListener(new WindowListener() {
             @Override public void windowOpened(WindowEvent windowEvent) { }
@@ -51,6 +47,11 @@ public class ImageCaptureDemo {
             @Override public void windowActivated(WindowEvent windowEvent) {  }
             @Override public void windowDeactivated(WindowEvent windowEvent) {  }
         });
+    }
+
+    public void start() {
+        EventQueue.invokeLater(() -> frame.setVisible(true));
+
         driver.start();
     }
 }

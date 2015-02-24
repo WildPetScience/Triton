@@ -1,21 +1,27 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Triton:Client-PC [check]" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Triton:Client-PC [run] (development remote server - localhost)" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$/Client-PC" />
       <option name="externalSystemIdString" value="GRADLE" />
-      <option name="scriptParameters" value="" />
+      <option name="scriptParameters" value="-PappArgs=&quot;['-r','http://localhost:8080/condor']&quot;" />
       <option name="taskDescriptions">
         <list />
       </option>
       <option name="taskNames">
         <list>
-          <option value="check" />
+          <option value="run" />
         </list>
       </option>
       <option name="vmOptions" value="" />
     </ExternalSystemSettings>
+    <RunnerSettings RunnerId="ExternalSystemTaskDebugRunner">
+      <option name="DEBUG_PORT" value="" />
+      <option name="TRANSPORT" value="0" />
+      <option name="LOCAL" value="true" />
+    </RunnerSettings>
     <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
+    <ConfigurationWrapper RunnerId="ExternalSystemTaskDebugRunner" />
     <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
     <method />
   </configuration>

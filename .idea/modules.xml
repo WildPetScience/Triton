@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Client-PC/Client-PC.iml" filepath="$PROJECT_DIR$/Client-PC/Client-PC.iml" />
       <module fileurl="file://$PROJECT_DIR$/Client-Pi/Client-Pi.iml" filepath="$PROJECT_DIR$/Client-Pi/Client-Pi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Client-Pi-Debug/Client-Pi-Debug.iml" filepath="$PROJECT_DIR$/Client-Pi-Debug/Client-Pi-Debug.iml" />
       <module fileurl="file://$PROJECT_DIR$/Lib/Lib.iml" filepath="$PROJECT_DIR$/Lib/Lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/Triton.iml" filepath="$PROJECT_DIR$/Triton.iml" />
     </modules>

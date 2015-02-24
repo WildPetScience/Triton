@@ -1,13 +1,41 @@
 apply plugin: 'java'
-apply plugin: 'application'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 version = '0.1'
 
-mainClassName = 'uk.ac.cam.cl.wildpetscience.triton.pi.Client'
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
+    }
+}
+
+apply plugin: 'eu.appsatori.fatjar'
+
+fatJar {
+    manifest {
+        attributes 'Main-Class': 'uk.ac.cam.cl.wildpetscience.triton.pi.Client'
+    }
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    // Exclude prebuilt x86 binaries
+    exclude 'nu/pattern/opencv/'
+}
+
+Properties properties = new Properties()
+properties.load(project.file('local.properties').newDataInputStream())
+
+task deploy(type: org.gradle.api.tasks.Exec, dependsOn: 'fatJar') {
+    commandLine './pi-deploy.sh', properties.getProperty('piAddress')
+}
 
 dependencies {
     compile project(':Lib')
+
+    compile 'commons-cli:commons-cli:1.2'
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

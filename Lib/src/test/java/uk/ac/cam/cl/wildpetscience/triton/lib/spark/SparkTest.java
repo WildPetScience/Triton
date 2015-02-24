@@ -1,9 +1,7 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.spark;
 
+import org.junit.AfterClass;
 import org.junit.Test;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 import spark.Spark;
 
 import java.io.BufferedReader;
@@ -17,15 +15,16 @@ import java.net.URLConnection;
  * Tests that Spark is present and working.
  */
 public class SparkTest {
+
+    @AfterClass
+    public static void tearDown() {
+        Spark.stop();
+    }
+
     @Test
     public void testLoadSpark() throws IOException, InterruptedException {
-        Spark.setPort(9877);
-        Spark.get(new Route("/get") {
-            @Override
-            public Object handle(Request request, Response response) {
-                return "Spark server";
-            }
-        });
+        Spark.port(9877);
+        Spark.get("/get", (req, res) -> "Spark server");
         // Wait for spark to be up
         Thread.sleep(400);
         URLConnection conn =
