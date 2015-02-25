@@ -23,8 +23,8 @@ import static org.opencv.imgproc.Imgproc.*;
  */
 public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
 
-    final static int MARKER_AREA_MIN = 10;
-    final static int MARKER_AREA_MAX = 1000;
+    final static int MARKER_AREA_MIN = 30*20;
+    final static int MARKER_AREA_MAX = 400*40;
 
     double width, height;
 
@@ -51,6 +51,7 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
                 cnt.release();
             }
         }
+        System.out.println(String.format("%d, %d", contours.size(), markers.size()));
 
         Corners imageCorners = findCorners(markers);
         // System.out.println(markers.size() + "#########");
@@ -85,8 +86,8 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
             corners.get(i).x /= width;
             corners.get(i).y /= height;
         }
-        if (corners.size() > 3) {
-            return new Corners(corners.get(0), corners.get(1), corners.get(2), corners.get(3));
+        if (corners.size() == 4) {
+            return new Corners(corners.get(0), corners.get(1), corners.get(3), corners.get(2));
         }
         return null;
     }
@@ -119,16 +120,19 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
     }
 
     // Binary mask - white for marker, black otherwise.
-    private Mat createMask(Mat inputMat) {
+    public static Mat createMask(Mat inputMat) {
         Mat mask = new Mat();
         // Green colour range.
-        final Scalar lowerb = new Scalar (50,60,60);
-        final Scalar upperb = new Scalar (70,255,255);
+        // Hue, sat, lum
+        final Scalar lowerb = new Scalar (30, 91, 56);
+        final Scalar upperb = new Scalar (68, 255, 198);
         Mat imgHSV = new Mat();
         cvtColor(inputMat, imgHSV, COLOR_BGR2HSV);
         Core.inRange(imgHSV, lowerb, upperb, mask);
         erode(mask, mask, getStructuringElement(MORPH_ELLIPSE, new Size(5, 5)));
         dilate(mask, mask, getStructuringElement(MORPH_ELLIPSE, new Size(5, 5)));
+        dilate(mask, mask, getStructuringElement(MORPH_ELLIPSE, new Size(5, 5)));
+        erode(mask, mask, getStructuringElement(MORPH_ELLIPSE, new Size(5, 5)));
         return mask;
     }
 

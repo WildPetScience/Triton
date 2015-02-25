@@ -100,6 +100,34 @@ public class Demos extends JFrame {
         });
         grid.add(noiseReduction);
 
+        grid.add(new JLabel("Corner classification demo:"));
+        JButton cornerClass = new JButton("Start");
+        cornerClass.addActionListener(e -> {
+            VisualPipelineDemo demo = new VisualPipelineDemo(
+                    output -> new Driver<>(
+                            getInputSource(),
+                            new CornerMaskFilter(),
+                            output
+                    ), "Corner mask");
+            demo.start();
+        });
+        grid.add(cornerClass);
+
+        grid.add(new JLabel("Raw corner detection demo:"));
+        JButton rawCornerDetection = new JButton("Start");
+        rawCornerDetection.addActionListener(e -> {
+            VisualPipelineDemo demo = new VisualPipelineDemo(
+                    output -> new Driver<>(
+                            getInputSource(),
+                            new CornerDetectionFilter(),
+                            new CornerDisplayFilter(),
+                            new ReducingFilter<>(),
+                            output
+                    ), "Raw corner detection");
+            demo.start();
+        });
+        grid.add(rawCornerDetection);
+
         grid.add(new JLabel("Corner detection demo:"));
         JButton cornerDetection = new JButton("Start");
         cornerDetection.addActionListener(e -> {
@@ -156,6 +184,7 @@ public class Demos extends JFrame {
                             getInputSource(),
                             new CornerDetectionFilter(),
                             new CornerDisplayFilter(),
+                            new CornerNormalisationFilter(),
                             new PassthroughFilter<>(new TrackingFilter()),
                             output),
                     config,

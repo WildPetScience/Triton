@@ -14,11 +14,11 @@ public class Corners {
     private Point upperRight;
     private Point lowerRight;
 
-    public Corners(Point upperLeft, Point lowerLeft, Point upperRight, Point lowerRight) {
-        this.upperLeft = upperLeft;
-        this.lowerLeft = lowerLeft;
-        this.upperRight = upperRight;
-        this.lowerRight = lowerRight;
+    public Corners(Point upperLeft, Point upperRight, Point lowerRight, Point lowerLeft) {
+        setUpperLeft(upperLeft);
+        setLowerLeft(lowerLeft);
+        setUpperRight(upperRight);
+        setLowerRight(lowerRight);
     }
 
     public Corners() {
@@ -30,10 +30,10 @@ public class Corners {
 
     public Corners(Point[] cList) {
         if (cList.length == 4) {
-            upperLeft = cList[0];
-            upperRight = cList[1];
-            lowerRight = cList[2];
-            lowerLeft = cList[3];
+            setUpperLeft(cList[0]);
+            setUpperRight(cList[1]);
+            setLowerRight(cList[2]);
+            setLowerLeft(cList[3]);
         }
     }
 
@@ -67,6 +67,8 @@ public class Corners {
 
     public void setLowerLeft(Point lowerLeft) {
         this.lowerLeft = lowerLeft;
+        this.lowerLeft.x = norm(this.lowerLeft.x);
+        this.lowerLeft.y = norm(this.lowerLeft.y);
     }
 
     public Point getUpperLeft() {
@@ -75,6 +77,8 @@ public class Corners {
 
     public void setUpperLeft(Point upperLeft) {
         this.upperLeft = upperLeft;
+        this.upperLeft.x = norm(this.upperLeft.x);
+        this.upperLeft.y = norm(this.upperLeft.y);
     }
 
     public Point getLowerRight() {
@@ -83,6 +87,8 @@ public class Corners {
 
     public void setLowerRight(Point lowerRight) {
         this.lowerRight = lowerRight;
+        this.lowerRight.x = norm(this.lowerRight.x);
+        this.lowerRight.y = norm(this.lowerRight.y);
     }
 
     public Point getUpperRight() {
@@ -91,9 +97,26 @@ public class Corners {
 
     public void setUpperRight(Point upperRight) {
         this.upperRight = upperRight;
+        this.upperRight.x = norm(this.upperRight.x);
+        this.upperRight.y = norm(this.upperRight.y);
     }
 
     public Point[] get() {
         return new Point[] { upperLeft, upperRight, lowerRight, lowerLeft };
+    }
+
+    /**
+     * Normalises a value
+     * @param val
+     * @return
+     */
+    private static double norm(double val) {
+        if (val < 0) {
+            val = 0;
+        }
+        if (val > 1) {
+            val = 1;
+        }
+        return val;
     }
 }
