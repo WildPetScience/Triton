@@ -11,6 +11,7 @@ public class ConfigData {
     private double cageWidth;
     private double cageHeight;
     private String remoteServer;
+    private String clientAccessCode;
     private String animalType;
 
     public ConfigData(Set<Zone> zones, double cageWidth, double cageHeight, String remoteServer, String animalType) {
@@ -18,6 +19,7 @@ public class ConfigData {
         this.cageWidth = cageWidth;
         this.cageHeight = cageHeight;
         this.remoteServer = remoteServer;
+        this.clientAccessCode = "dummyaccesscode"; // TODO: implement in config
         this.animalType = animalType;
     }
 
@@ -35,6 +37,10 @@ public class ConfigData {
 
     public String getRemoteServer() {
         return remoteServer;
+    }
+
+    public String getClientAccessCode() {
+        return clientAccessCode;
     }
 
     public String getAnimalType() {

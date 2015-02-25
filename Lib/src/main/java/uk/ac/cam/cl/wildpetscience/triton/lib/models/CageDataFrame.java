@@ -5,9 +5,9 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.models;
  */
 public class CageDataFrame {
 
+    private String animalType;
     private double cageWidth;
     private double cageHeight;
-    private String animalType;
 
     public CageDataFrame(double cageWidth, double cageHeight, String animalType) {
         this.cageWidth = cageWidth;
