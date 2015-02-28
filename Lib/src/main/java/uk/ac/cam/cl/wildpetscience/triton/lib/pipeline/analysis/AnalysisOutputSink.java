@@ -39,7 +39,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     private double cageWidth;
     private double cageHeight;
     private String serverURL;
-    private String clientAccessCode;
+    private AccessData accessData;
     private String animalType;
     private Set<Zone> zones;
     private Zone nullZone;
@@ -105,7 +105,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         this.cageWidth = config.getCageWidth();
         this.cageHeight = config.getCageHeight();
         this.serverURL = config.getRemoteServer();
-        this.clientAccessCode = config.getClientAccessCode();
+        this.accessData = config.getAccessData();
         this.animalType = config.getAnimalType();
 
         /* Copy the zone set from config, add the null zone */
@@ -130,7 +130,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
             try {
                 while (!dataQueue.isEmpty()) {
                     PositionDataFrame frame = dataQueue.poll();
-                    HttpPost post = new HttpPost(serverURL + "/api/clients/" + clientAccessCode + "/positions");
+                    HttpPost post = new HttpPost(serverURL + "/api/clients/" + accessData.intID + "/positions?accessKey=" + accessData.accessToken);
                     Gson g = new Gson();
                     StringEntity params = new StringEntity(g.toJson(frame));
                     post.setEntity(params);
@@ -179,7 +179,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         // TODO: [Nick] Interact with API
         HttpClient httpClient = HttpClients.createDefault();
         try {
-            HttpPost post = new HttpPost(serverURL + "/api/clients/" + clientAccessCode + "/zones");
+            HttpPost post = new HttpPost(serverURL + "/api/clients/" + accessData.intID + "/zones");
             Gson g = new Gson();
             StringEntity params = new StringEntity(g.toJson(data));
             post.setEntity(params);
