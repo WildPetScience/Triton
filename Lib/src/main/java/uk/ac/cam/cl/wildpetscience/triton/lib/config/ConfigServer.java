@@ -71,7 +71,7 @@ public class ConfigServer {
         map.put("/start", new HTTPRoute(new StartStopRoute(), HTTPMethod.POST));
         map.put("/stop", new HTTPRoute(new StartStopRoute(), HTTPMethod.POST));
 
-        HTTPRoute route = new HTTPRoute(nextImageRoute = new NextImageRoute(driver), HTTPMethod.GET);
+        HTTPRoute route = new HTTPRoute(new NextImageRoute(driver), HTTPMethod.GET);
         map.put("/image", route);
 
         map.put("/getzones", new HTTPRoute(new ManageZonesRoute()));
