@@ -66,6 +66,7 @@ function addZone() {
 
 function confirmZone() {
     window.editState.editing = false;
+    $("#confirm-zones-button").prop("disabled", true);
     var entry = $("#name-entry");
     var canvas = $("#zone-canvas");
     var newZone = {
@@ -84,12 +85,24 @@ function cancelZone() {
 }
 
 function saveZones() {
+    $("#add-zone-button").prop('disabled', true);
+    $("#save-zone-button").prop('disabled', true);
+    $("#clear-zone-button").prop('disabled', true);
     $.ajax("/zones", {
        type: "POST",
 
        data: JSON.stringify(window.zones),
 
+       success: function() {
+           $("#add-zone-button").prop('disabled', false);
+           $("#save-zone-button").prop('disabled', false);
+           $("#clear-zone-button").prop('disabled', false);
+       },
+
        error: function() {
+           $("#add-zone-button").prop('disabled', false);
+           $("#save-zone-button").prop('disabled', false);
+           $("#clear-zone-button").prop('disabled', false);
            console.log("Could not save zones.");
        }
     });
@@ -234,6 +247,11 @@ function clearZones() {
     canvas.mouseup(function(event) {
         if(window.editState.editing) {
             window.editState.dragging = false
+        }
+        if(window.newRect.w > 0 && window.newRect.h > 0) {
+            $("#confirm-zones-button").prop('disabled', false);
+        } else {
+            $("#confirm-zones-button").prop('disabled', true);
         }
     });
 
