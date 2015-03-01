@@ -2,6 +2,7 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.tracker;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Corners;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -18,7 +19,7 @@ import static org.opencv.imgproc.Imgproc.*;
 //
 public class ClusteringModule {
     private static boolean[][] used, movement;
-
+    private static int minX, minY, maxX, maxY;
     private static int area, maxArea, totalArea;
     private static int rows, cols;
     private static final int vicinity = 1;
@@ -28,7 +29,23 @@ public class ClusteringModule {
     private ClusteringModule() {
     }
 
-    public static void process(Mat img) {
+    private static double min(double a, double b) {
+        if(a>b)
+            return b;
+        return a;
+    }
+
+    private static double max(double a, double b) {
+        if(a<b)
+            return b;
+        return a;
+    }
+
+    private static boolean inBox(double y, double x) {
+        return !(x < minX || x > maxX || y < minY || y > maxY);
+    }
+
+    public static void process(Mat img, Corners c) {
         totalArea = 0;
 
         if (rows != img.rows() || cols != img.cols()) {
@@ -48,10 +65,15 @@ public class ClusteringModule {
 
         dilate(img, img, getStructuringElement(MORPH_RECT, new Size(20, 20)));
 
+        maxX = (int)(max(c.getUpperRight().x, c.getLowerRight().x) * cols);
+        maxY = (int)(max(c.getUpperRight().y, c.getUpperLeft().y) * rows);
+        minX = (int)(min(c.getUpperLeft().x, c.getLowerLeft().x) * cols);
+        maxY = (int)(max(c.getLowerRight().y, c.getLowerLeft().y) * rows);
+
         for(int i = 0; i < rows; ++i)
             for(int j = 0; j < cols; ++j) {
                 used[i][j] = false;
-                if (img.get(i, j)[0] == 255)
+                if (img.get(i, j)[0] == 255 && inBox(i, j))
                     movement[i][j] = true;
                 else
                     movement[i][j] = false;
