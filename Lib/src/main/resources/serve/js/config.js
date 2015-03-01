@@ -10,6 +10,7 @@ function toggleRunning() {
     var container = $("#start-stop");
     var canvas = $("#image-canvas");
     var ctx = canvas[0].getContext('2d');
+    button.prop('disabled', true);
     if(button.text() === "Start") {
         $.ajax("/start", {
             type: "POST",
@@ -21,6 +22,7 @@ function toggleRunning() {
                 $("#start-error").remove();
                 $(".stop-hidden").removeClass("hidden");
                 window.shouldDrawZones = true;
+                button.prop('disabled', false);
             },
 
             error: function() {
@@ -42,6 +44,7 @@ function toggleRunning() {
                 setTimeout(function() { ctx.clearRect(0, 0, 1280, 720); }, 100);
                 $(".stop-hidden").addClass("hidden");
                 window.shouldDrawZones = false;
+                button.prop('disabled', false);
             },
 
             error: function() {
