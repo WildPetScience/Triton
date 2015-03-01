@@ -69,15 +69,17 @@
             Mark Zones
         </h2>
         <p>Use this tool to mark areas of interest on your pet's cage.</p>
-        <button type="button" id="new-button" class="btn btn-primary btn-lg" onclick="addZone()">Add Zone</button>
-        <button type="button" id="new-button" class="btn btn-primary btn-lg btn-success" onclick="saveZones()">Save Zones</button>
-        <button type="button" id="new-button" class="btn btn-primary btn-lg btn-danger" onclick="clearZones()">Clear Zones</button>
+        <p>Drag and drop on the video feed to mark a zone, then give it a name and click "confirm".</p>
+        <p>Click "Save Zones" to save the zones marked in blue to your device.</p>
+        <button type="button" id="add-zone-button" class="btn btn-primary btn-lg" onclick="addZone()">Add Zone</button>
+        <button type="button" id="save-zone-button" class="btn btn-primary btn-lg btn-success" onclick="saveZones()">Save Zones</button>
+        <button type="button" id="clear-zone-button" class="btn btn-primary btn-lg btn-danger" onclick="clearZones()">Clear Zones</button>
         <hr />
         <div id="name-entry-container" class="hidden">
-            <div class="input-group">
+            <div id="confirm-group" class="input-group">
                 <input id="name-entry" type="text" placeholder="Zone name..." class="form-control" />
                 <span class="input-group-btn">
-                    <button type="button" id="confirm-zones-button" class="btn btn-success" onclick="confirmZone()">Confirm</button>
+                    <button type="button" id="confirm-zones-button" class="btn btn-success" onclick="confirmZone()" disabled>Confirm</button>
                     <button type="button" id="cancel-zones-button" class="btn btn-danger" onclick="cancelZone()">Cancel</button>
                 </span>
             </div>

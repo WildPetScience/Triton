@@ -10,6 +10,7 @@ function toggleRunning() {
     var container = $("#start-stop");
     var canvas = $("#image-canvas");
     var ctx = canvas[0].getContext('2d');
+    button.prop('disabled', true);
     if(button.text() === "Start") {
         $.ajax("/start", {
             type: "POST",
@@ -21,6 +22,7 @@ function toggleRunning() {
                 $("#start-error").remove();
                 $(".stop-hidden").removeClass("hidden");
                 window.shouldDrawZones = true;
+                button.prop('disabled', false);
             },
 
             error: function() {
@@ -28,6 +30,7 @@ function toggleRunning() {
                     var errorMessage = createErrorMessage("Starting the system.", "start-error");
                 }
                 container.append(errorMessage);
+                button.prop('disabled', false);
             }
         });
     } else if(button.text() === "Stop") {
@@ -42,6 +45,7 @@ function toggleRunning() {
                 setTimeout(function() { ctx.clearRect(0, 0, 1280, 720); }, 100);
                 $(".stop-hidden").addClass("hidden");
                 window.shouldDrawZones = false;
+                button.prop('disabled', false);
             },
 
             error: function() {
@@ -49,6 +53,7 @@ function toggleRunning() {
                     var errorMessage = createErrorMessage("Stopping the system.", "start-error");
                 }
                 container.append(errorMessage);
+                button.prop('disabled', false);
             }
         });
     }
@@ -60,18 +65,22 @@ function addZone() {
 }
 
 function confirmZone() {
-    window.editState.editing = false;
     var entry = $("#name-entry");
-    var canvas = $("#zone-canvas");
-    var newZone = {
-        id: entry.val(),
-        x: window.newRect.x / canvas.width(),
-        y: window.newRect.y / canvas.height(),
-        w: window.newRect.w / canvas.width(),
-        h: window.newRect.h / canvas.height()
-    };
-    window.zones.push(newZone);
-    resetZoneInput();
+    if($.trim(entry.val()).length > 0) {
+        window.editState.editing = false;
+        var canvas = $("#zone-canvas");
+        var newZone = {
+            id: entry.val(),
+            x: window.newRect.x / canvas.width(),
+            y: window.newRect.y / canvas.height(),
+            w: window.newRect.w / canvas.width(),
+            h: window.newRect.h / canvas.height()
+        };
+        window.zones.push(newZone);
+        resetZoneInput();
+    } else {
+        $("#confirm-group").addClass("has-error");
+    }
 }
 
 function cancelZone() {
@@ -79,12 +88,24 @@ function cancelZone() {
 }
 
 function saveZones() {
+    $("#add-zone-button").prop('disabled', true);
+    $("#save-zone-button").prop('disabled', true);
+    $("#clear-zone-button").prop('disabled', true);
     $.ajax("/zones", {
        type: "POST",
 
        data: JSON.stringify(window.zones),
 
+       success: function() {
+           $("#add-zone-button").prop('disabled', false);
+           $("#save-zone-button").prop('disabled', false);
+           $("#clear-zone-button").prop('disabled', false);
+       },
+
        error: function() {
+           $("#add-zone-button").prop('disabled', false);
+           $("#save-zone-button").prop('disabled', false);
+           $("#clear-zone-button").prop('disabled', false);
            console.log("Could not save zones.");
        }
     });
@@ -100,6 +121,7 @@ function saveType() {
     });
 }
 function resetZoneInput() {
+    $("#confirm-zones-button").prop("disabled", true);
     var entry = $("#name-entry");
     entry.val("");
     window.editState.editing = false;
@@ -110,6 +132,7 @@ function resetZoneInput() {
         h: 0
     };
     $("#name-entry-container").addClass("hidden");
+    $("#confirm-group").removeClass("has-error");
 }
 
 function updateCanvas() {
@@ -229,6 +252,11 @@ function clearZones() {
     canvas.mouseup(function(event) {
         if(window.editState.editing) {
             window.editState.dragging = false
+        }
+        if(Math.abs(window.newRect.w) > 0 && Math.abs(window.newRect.h) > 0) {
+            $("#confirm-zones-button").prop('disabled', false);
+        } else {
+            $("#confirm-zones-button").prop('disabled', true);
         }
     });
 
