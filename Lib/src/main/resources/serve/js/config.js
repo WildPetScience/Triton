@@ -65,19 +65,22 @@ function addZone() {
 }
 
 function confirmZone() {
-    window.editState.editing = false;
-    $("#confirm-zones-button").prop("disabled", true);
     var entry = $("#name-entry");
-    var canvas = $("#zone-canvas");
-    var newZone = {
-        id: entry.val(),
-        x: window.newRect.x / canvas.width(),
-        y: window.newRect.y / canvas.height(),
-        w: window.newRect.w / canvas.width(),
-        h: window.newRect.h / canvas.height()
-    };
-    window.zones.push(newZone);
-    resetZoneInput();
+    if($.trim(entry.val()).length > 0) {
+        window.editState.editing = false;
+        var canvas = $("#zone-canvas");
+        var newZone = {
+            id: entry.val(),
+            x: window.newRect.x / canvas.width(),
+            y: window.newRect.y / canvas.height(),
+            w: window.newRect.w / canvas.width(),
+            h: window.newRect.h / canvas.height()
+        };
+        window.zones.push(newZone);
+        resetZoneInput();
+    } else {
+        $("#confirm-group").addClass("has-error");
+    }
 }
 
 function cancelZone() {
@@ -118,6 +121,7 @@ function saveType() {
     });
 }
 function resetZoneInput() {
+    $("#confirm-zones-button").prop("disabled", true);
     var entry = $("#name-entry");
     entry.val("");
     window.editState.editing = false;
@@ -128,6 +132,7 @@ function resetZoneInput() {
         h: 0
     };
     $("#name-entry-container").addClass("hidden");
+    $("#confirm-group").removeClass("has-error");
 }
 
 function updateCanvas() {
@@ -248,7 +253,7 @@ function clearZones() {
         if(window.editState.editing) {
             window.editState.dragging = false
         }
-        if(window.newRect.w > 0 && window.newRect.h > 0) {
+        if(Math.abs(window.newRect.w) > 0 && Math.abs(window.newRect.h) > 0) {
             $("#confirm-zones-button").prop('disabled', false);
         } else {
             $("#confirm-zones-button").prop('disabled', true);
