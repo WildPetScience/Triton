@@ -30,6 +30,7 @@ function toggleRunning() {
                     var errorMessage = createErrorMessage("Starting the system.", "start-error");
                 }
                 container.append(errorMessage);
+                button.prop('disabled', false);
             }
         });
     } else if(button.text() === "Stop") {
@@ -52,6 +53,7 @@ function toggleRunning() {
                     var errorMessage = createErrorMessage("Stopping the system.", "start-error");
                 }
                 container.append(errorMessage);
+                button.prop('disabled', false);
             }
         });
     }
