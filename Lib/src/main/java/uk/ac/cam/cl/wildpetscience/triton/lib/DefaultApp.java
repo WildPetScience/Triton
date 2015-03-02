@@ -57,13 +57,16 @@ public class DefaultApp implements App {
             e.printStackTrace();
         }
         ConfigManager.addListener(outputSink);
+        TapFilter tapFilter = new TapFilter();
         driver = new Driver<>(
                 input,
                 preFilter,
                 new CornerDetectionFilter(),
+                tapFilter,
                 new TrackingFilter(),
                 outputSink);
 
+        driver.setTapFilter(tapFilter);
         driver.setKeepInputAlive(true);
 
         driver.start();

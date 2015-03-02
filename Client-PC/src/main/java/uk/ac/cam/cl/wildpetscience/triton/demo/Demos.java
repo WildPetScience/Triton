@@ -6,7 +6,10 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import uk.ac.cam.cl.wildpetscience.triton.WildAnimalTool;
 import uk.ac.cam.cl.wildpetscience.triton.lib.Bootstrap;
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigManager;
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigServer;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.ImageWithCorners;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
@@ -143,6 +146,21 @@ public class Demos extends JFrame {
         });
         grid.add(cornerDetection);
 
+        grid.add(new JLabel("Corner Transform demo:"));
+        JButton cornerTransform = new JButton("Start");
+        cornerTransform.addActionListener(e -> {
+            VisualPipelineDemo demo = new VisualPipelineDemo(
+                    output -> new Driver<>(
+                            getInputSource(),
+                            new CornerDetectionFilter(),
+                            new CornerDisplayFilter(),
+                            new CornerTransformFilter(),
+                            output
+                    ), "Corner transform");
+            demo.start();
+        });
+        grid.add(cornerTransform);
+
         grid.add(new JLabel("Location tracking demo:"));
         JButton locationTracking = new JButton("Start");
         locationTracking.addActionListener(e -> {
@@ -193,6 +211,33 @@ public class Demos extends JFrame {
             demo.start();
         });
         grid.add(completeDemo);
+
+        ConfigData config2 = new ConfigData(zoneSet, 100, 200, "http://localhost:8080/condor", "Hamster");
+        grid.add(new JLabel("Complete demo (with webserver):"));
+        JButton completeDemo2 = new JButton("Start");
+        completeDemo2.addActionListener(e -> {
+            AnalysisOutputSink outputSink;
+            AnalysisDemo demo = new AnalysisDemo(
+                    output -> {
+                        Driver<PassthroughFilter.Passthrough<ImageWithCorners, AnimalPosition>>
+                                driver = new Driver<>(
+                                getInputSource(),
+                                new CornerDetectionFilter(),
+                                new CornerDisplayFilter(),
+                                new CornerNormalisationFilter(),
+                                new PassthroughFilter<>(new TrackingFilter()),
+                                output);
+                        ConfigServer.start(8000, driver);
+                        return driver;
+                    },
+                    config,
+                    outputSink = new AnalysisOutputSink(config),
+                    "Complete demo"
+                    );
+            ConfigManager.addListener(outputSink);
+            demo.start();
+        });
+        grid.add(completeDemo2);
 
         grid.add(new JLabel("Position classification demo:"));
         JButton positionClassification = new JButton("Start");

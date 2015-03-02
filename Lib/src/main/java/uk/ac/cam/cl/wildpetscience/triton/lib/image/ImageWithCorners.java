@@ -74,4 +74,8 @@ public class ImageWithCorners extends Image {
     public void setValid(boolean valid) {
         this.valid = valid;
     }
+
+    public Image getInteriorTransform() {
+        return new Image(corners.transformImage(getData()));
+    }
 }

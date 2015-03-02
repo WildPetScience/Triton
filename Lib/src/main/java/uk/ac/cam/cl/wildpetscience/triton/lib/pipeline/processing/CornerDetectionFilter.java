@@ -51,7 +51,6 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
                 cnt.release();
             }
         }
-        System.out.println(String.format("%d, %d", contours.size(), markers.size()));
 
         Corners imageCorners = findCorners(markers);
         // System.out.println(markers.size() + "#########");
@@ -124,8 +123,10 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
         Mat mask = new Mat();
         // Green colour range.
         // Hue, sat, lum
-        final Scalar lowerb = new Scalar (30, 91, 56);
-        final Scalar upperb = new Scalar (68, 255, 198);
+        // final Scalar lowerb = new Scalar (30, 91, 56);
+        // final Scalar upperb = new Scalar (68, 255, 198);
+        final Scalar lowerb = new Scalar (30, 0, 0);
+        final Scalar upperb = new Scalar (98, 255, 255);
         Mat imgHSV = new Mat();
         cvtColor(inputMat, imgHSV, COLOR_BGR2HSV);
         Core.inRange(imgHSV, lowerb, upperb, mask);

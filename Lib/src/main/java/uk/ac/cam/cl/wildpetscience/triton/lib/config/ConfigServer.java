@@ -71,7 +71,7 @@ public class ConfigServer {
         map.put("/start", new HTTPRoute(new StartStopRoute(), HTTPMethod.POST));
         map.put("/stop", new HTTPRoute(new StartStopRoute(), HTTPMethod.POST));
 
-        HTTPRoute route = new HTTPRoute(nextImageRoute = new NextImageRoute(driver), HTTPMethod.GET);
+        HTTPRoute route = new HTTPRoute(nextImageRoute = new NextImageRoute(driver.getTapFilter()), HTTPMethod.GET);
         map.put("/image", route);
 
         map.put("/getzones", new HTTPRoute(new ManageZonesRoute()));
@@ -90,7 +90,7 @@ public class ConfigServer {
 
     public static void setDriver(Driver<?> driver) {
         if (nextImageRoute != null) {
-            nextImageRoute.setDriver(driver);
+            nextImageRoute.setFilter(driver.getTapFilter());
         }
     }
 

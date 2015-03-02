@@ -21,6 +21,8 @@ public class Driver<D> extends Thread {
 
     private boolean cancelled = false;
 
+    private TapFilter tapFilter;
+
     public Driver(ImageInputSource in, Filter<Image, D> flt, OutputSink<D> out) {
         this.in = in;
         this.out = out;
@@ -141,5 +143,13 @@ public class Driver<D> extends Thread {
 
     public void setKeepInputAlive(boolean keepInputAlive) {
         this.keepInputAlive = keepInputAlive;
+    }
+
+    public TapFilter getTapFilter() {
+        return tapFilter;
+    }
+
+    public void setTapFilter(TapFilter tapFilter) {
+        this.tapFilter = tapFilter;
     }
 }
