@@ -1,5 +1,9 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.analysis;
 
+import com.google.gson.Gson;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.conn.HttpHostConnectException;
+import org.apache.http.entity.StringEntity;
 import org.eclipse.jetty.util.ArrayQueue;
 import org.opencv.core.Point;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
@@ -35,6 +39,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     private double cageWidth;
     private double cageHeight;
     private String serverURL;
+    private AccessData accessData;
     private String animalType;
     private Set<Zone> zones;
     private Zone nullZone;
@@ -100,6 +105,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         this.cageWidth = config.getCageWidth();
         this.cageHeight = config.getCageHeight();
         this.serverURL = config.getRemoteServer();
+        this.accessData = config.getAccessData();
         this.animalType = config.getAnimalType();
 
         /* Copy the zone set from config, add the null zone */
@@ -115,45 +121,80 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
     @Override
     public void sendPositionData(PositionDataFrame data) {
-        System.out.println(data.toString()); // NB: for demo only
         path.add(data); // NB: for demo only
         dataQueue.add(data);
 
         /* If too much data in queue, flush to server */
-        HttpClient httpClient = HttpClients.createDefault(); // httpClient to execute post requests
         if (dataQueue.size() >= maxDataQueueSize) {
-            PositionDataFrame frame = dataQueue.poll();
-
-            // TODO: [Nick] Interact with API
-            HttpPost post = new HttpPost(serverURL + "/api/clients/$ClientId/api/positions"); // TODO: ClientId?
-
-            /* --- Obviously this doesn't work with using JSON in API, but left as an example --- */
-            List<NameValuePair> params = new ArrayList<NameValuePair>(4);
-            DecimalFormat df = new DecimalFormat("#0.00");
-            String x = df.format(data.getLocation().x);
-            String y = df.format(data.getLocation().y);
-            String speed = df.format(data.getSpeed());
-            params.add(new BasicNameValuePair("x", x));
-            params.add(new BasicNameValuePair("y", y));
-            params.add(new BasicNameValuePair("time", data.getTime().format(DateTimeFormatter.ISO_LOCAL_TIME)));
-            params.add(new BasicNameValuePair("speed", speed));
+            HttpClient httpClient = HttpClients.createDefault();
             try {
-                post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+                while (!dataQueue.isEmpty()) {
+                    PositionDataFrame frame = dataQueue.poll();
+                    HttpPost post = new HttpPost(serverURL + "/api/clients/" + accessData.intID + "/positions?accessKey=" + accessData.accessToken);
+                    Gson g = new Gson();
+                    StringEntity params = new StringEntity(g.toJson(frame));
+                    post.setEntity(params);
+                    httpClient.execute(post);
+                }
+            } catch (HttpHostConnectException e) {
+                System.err.println("Failed to connect to server when trying to send position data");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                // TODO: Release the connection?
+                dataQueue.clear();
             }
-            /* --- End of example --- */
         }
     }
 
     @Override
     public void sendCageData(CageDataFrame data) {
         // TODO: [Nick] Interact with API
+        HttpClient httpClient = HttpClients.createDefault();
+        try {
+            HttpPost post = new HttpPost(serverURL + "/api/clients");
+            Gson g = new Gson();
+            StringEntity params = new StringEntity(g.toJson(data));
+            post.setEntity(params);
+            httpClient.execute(post);
+        } catch (HttpHostConnectException e) {
+            System.err.println("Failed to connect to server when trying to send cage data");
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // TODO: Release the connection?
+        }
     }
 
     @Override
     public void sendZoneData(ZoneDataFrame data) {
         // TODO: [Nick] Interact with API
+        HttpClient httpClient = HttpClients.createDefault();
+        try {
+            HttpPost post = new HttpPost(serverURL + "/api/clients/" + accessData.intID + "/zones");
+            Gson g = new Gson();
+            StringEntity params = new StringEntity(g.toJson(data));
+            post.setEntity(params);
+            httpClient.execute(post);
+        } catch (HttpHostConnectException e) {
+            System.err.println("Failed to connect to server when trying to send zone data");
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // TODO: Release the connection?
+        }
     }
 
     @Override

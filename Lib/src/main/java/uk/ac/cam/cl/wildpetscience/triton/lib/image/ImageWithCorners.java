@@ -10,6 +10,8 @@ public class ImageWithCorners extends Image {
 
     private Corners corners;
 
+    private boolean valid;
+
     /**
      * Creates a new image with corners.
      * @param mat The matrix to use - takes ownership.
@@ -17,6 +19,7 @@ public class ImageWithCorners extends Image {
      */
     public ImageWithCorners(Mat mat, Corners corners) {
         super(mat);
+        valid = true;
         this.corners = corners;
     }
 
@@ -26,6 +29,8 @@ public class ImageWithCorners extends Image {
      */
     public ImageWithCorners(Mat mat) {
         super(mat);
+
+        valid = false;
         corners = new Corners();
     }
 
@@ -60,5 +65,13 @@ public class ImageWithCorners extends Image {
 
     public void setCorners(Corners corners) {
         this.corners = corners;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 }

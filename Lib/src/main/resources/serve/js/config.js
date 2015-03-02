@@ -8,6 +8,9 @@ function createErrorMessage(message, id) {
 function toggleRunning() {
     var button = $("#toggle-button");
     var container = $("#start-stop");
+    var canvas = $("#image-canvas");
+    var ctx = canvas[0].getContext('2d');
+    button.prop('disabled', true);
     if(button.text() === "Start") {
         $.ajax("/start", {
             type: "POST",
@@ -17,6 +20,9 @@ function toggleRunning() {
                 button.removeClass("btn-success");
                 button.addClass("btn-danger");
                 $("#start-error").remove();
+                $(".stop-hidden").removeClass("hidden");
+                window.shouldDrawZones = true;
+                button.prop('disabled', false);
             },
 
             error: function() {
@@ -24,6 +30,7 @@ function toggleRunning() {
                     var errorMessage = createErrorMessage("Starting the system.", "start-error");
                 }
                 container.append(errorMessage);
+                button.prop('disabled', false);
             }
         });
     } else if(button.text() === "Stop") {
@@ -35,6 +42,10 @@ function toggleRunning() {
                 button.removeClass("btn-danger");
                 button.addClass("btn-success");
                 $("#stop-error").remove();
+                setTimeout(function() { ctx.clearRect(0, 0, 1280, 720); }, 100);
+                $(".stop-hidden").addClass("hidden");
+                window.shouldDrawZones = false;
+                button.prop('disabled', false);
             },
 
             error: function() {
@@ -42,6 +53,7 @@ function toggleRunning() {
                     var errorMessage = createErrorMessage("Stopping the system.", "start-error");
                 }
                 container.append(errorMessage);
+                button.prop('disabled', false);
             }
         });
     }
@@ -53,18 +65,22 @@ function addZone() {
 }
 
 function confirmZone() {
-    window.editState.editing = false;
     var entry = $("#name-entry");
-    var canvas = $("#zone-canvas");
-    var newZone = {
-        id: entry.val(),
-        x: window.newRect.x / canvas.width(),
-        y: window.newRect.y / canvas.height(),
-        w: window.newRect.w / canvas.width(),
-        h: window.newRect.h / canvas.height()
-    };
-    window.zones.push(newZone);
-    resetZoneInput();
+    if($.trim(entry.val()).length > 0) {
+        window.editState.editing = false;
+        var canvas = $("#zone-canvas");
+        var newZone = {
+            id: entry.val(),
+            x: window.newRect.x / canvas.width(),
+            y: window.newRect.y / canvas.height(),
+            w: window.newRect.w / canvas.width(),
+            h: window.newRect.h / canvas.height()
+        };
+        window.zones.push(newZone);
+        resetZoneInput();
+    } else {
+        $("#confirm-group").addClass("has-error");
+    }
 }
 
 function cancelZone() {
@@ -72,12 +88,24 @@ function cancelZone() {
 }
 
 function saveZones() {
+    $("#add-zone-button").prop('disabled', true);
+    $("#save-zone-button").prop('disabled', true);
+    $("#clear-zone-button").prop('disabled', true);
     $.ajax("/zones", {
        type: "POST",
 
        data: JSON.stringify(window.zones),
 
+       success: function() {
+           $("#add-zone-button").prop('disabled', false);
+           $("#save-zone-button").prop('disabled', false);
+           $("#clear-zone-button").prop('disabled', false);
+       },
+
        error: function() {
+           $("#add-zone-button").prop('disabled', false);
+           $("#save-zone-button").prop('disabled', false);
+           $("#clear-zone-button").prop('disabled', false);
            console.log("Could not save zones.");
        }
     });
@@ -93,6 +121,7 @@ function saveType() {
     });
 }
 function resetZoneInput() {
+    $("#confirm-zones-button").prop("disabled", true);
     var entry = $("#name-entry");
     entry.val("");
     window.editState.editing = false;
@@ -103,6 +132,7 @@ function resetZoneInput() {
         h: 0
     };
     $("#name-entry-container").addClass("hidden");
+    $("#confirm-group").removeClass("has-error");
 }
 
 function updateCanvas() {
@@ -132,16 +162,18 @@ function drawRect(box, color) {
 function drawZones() {
     var zo = $("#zone-canvas")[0].getContext("2d");
     zo.clearRect(0, 0, 1280, 720);
-    drawRect(window.newRect, "#00FF00");
-    for(var i = 0; i < window.zones.length; i++) {
-        var zone = window.zones[i];
-        var rect = {
-            x: zone.x * zo.canvas.width,
-            y: zone.y * zo.canvas.height,
-            w: zone.w * zo.canvas.width,
-            h: zone.h * zo.canvas.height
-        };
-        drawRect(rect, "#0000FF");
+    if(window.shouldDrawZones) {
+        drawRect(window.newRect, "#00FF00");
+        for (var i = 0; i < window.zones.length; i++) {
+            var zone = window.zones[i];
+            var rect = {
+                x: zone.x * zo.canvas.width,
+                y: zone.y * zo.canvas.height,
+                w: zone.w * zo.canvas.width,
+                h: zone.h * zo.canvas.height
+            };
+            drawRect(rect, "#0000FF");
+        }
     }
 }
 
@@ -158,6 +190,14 @@ function clearZones() {
     var canvas = $("#zone-canvas");
 
     window.zones = [];
+    window.shouldDrawZones = $("#toggle-button").text() === "Stop";
+
+    if(window.shouldDrawZones) {
+        $(".stop-hidden").removeClass("hidden");
+    } else {
+        $(".stop-hidden").addClass("hidden");
+    }
+
     $.ajax("/getzones", {
         type: "GET",
 
@@ -213,8 +253,13 @@ function clearZones() {
         if(window.editState.editing) {
             window.editState.dragging = false
         }
+        if(Math.abs(window.newRect.w) > 0 && Math.abs(window.newRect.h) > 0) {
+            $("#confirm-zones-button").prop('disabled', false);
+        } else {
+            $("#confirm-zones-button").prop('disabled', true);
+        }
     });
 
-    window.setInterval(updateCanvas, 150);
+    window.setInterval(updateCanvas, 250);
     window.setInterval(drawZones, 15);
 })();

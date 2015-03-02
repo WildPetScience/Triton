@@ -4,6 +4,7 @@ import org.opencv.core.*;
 import org.opencv.imgproc.*;
 import uk.ac.cam.cl.wildpetscience.triton.lib.image.ImageWithCorners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.AnimalPosition;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.Corners;
 import uk.ac.cam.cl.wildpetscience.triton.lib.pipeline.Filter;
 
 import java.io.IOException;
@@ -77,7 +78,7 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
 
         Mat result = getDiff();
 
-        ClusteringModule.process(result);
+        ClusteringModule.process(result, input.getCorners());
 
         double xNew = ClusteringModule.getX();
         double yNew = ClusteringModule.getY();
@@ -90,13 +91,20 @@ public class TrackingFilter implements Filter<ImageWithCorners, AnimalPosition> 
             return new AnimalPosition(new Point(xPos, yPos), input.getTimestamp(), prob);
         }
 
-        xPos = (xPos + xNew*2) / 3;
-        yPos = (yPos + yNew*2) / 3;
+        xPos = (xPos + 2*xNew) / 3;
+        yPos = (yPos + 2*yNew) / 3;
         prob = probNew;
 
         result.release();
 
-        return new AnimalPosition(new Point(xPos, yPos), input.getTimestamp(), prob);
+        Point absolutePos = new Point(xPos, yPos);
+        Corners corners = input.getCorners();
+        Point relativePos = corners.getTransform(absolutePos);
+
+        if(relativePos.x < 0 || relativePos.y < 0 || relativePos.x > 1 || relativePos.y > 1)
+            prob = 0;
+
+        return new AnimalPosition(relativePos, input.getTimestamp(), prob);
     }
 
     @Override
