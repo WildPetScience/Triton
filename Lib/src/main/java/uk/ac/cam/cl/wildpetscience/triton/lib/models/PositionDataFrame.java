@@ -58,7 +58,7 @@ public class PositionDataFrame implements Serializable {
         String timeString = time.format(DateTimeFormatter.ISO_LOCAL_TIME);
         String out =    "Time:          " + timeString + "\n" +
                         "Location:      " + "("+xString+","+yString+")" + "\n" +
-                        "Zone ID:       " + zone.id + "\n" +
+                        "Zone ID:       " + (zone != null ? zone.id : "N/A") + "\n" +
                         "Speed:         " + df.format(speed) + "\n";
         return out;
     }
