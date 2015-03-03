@@ -14,12 +14,12 @@ public class ConfigData {
     private AccessData accessData;
     private String animalType;
 
-    public ConfigData(Set<Zone> zones, double cageWidth, double cageHeight, String remoteServer, String animalType) {
+    public ConfigData(Set<Zone> zones, double cageWidth, double cageHeight, String remoteServer, String animalType, AccessData accessData) {
         this.zones = zones;
         this.cageWidth = cageWidth;
         this.cageHeight = cageHeight;
         this.remoteServer = remoteServer;
-        this.accessData = new AccessData("FuRrY", "whisky cat run", 5); // TODO: implement in config
+        this.accessData = accessData; // TODO: implement in config
         this.animalType = animalType;
     }
 
