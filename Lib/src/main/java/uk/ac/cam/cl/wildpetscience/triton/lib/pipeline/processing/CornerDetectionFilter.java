@@ -51,7 +51,6 @@ public class CornerDetectionFilter implements Filter<Image, ImageWithCorners> {
                 cnt.release();
             }
         }
-        System.out.println(String.format("%d, %d", contours.size(), markers.size()));
 
         Corners imageCorners = findCorners(markers);
         // System.out.println(markers.size() + "#########");

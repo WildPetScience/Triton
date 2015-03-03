@@ -8,6 +8,7 @@ import uk.ac.cam.cl.wildpetscience.triton.lib.image.Image;
 public class DummyDriver extends Driver<Image> {
     public DummyDriver() {
         super(new DummyInputSource(), new IdentityFilter<>(), new IgnoreOutputSink<>());
+        setTapFilter(new DummyTapFilter());
     }
 
     @Override
