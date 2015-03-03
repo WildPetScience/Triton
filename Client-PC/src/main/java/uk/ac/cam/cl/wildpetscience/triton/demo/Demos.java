@@ -212,7 +212,7 @@ public class Demos extends JFrame {
         });
         grid.add(completeDemo);
 
-        ConfigData config2 = new ConfigData(zoneSet, 100, 200, "http://localhost:8080/condor", "Hamster");
+        ConfigData config2 = new ConfigData(zoneSet, 100, 200, "http://localhost:8080/condor", "Hamster", null);
         grid.add(new JLabel("Complete demo (with webserver):"));
         JButton completeDemo2 = new JButton("Start");
         completeDemo2.addActionListener(e -> {
