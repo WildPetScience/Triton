@@ -93,7 +93,8 @@ public class WildAnimalTool extends JFrame {
                     width,
                     height,
                     ConfigManager.getRemoteServer(),
-                    animalName.getText());
+                    animalName.getText(),
+                    null);
             AnalysisOutputSink output = new AnalysisOutputSink(configData);
             for (AnimalPosition pos : panel.path) {
                 output.onDataAvailable(pos);
