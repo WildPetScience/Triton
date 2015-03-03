@@ -58,6 +58,12 @@ public class Bootstrap {
         // I'm not proud of this code
         try {
             AppConfig primary = AppConfig.getPrimaryConfig();
+	        // Code duplication #YOLO
+	        primary.setAccessData(
+			        new AccessData(
+					        new CodeGenerator().nextCode()
+			        )
+	        );
             primary.saveAsPrimaryConfig();
         } catch(IOException e) {
             // Couldn't get the primary config so see if we can get a default
@@ -110,6 +116,7 @@ public class Bootstrap {
                 ConfigManager.save();
             }
         } catch(IOException e) {
+	        // This is probably caused by an HTTP connection issue rather than anything else
             System.err.println("Primary config does not exist when it should.");
             System.exit(0);
         }
