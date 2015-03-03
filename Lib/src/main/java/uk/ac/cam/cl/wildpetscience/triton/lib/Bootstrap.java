@@ -1,16 +1,24 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib;
 
+import com.google.gson.Gson;
 import nu.pattern.OpenCV;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.CodeGenerator;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Initialises things that must be done at the start of runtime.
  */
+
 public class Bootstrap {
+
+    private static String ACCESS_KEY = "JHsa841fZS91Acv";
+
     public static void init() {
         if (isPi()) {
             // RPi camera V4L module
@@ -47,8 +55,30 @@ public class Bootstrap {
                 def.saveAsPrimaryConfig();
             } catch(IOException ee) {
                 System.err.println("Problem getting default config.");
+                System.err.println("System cannot continue from here.");
+                System.exit(1);
             }
         }
+
+        try {
+            AppConfig primary = AppConfig.getPrimaryConfig();
+            HashMap<String, Object> body = new HashMap<>();
+            body.put("cageWidth", primary.getDimensions().getWidth());
+            body.put("cageHeight", primary.getDimensions().getHeight());
+            body.put("identifier", primary.getDataCode());
+            body.put("accessKey", ACCESS_KEY);
+
+            SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            body.put("dateConnected", f.format(new Date()));
+            HashMap<String, String> animalType = new HashMap<>();
+            animalType.put("name", primary.getAnimalType());
+            body.put("animalType", animalType);
+            System.out.println(new Gson().toJson(body));
+        } catch(IOException e) {
+            System.err.println("Primary config does not exist when it should.");
+            System.exit(0);
+        }
+
     }
 
     /**
