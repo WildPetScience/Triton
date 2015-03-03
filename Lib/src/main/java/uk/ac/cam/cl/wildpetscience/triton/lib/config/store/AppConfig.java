@@ -3,6 +3,7 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.config.store;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.AccessData;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.LogEntry;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
@@ -23,7 +24,7 @@ public class AppConfig {
             + "/.wildpetscience/";
 
     private boolean running;
-    private String dataCode;
+    private AccessData accessData;
     private List<LogEntry> systemLogs;
     private Set<Zone> zones;
     private Box dimensions;
@@ -125,12 +126,12 @@ public class AppConfig {
         this.running = running;
     }
 
-    public String getDataCode() {
-        return dataCode;
+    public AccessData getAccessData() {
+        return accessData;
     }
 
-    public void setDataCode(String dataCode) {
-        this.dataCode = dataCode;
+    public void setAccessData(AccessData accessData) {
+        this.accessData = accessData;
     }
 
     public List<LogEntry> getSystemLogs() {

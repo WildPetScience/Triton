@@ -193,7 +193,7 @@ public class Demos extends JFrame {
         Set<Zone> zoneSet = new HashSet<>();
         zoneSet.add(new Zone(new Box(0.2, 0.2, 0.2, 0.2), "WATER"));
         zoneSet.add(new Zone(new Box(0.8, 0.6, 0.2, 0.2), "FOOD"));
-        ConfigData config = new ConfigData(zoneSet, 100, 200, "http://localhost:8080/condor", "Hamster");
+        ConfigData config = new ConfigData(zoneSet, 100, 200, "http://localhost:8080/condor", "Hamster", null);
         grid.add(new JLabel("Complete demo:"));
         JButton completeDemo = new JButton("Start");
         completeDemo.addActionListener(e -> {

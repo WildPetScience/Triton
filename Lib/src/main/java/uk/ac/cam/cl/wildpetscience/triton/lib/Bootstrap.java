@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import nu.pattern.OpenCV;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.CodeGenerator;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.AccessData;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +17,6 @@ import java.util.HashMap;
  */
 
 public class Bootstrap {
-
-    private static String ACCESS_KEY = "JHsa841fZS91Acv";
 
     public static void init() {
         if (isPi()) {
@@ -51,7 +50,11 @@ public class Bootstrap {
             // Couldn't get the primary config so see if we can get a default
             try {
                 AppConfig def = AppConfig.getDefaultConfig();
-                def.setDataCode(new CodeGenerator().nextCode());
+                def.setAccessData(
+                        new AccessData(
+                                new CodeGenerator().nextCode()
+                        )
+                );
                 def.saveAsPrimaryConfig();
             } catch(IOException ee) {
                 System.err.println("Problem getting default config.");
@@ -65,8 +68,8 @@ public class Bootstrap {
             HashMap<String, Object> body = new HashMap<>();
             body.put("cageWidth", primary.getDimensions().getWidth());
             body.put("cageHeight", primary.getDimensions().getHeight());
-            body.put("identifier", primary.getDataCode());
-            body.put("accessKey", ACCESS_KEY);
+            body.put("identifier", primary.getAccessData().stringID);
+            body.put("accessKey", primary.getAccessData().accessToken);
 
             SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             body.put("dateConnected", f.format(new Date()));
