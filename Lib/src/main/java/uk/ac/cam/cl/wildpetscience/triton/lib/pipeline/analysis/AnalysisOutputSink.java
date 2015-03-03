@@ -167,7 +167,8 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
     @Override
     public void sendCageData(CageDataFrame data) {
-        // TODO: [Nick] Interact with API
+	    // Not implemented
+	    /*
         HttpClient httpClient = HttpClients.createDefault();
         try {
             HttpPost post = new HttpPost(serverURL + "/api/clients");
@@ -185,20 +186,24 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-        }
+        }*/
     }
 
     @Override
     public void sendZoneData(ZoneDataFrame data) {
-        // TODO: [Nick] Interact with API
         HttpClient httpClient = HttpClients.createDefault();
         try {
-            HttpPost post = new HttpPost(serverURL + "/api/clients/" + accessData.getIntID() + "/zones");
-            Gson g = new Gson();
-            StringEntity params = new StringEntity(g.toJson(data));
-            post.setEntity(params);
-            httpClient.execute(post);
-            post.releaseConnection();
+	        for (Zone z : data.getZones()) {
+		        HttpPost post = new HttpPost(serverURL + "/api/clients/" + accessData.getIntID() + "/zones?accessKey=" + accessData.accessToken);
+
+		        HashMap<String, Object> body = new HashMap<>();
+		        body.put("zoneName", z.id);
+
+		        post.setHeader("Content-Type", "application/json");
+		        post.setEntity(new StringEntity((new Gson()).toJson(body)));
+		        httpClient.execute(post);
+		        post.releaseConnection();
+	        }
         } catch (HttpHostConnectException e) {
             System.err.println("Failed to connect to server when trying to send zone data");
         } catch (ClientProtocolException e) {

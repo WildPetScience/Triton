@@ -23,8 +23,8 @@ public class LocationPipelineDemo {
         frame.setLocationRelativeTo(null);
 
         Set<Zone> zoneSet = new HashSet<>();
-        zoneSet.add(new Zone(new Box(0.2, 0.2, 0.2, 0.2), "WATER"));
-        zoneSet.add(new Zone(new Box(0.8, 0.6, 0.2, 0.2), "FOOD"));
+        zoneSet.add(new Zone(new Box(0.2, 0.2, 0.2, 0.2), "Water"));
+        zoneSet.add(new Zone(new Box(0.8, 0.6, 0.2, 0.2), "Food"));
         ConfigData config = new ConfigData(zoneSet, 100, 200, "http://localhost:8080/condor", "Hamster", null);
         PositionTestPanel panel = new PositionTestPanel(config,
                 new AnalysisOutputSink(config));
