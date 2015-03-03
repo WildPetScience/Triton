@@ -114,7 +114,7 @@ public class ConfigManager {
 
     public static final String PUBLIC_ENDPOINT = "https://wps-condor.herokuapp.com/condor";
 
-    private static String remoteServer = PUBLIC_ENDPOINT;
+    private static String remoteServer = "http://127.0.0.1:8080/condor";
 
     /**
      * Sets the remote server. This value isn't persisted since it is set as a
@@ -140,6 +140,15 @@ public class ConfigManager {
         } catch(IOException e) {
             System.err.println("No primary config found when getting code.");
             return null;
+        }
+    }
+
+    public static void save() {
+        try {
+            AppConfig conf = AppConfig.getPrimaryConfig();
+            conf.saveAsPrimaryConfig();
+        } catch(IOException e) {
+            e.printStackTrace();
         }
     }
 

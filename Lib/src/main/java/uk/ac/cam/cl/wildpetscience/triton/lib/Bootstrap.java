@@ -1,16 +1,29 @@
 package uk.ac.cam.cl.wildpetscience.triton.lib;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import nu.pattern.OpenCV;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import spark.utils.IOUtils;
+import sun.nio.ch.IOUtil;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.CodeGenerator;
+import uk.ac.cam.cl.wildpetscience.triton.lib.config.ConfigManager;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
 import uk.ac.cam.cl.wildpetscience.triton.lib.models.AccessData;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.JoinResponse;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Initialises things that must be done at the start of runtime.
@@ -76,7 +89,26 @@ public class Bootstrap {
             HashMap<String, String> animalType = new HashMap<>();
             animalType.put("name", primary.getAnimalType());
             body.put("animalType", animalType);
-            System.out.println(new Gson().toJson(body));
+
+            HttpClient httpClient = HttpClients.createDefault();
+            String serverURL = ConfigManager.getRemoteServer();
+            HttpPost post = new HttpPost(serverURL + "/api/clients");
+            post.setHeader("Content-Type", "application/json");
+            Gson g = new Gson();
+            StringEntity params = new StringEntity(g.toJson(body));
+            post.setEntity(params);
+            HttpResponse response = httpClient.execute(post);
+
+            if(response.getStatusLine().getStatusCode() != 201) {
+                System.out.println("This client is already registered with the server.");
+            } else {
+                System.out.println("Successfully registered a client.");
+
+                Type t = new TypeToken<JoinResponse>() {}.getType();
+                JoinResponse resp = g.fromJson(IOUtils.toString(response.getEntity().getContent()), t);
+                ConfigManager.getAccessData().setIntID(Integer.parseInt(resp.dbo.get("_id")));
+                ConfigManager.save();
+            }
         } catch(IOException e) {
             System.err.println("Primary config does not exist when it should.");
             System.exit(0);
