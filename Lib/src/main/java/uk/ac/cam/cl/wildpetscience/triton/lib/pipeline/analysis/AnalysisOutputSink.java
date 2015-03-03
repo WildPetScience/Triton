@@ -130,11 +130,13 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
             try {
                 while (!dataQueue.isEmpty()) {
                     PositionDataFrame frame = dataQueue.poll();
+                    System.out.println("Polled from data queue:\n" + frame.toString());
                     HttpPost post = new HttpPost(serverURL + "/api/clients/" + accessData.getIntID() + "/positions?accessKey=" + accessData.accessToken);
                     Gson g = new Gson();
                     StringEntity params = new StringEntity(g.toJson(frame));
                     post.setEntity(params);
                     httpClient.execute(post);
+                    post.releaseConnection();
                 }
             } catch (HttpHostConnectException e) {
                 System.err.println("Failed to connect to server when trying to send position data");
@@ -145,7 +147,6 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                // TODO: Release the connection?
                 dataQueue.clear();
             }
         }
@@ -161,6 +162,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
             StringEntity params = new StringEntity(g.toJson(data));
             post.setEntity(params);
             httpClient.execute(post);
+            post.releaseConnection();
         } catch (HttpHostConnectException e) {
             System.err.println("Failed to connect to server when trying to send cage data");
         } catch (ClientProtocolException e) {
@@ -170,7 +172,6 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            // TODO: Release the connection?
         }
     }
 
@@ -184,6 +185,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
             StringEntity params = new StringEntity(g.toJson(data));
             post.setEntity(params);
             httpClient.execute(post);
+            post.releaseConnection();
         } catch (HttpHostConnectException e) {
             System.err.println("Failed to connect to server when trying to send zone data");
         } catch (ClientProtocolException e) {
@@ -193,7 +195,6 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            // TODO: Release the connection?
         }
     }
 
