@@ -134,7 +134,6 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
                     Gson g = new Gson();
 
 	                HashMap<String, Object> body = new HashMap<>();
-	                System.out.println(frame.getTime());
 	                body.put("time", f.format(frame.getTime()));
 	                body.put("x", frame.getX());
 	                body.put("y", frame.getY());
@@ -147,8 +146,8 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 	                }
 
 	                System.out.println(g.toJson(body));
-                    StringEntity params = new StringEntity(g.toJson(frame));
-	                post.setEntity(params);
+	                post.setHeader("Content-Type", "application/json");
+	                post.setEntity(new StringEntity(g.toJson(frame)));
                     httpClient.execute(post);
                     post.releaseConnection();
                 }
