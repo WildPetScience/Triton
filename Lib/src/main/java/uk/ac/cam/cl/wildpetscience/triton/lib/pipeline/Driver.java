@@ -50,15 +50,30 @@ public class Driver<D> extends Thread {
     }
 
     public <A, B, C> Driver(ImageInputSource in,
-                      Filter<Image, A> f1,
-                      Filter<A, B> f2,
-                      Filter<B, C> f3,
-                      Filter<C, D> f4,
-                      OutputSink<D> out) {
+                               Filter<Image, A> f1,
+                               Filter<A, B> f2,
+                               Filter<B, C> f3,
+                               Filter<C, D> f4,
+                               OutputSink<D> out) {
         this(in,
                 new ConnectingFilter<>(
                         new ConnectingFilter<>(f1, f2),
                         new ConnectingFilter<>(f3, f4))
+                , out);
+    }
+
+    public <A, B, C, E> Driver(ImageInputSource in,
+                      Filter<Image, A> f1,
+                      Filter<A, B> f2,
+                      Filter<B, C> f3,
+                      Filter<C, E> f4,
+                      Filter<E, D> f5,
+                      OutputSink<D> out) {
+        this(in,
+                new ConnectingFilter<>(
+                        new ConnectingFilter<>(f1, f2),
+                        new ConnectingFilter<>(f3,
+                                new ConnectingFilter(f4, f5)))
                         , out);
     }
 

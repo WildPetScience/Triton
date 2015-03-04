@@ -218,14 +218,17 @@ public class Demos extends JFrame {
             AnalysisOutputSink outputSink;
             AnalysisDemo demo = new AnalysisDemo(
                     output -> {
+                        TapFilter tapFilter = new TapFilter();
                         Driver<PassthroughFilter.Passthrough<ImageWithCorners, AnimalPosition>>
                                 driver = new Driver<>(
                                 getInputSource(),
                                 new CornerDetectionFilter(),
                                 new CornerDisplayFilter(),
                                 new CornerNormalisationFilter(),
+                                tapFilter,
                                 new PassthroughFilter<>(new TrackingFilter()),
                                 output);
+                        driver.setTapFilter(tapFilter);
                         ConfigServer.start(8000, driver);
                         return driver;
                     },
@@ -234,6 +237,10 @@ public class Demos extends JFrame {
                     "Complete demo"
                     );
             ConfigManager.addListener(outputSink);
+            try {
+                ConfigManager.setRunning(true);
+            } catch (IOException e1) {
+            }
             demo.start();
         });
         grid.add(completeDemo2);
