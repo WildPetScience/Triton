@@ -19,13 +19,13 @@ public class PositionDataFrame implements Serializable {
     private double y;
     private double speed;
     @SerializedName("zone")
-    private String zoneId;
+    private Zone zone;
 
-    public PositionDataFrame(LocalDateTime time, Point location, String zoneId, double speed) {
+    public PositionDataFrame(LocalDateTime time, Point location, Zone zone, double speed) {
         this.time = time;
         this.x = location.x;
         this.y = location.y;
-        this.zoneId = zoneId;
+        this.zone = zone;
         this.speed = speed;
     }
 
@@ -35,8 +35,16 @@ public class PositionDataFrame implements Serializable {
 
     public Point getLocation() { return new Point(x, y); }
 
-    public String getZoneId() {
-        return zoneId;
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+    public Zone getZone() {
+        return zone;
     }
 
     public double getSpeed() {
@@ -50,7 +58,7 @@ public class PositionDataFrame implements Serializable {
         String timeString = time.format(DateTimeFormatter.ISO_LOCAL_TIME);
         String out =    "Time:          " + timeString + "\n" +
                         "Location:      " + "("+xString+","+yString+")" + "\n" +
-                        "Zone ID:       " + zoneId + "\n" +
+                        "Zone ID:       " + (zone != null ? zone.id : "N/A") + "\n" +
                         "Speed:         " + df.format(speed) + "\n";
         return out;
     }

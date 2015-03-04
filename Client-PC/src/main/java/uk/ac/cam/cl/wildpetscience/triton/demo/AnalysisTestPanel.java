@@ -89,7 +89,7 @@ public class AnalysisTestPanel extends JPanel implements OutputSink<PassthroughF
             }
             /* Plot points */
             Ellipse2D.Double plotted = new Ellipse2D.Double(xNew-2, yNew-2, 4, 4); // -2 for centering
-            if (!data.getZoneId().equals("N/A")) g2.setColor(Color.BLUE); // point BLUE if in user-defined zone
+            if (data.getZone() != null) g2.setColor(Color.BLUE); // point BLUE if in user-defined zone
             g2.draw(plotted);
             g2.fill(plotted);
             lastPoint = location;

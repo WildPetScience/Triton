@@ -3,10 +3,7 @@ package uk.ac.cam.cl.wildpetscience.triton.lib.config;
 import uk.ac.cam.cl.wildpetscience.triton.lib.App;
 import uk.ac.cam.cl.wildpetscience.triton.lib.DummyApp;
 import uk.ac.cam.cl.wildpetscience.triton.lib.config.store.AppConfig;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.Box;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.ConfigData;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.LogEntry;
-import uk.ac.cam.cl.wildpetscience.triton.lib.models.Zone;
+import uk.ac.cam.cl.wildpetscience.triton.lib.models.*;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -117,7 +114,7 @@ public class ConfigManager {
 
     public static final String PUBLIC_ENDPOINT = "https://wps-condor.herokuapp.com/condor";
 
-    private static String remoteServer = PUBLIC_ENDPOINT;
+    private static String remoteServer = "http://127.0.0.1:8080/condor";
 
     /**
      * Sets the remote server. This value isn't persisted since it is set as a
@@ -136,13 +133,22 @@ public class ConfigManager {
      * @return The unique, random access code for viewing data online. Null if the primary
      * config cannot be found.
      */
-    public static String getAccessCode() {
+    public static AccessData getAccessData() {
         try {
             AppConfig conf = AppConfig.getPrimaryConfig();
-            return conf.getDataCode();
+            return conf.getAccessData();
         } catch(IOException e) {
             System.err.println("No primary config found when getting code.");
             return null;
+        }
+    }
+
+    public static void save() {
+        try {
+            AppConfig conf = AppConfig.getPrimaryConfig();
+            conf.saveAsPrimaryConfig();
+        } catch(IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -165,7 +171,7 @@ public class ConfigManager {
     }
 
     public static ConfigData getConfigData() throws IOException {
-        return new ConfigData(getZones(), getCageWidth(), getCageHeight(), remoteServer, getAnimal());
+        return new ConfigData(getZones(), getCageWidth(), getCageHeight(), remoteServer, getAnimal(), getAccessData());
     }
 
     private static void broadcastToListeners() {
