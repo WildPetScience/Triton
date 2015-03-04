@@ -17,6 +17,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -42,7 +43,6 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
     private AccessData accessData;
     private String animalType;
     private Set<Zone> zones;
-    private Zone nullZone;
     private AnimalPosition lastKnownPosition;
     private Queue<AnimalPosition> positionQueue;
     private List<PositionDataFrame> path; // NB: for demo only
@@ -70,7 +70,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
             }
         }
         /* If no zone found, return the 'N/A' zone */
-        return nullZone;
+        return null;
     }
 
     /* Computes speed between two points in time and space. NB: uses cageWidth and cageHeight */
@@ -93,7 +93,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         PositionDataFrame frame = new PositionDataFrame(
                 time,
                 location,
-                currentZone.id,
+                currentZone,
                 speed
         );
 
@@ -110,8 +110,6 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
         /* Copy the zone set from config, add the null zone */
         zones = new HashSet<Zone>(config.getZones());
-        nullZone = new Zone(new Box(0,0,0,0), "N/A");
-        zones.add(nullZone);
 
         /* Send updated data to server */
         sendCageData(new CageDataFrame(cageWidth, cageHeight, animalType));
@@ -126,15 +124,32 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
         /* If too much data in queue, flush to server */
         if (dataQueue.size() >= maxDataQueueSize) {
+	        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
             HttpClient httpClient = HttpClients.createDefault();
             try {
                 while (!dataQueue.isEmpty()) {
                     PositionDataFrame frame = dataQueue.poll();
+                    System.out.println("Polled from data queue:\n" + frame.toString());
                     HttpPost post = new HttpPost(serverURL + "/api/clients/" + accessData.getIntID() + "/positions?accessKey=" + accessData.accessToken);
                     Gson g = new Gson();
-                    StringEntity params = new StringEntity(g.toJson(frame));
-                    post.setEntity(params);
+
+	                HashMap<String, Object> body = new HashMap<>();
+	                body.put("time", f.format(frame.getTime()));
+	                body.put("x", frame.getX());
+	                body.put("y", frame.getY());
+	                body.put("speed", frame.getSpeed());
+
+	                if (frame.getZone() != null) {
+		                HashMap<String, String> zone = new HashMap<>();
+		                zone.put("zoneName", frame.getZone().id);
+		                body.put("zone", zone);
+	                }
+
+	                System.out.println(g.toJson(body));
+	                post.setHeader("Content-Type", "application/json");
+	                post.setEntity(new StringEntity(g.toJson(frame)));
                     httpClient.execute(post);
+                    post.releaseConnection();
                 }
             } catch (HttpHostConnectException e) {
                 System.err.println("Failed to connect to server when trying to send position data");
@@ -145,7 +160,6 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                // TODO: Release the connection?
                 dataQueue.clear();
             }
         }
@@ -153,7 +167,8 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
 
     @Override
     public void sendCageData(CageDataFrame data) {
-        // TODO: [Nick] Interact with API
+	    // Not implemented
+	    /*
         HttpClient httpClient = HttpClients.createDefault();
         try {
             HttpPost post = new HttpPost(serverURL + "/api/clients");
@@ -161,6 +176,7 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
             StringEntity params = new StringEntity(g.toJson(data));
             post.setEntity(params);
             httpClient.execute(post);
+            post.releaseConnection();
         } catch (HttpHostConnectException e) {
             System.err.println("Failed to connect to server when trying to send cage data");
         } catch (ClientProtocolException e) {
@@ -170,20 +186,24 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            // TODO: Release the connection?
-        }
+        }*/
     }
 
     @Override
     public void sendZoneData(ZoneDataFrame data) {
-        // TODO: [Nick] Interact with API
         HttpClient httpClient = HttpClients.createDefault();
         try {
-            HttpPost post = new HttpPost(serverURL + "/api/clients/" + accessData.getIntID() + "/zones");
-            Gson g = new Gson();
-            StringEntity params = new StringEntity(g.toJson(data));
-            post.setEntity(params);
-            httpClient.execute(post);
+	        for (Zone z : data.getZones()) {
+		        HttpPost post = new HttpPost(serverURL + "/api/clients/" + accessData.getIntID() + "/zones?accessKey=" + accessData.accessToken);
+
+		        HashMap<String, Object> body = new HashMap<>();
+		        body.put("zoneName", z.id);
+
+		        post.setHeader("Content-Type", "application/json");
+		        post.setEntity(new StringEntity((new Gson()).toJson(body)));
+		        httpClient.execute(post);
+		        post.releaseConnection();
+	        }
         } catch (HttpHostConnectException e) {
             System.err.println("Failed to connect to server when trying to send zone data");
         } catch (ClientProtocolException e) {
@@ -193,7 +213,6 @@ public class AnalysisOutputSink implements OutputSink<AnimalPosition>, Analysis 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            // TODO: Release the connection?
         }
     }
 
