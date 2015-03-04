@@ -18,7 +18,7 @@ public class TapFilter implements Filter<ImageWithCorners, ImageWithCorners> {
         synchronized (latestLock) {
             if (latestWanted) {
                 latest = new ImageWithCorners(input);
-                latestLock.notify();
+                latestLock.notifyAll();
             }
         }
         return input;

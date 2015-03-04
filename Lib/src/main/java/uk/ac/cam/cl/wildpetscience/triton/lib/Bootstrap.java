@@ -119,7 +119,6 @@ public class Bootstrap {
 	        // This is probably caused by an HTTP connection issue rather than anything else
             System.err.println("Primary config does not exist when it should.");
             e.printStackTrace();
-            System.exit(1);
         }
 
     }
