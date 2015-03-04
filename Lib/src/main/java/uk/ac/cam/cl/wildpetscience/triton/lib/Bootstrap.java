@@ -111,7 +111,8 @@ public class Bootstrap {
             }
         } catch(IOException e) {
             System.err.println("Primary config does not exist when it should.");
-            System.exit(0);
+            e.printStackTrace();
+            System.exit(1);
         }
 
     }
